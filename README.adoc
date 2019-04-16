@@ -11,7 +11,7 @@ Simple Java profiling tool.
 
 == Usage
 
-=== Configure your aspect
+=== 1. Configure your aspect to profile
 
 Make your aspect(`AdonisTrackAspect.java`) by extends `ProfileAspect`
 
@@ -42,7 +42,7 @@ Configure `profilePointcut` and `executionPointcut` by using pointcut expression
     }
 ----
 
-=== Run your application with above aspect(`AdonisTrackAspect.java`)
+=== 2. Run your application with above aspect(`AdonisTrackAspect.java`)
 
 [indent=0]
 ----
@@ -59,7 +59,7 @@ Configure `profilePointcut` and `executionPointcut` by using pointcut expression
     2019-04-16 15:03:25.651  INFO 210736 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
 ----
 
-=== Call your application
+=== 3. Call your application and check the logs
 
 When your application is called via `GET /greeting?name=foo HTTP/1.1` request, 
 the following logs are printed.
