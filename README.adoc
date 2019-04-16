@@ -10,7 +10,7 @@ Simple Java profiling tool.
 
 == Make your aspect to profile the request: AdonistrackAspect.java
 
-Configure "profilePointcut" and "executionPointcut" by using pointcut expression.
+Configure `profilePointcut` and `executionPointcut` by using pointcut expression.
 
 [source,java,indent=0]
 ----
