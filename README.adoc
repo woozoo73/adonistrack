@@ -1,6 +1,7 @@
 = AdonisTract image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"]
 
 Simple Java profiling tool.
+
 * You can trace the call stack immediately.
 * You do not need to write code to log method calls.
 * Provide method call information, parameters, return values and error information.
