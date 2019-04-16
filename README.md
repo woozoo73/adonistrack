@@ -8,7 +8,7 @@ Simple Java profiling tool.
 - Provides an extension point for custom.
 
 #### Make your aspect to profile the request: AdonistrackAspect.java
-##### configure "profilePointcut" and "executionPointcut" by using pointcut expression.
+onfigure "profilePointcut" and "executionPointcut" by using pointcut expression.
 
     package com.woozooha.hello;
 
