@@ -1,4 +1,4 @@
-= Spring Boot image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"]
+= AdonisTract image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"]
 
 Simple Java profiling tool.
 - You can trace the call stack immediately.
