@@ -1,4 +1,6 @@
 # AdonisTrack
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 Simple Java profiling tool.
 - You can trace the call stack immediately.
 - You do not need to write code to log method calls.
@@ -57,3 +59,6 @@ onfigure "profilePointcut" and "executionPointcut" by using pointcut expression.
             <---- hello (0.01ms:0.73%)
         <---- com.woozooha.hello.Greeting@2879ceae (3.76ms:100.00%)
     <---- com.woozooha.hello.Greeting@2879ceae (6.89ms:100.00%)
+
+## License
+AdonisTrack is Open Source software released under the Apache 2.0 license.
