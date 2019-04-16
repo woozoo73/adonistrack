@@ -42,7 +42,7 @@ onfigure "profilePointcut" and "executionPointcut" by using pointcut expression.
      =========|_|==============|___/=/_/_/_/
      :: Spring Boot ::        (v2.1.3.RELEASE)
 
-    2019-04-16 15:03:15.493  INFO 210736 --- [           main] com.woozooha.hello.Application           : Starting Application on woo-thinkpad with PID 210736 (C:\Users\woozoo\eclipse-workspace\lilacscent-test\target\classes started by woozoo in C:\Users\woozoo\eclipse-workspace\lilacscent-test)
+    2019-04-16 15:03:15.493  INFO 210736 --- [           main] com.woozooha.hello.Application           : Starting Application on woo-thinkpad with PID 210736
     ...
     2019-04-16 15:03:25.651  INFO 210736 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
     
