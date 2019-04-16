@@ -1,6 +1,7 @@
 # AdonisTrack
 Simple Java profiling tool.
 - You can trace the call stack immediately.
+- You do not need to write code to log method calls.
 - Provide method call information, parameters, return values and error information.
 - Compatible with Spring Framework.
 - Information is not mixed in concurrent calls.
