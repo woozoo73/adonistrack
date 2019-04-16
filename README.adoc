@@ -37,7 +37,7 @@ Configure `profilePointcut` and `executionPointcut` by using pointcut expression
     }
 ----
 
-== Run your application.
+== Run your application with above aspect
 
 [indent=0]
 ----
