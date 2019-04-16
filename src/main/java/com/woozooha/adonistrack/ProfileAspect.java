@@ -29,16 +29,16 @@ import com.woozooha.adonistrack.writer.ConsoleWriter;
 import com.woozooha.adonistrack.writer.Writer;
 
 /**
- * Invocation aspect.
+ * Profile invocations aspect.
  * 
  * @author woozoo73
  */
 @Aspect
-public abstract class InvocationAspect {
+public abstract class ProfileAspect {
 
     private Config config;
 
-    public InvocationAspect() {
+    public ProfileAspect() {
         initConfig();
     }
 
@@ -65,7 +65,6 @@ public abstract class InvocationAspect {
 
     @Before("profilePointcut()")
     public void profileBefore(JoinPoint joinPoint) {
-        System.err.println(joinPoint.toLongString());
         Invocation endpointInvocation = Context.getEndpointInvocation();
 
         Invocation invocation = new Invocation();

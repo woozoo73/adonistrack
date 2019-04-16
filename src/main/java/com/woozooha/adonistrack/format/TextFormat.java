@@ -18,13 +18,9 @@ package com.woozooha.adonistrack.format;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.woozooha.adonistrack.Invocation;
 import com.woozooha.adonistrack.JoinPointInfo;
 import com.woozooha.adonistrack.SignatureInfo;
-import com.woozooha.adonistrack.SourceLocationInfo;
 
 /**
  * Text output format.
@@ -32,8 +28,6 @@ import com.woozooha.adonistrack.SourceLocationInfo;
  * @author woozoo73
  */
 public class TextFormat implements Format {
-
-	private static final Log logger = LogFactory.getLog(TextFormat.class);
 
 	private static NumberFormat timeFormat = new DecimalFormat("###,##0.00");
 
@@ -44,7 +38,7 @@ public class TextFormat implements Format {
 		try {
 			output = formatInternal(invocation);
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 		return output;
@@ -100,15 +94,6 @@ public class TextFormat implements Format {
 			builder.append("(");
 			argsInfo(builder, invocation);
 			builder.append(")");
-
-			SourceLocationInfo sourceLocation = joinPoint.getSourceLocation();
-			if (sourceLocation != null) {
-				builder.append(" (");
-				builder.append(sourceLocation.getFileName());
-				builder.append(":");
-				builder.append(sourceLocation.getLine());
-				builder.append(")");
-			}
 		}
 
 		builder.append(" ");
@@ -140,12 +125,14 @@ public class TextFormat implements Format {
 					if (!firstArg) {
 						builder.append(", ");
 					}
+					// FIXME: Use ToString
 					builder.append(arg);
 					firstArg = false;
 				}
 			}
 			builder.append("]");
 		} else {
+		    // FIXME: Use ToString
 			builder.append(argument);
 		}
 	}

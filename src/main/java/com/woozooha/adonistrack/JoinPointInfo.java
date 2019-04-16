@@ -17,13 +17,6 @@ package com.woozooha.adonistrack;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 
@@ -32,94 +25,86 @@ import org.aspectj.lang.Signature;
  * 
  * @author woozoo73
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlType(propOrder = { "target", "signatureInfo", "argsInfo", "sourceLocation" })
 public class JoinPointInfo implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@XmlElement
-	private ObjectInfo target;
+    private ObjectInfo target;
 
-	@XmlElement(name = "signature")
-	private SignatureInfo signatureInfo;
+    private SignatureInfo signatureInfo;
 
-	private Object[] args;
+    private Object[] args;
 
-	@XmlElementWrapper(name = "args")
-	@XmlElement(name = "arg")
-	private ObjectInfo[] argsInfo;
+    private ObjectInfo[] argsInfo;
 
-	@XmlElement(name = "sourceLocation")
-	private SourceLocationInfo sourceLocation;
+    private SourceLocationInfo sourceLocation;
 
-	public JoinPointInfo() {
-	}
+    public JoinPointInfo() {
+    }
 
-	public JoinPointInfo(JoinPoint joinPoint) {
-		if (joinPoint == null) {
-			return;
-		}
+    public JoinPointInfo(JoinPoint joinPoint) {
+        if (joinPoint == null) {
+            return;
+        }
 
-		target = new ObjectInfo(joinPoint.getTarget());
+        target = new ObjectInfo(joinPoint.getTarget());
 
-		args = joinPoint.getArgs();
-		if (args != null && args.length > 0) {
-			argsInfo = new ObjectInfo[args.length];
-			for (int i = 0; i < argsInfo.length; i++) {
-				argsInfo[i] = new ObjectInfo(args[i]);
-			}
-		}
+        args = joinPoint.getArgs();
+        if (args != null && args.length > 0) {
+            argsInfo = new ObjectInfo[args.length];
+            for (int i = 0; i < argsInfo.length; i++) {
+                argsInfo[i] = new ObjectInfo(args[i]);
+            }
+        }
 
-		sourceLocation = new SourceLocationInfo(joinPoint.getSourceLocation());
+        sourceLocation = new SourceLocationInfo(joinPoint.getSourceLocation());
 
-		Signature signature = joinPoint.getSignature();
-		if (signature == null) {
-			return;
-		}
+        Signature signature = joinPoint.getSignature();
+        if (signature == null) {
+            return;
+        }
 
-		signatureInfo = new SignatureInfo(signature);
-	}
+        signatureInfo = new SignatureInfo(signature);
+    }
 
-	public ObjectInfo getTarget() {
-		return target;
-	}
+    public ObjectInfo getTarget() {
+        return target;
+    }
 
-	public void setTarget(ObjectInfo target) {
-		this.target = target;
-	}
+    public void setTarget(ObjectInfo target) {
+        this.target = target;
+    }
 
-	public SignatureInfo getSignatureInfo() {
-		return signatureInfo;
-	}
+    public SignatureInfo getSignatureInfo() {
+        return signatureInfo;
+    }
 
-	public void setSignatureInfo(SignatureInfo signatureInfo) {
-		this.signatureInfo = signatureInfo;
-	}
+    public void setSignatureInfo(SignatureInfo signatureInfo) {
+        this.signatureInfo = signatureInfo;
+    }
 
-	public void setArgs(Object[] args) {
-		this.args = args;
-	}
+    public void setArgs(Object[] args) {
+        this.args = args;
+    }
 
-	public Object[] getArgs() {
-		return args;
-	}
+    public Object[] getArgs() {
+        return args;
+    }
 
-	public ObjectInfo[] getArgsInfo() {
-		return argsInfo;
-	}
+    public ObjectInfo[] getArgsInfo() {
+        return argsInfo;
+    }
 
-	public void setArgsInfo(ObjectInfo[] argsInfo) {
-		this.argsInfo = argsInfo;
-	}
+    public void setArgsInfo(ObjectInfo[] argsInfo) {
+        this.argsInfo = argsInfo;
+    }
 
-	public SourceLocationInfo getSourceLocation() {
-		return sourceLocation;
-	}
+    public SourceLocationInfo getSourceLocation() {
+        return sourceLocation;
+    }
 
-	public void setSourceLocation(SourceLocationInfo sourceLocation) {
-		this.sourceLocation = sourceLocation;
-	}
+    public void setSourceLocation(SourceLocationInfo sourceLocation) {
+        this.sourceLocation = sourceLocation;
+    }
 
 }

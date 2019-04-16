@@ -19,14 +19,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import org.aspectj.lang.JoinPoint;
 
 /**
@@ -34,29 +26,20 @@ import org.aspectj.lang.JoinPoint;
  * 
  * @author woozoo73
  */
-@XmlRootElement(name = "invocation")
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlType(propOrder = { "joinPointInfo", "jdbcInfo", "childInvocationList", "returnValueInfo", "throwableInfo" })
 public class Invocation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@XmlAttribute
 	private Integer depth = 0;
 
-	@XmlElementWrapper(name = "childInvocationList")
-	@XmlElement(name = "invocation")
 	private List<Invocation> childInvocationList;
 
 	private JoinPoint joinPoint;
 
-	@XmlElement(name = "joinPoint")
 	private JoinPointInfo joinPointInfo;
 
-	@XmlAttribute
 	private Long durationNanoTime;
 
-	@XmlAttribute
 	private Double durationPercentage = 100D;
 
 	private Long startNanoTime;
@@ -65,12 +48,10 @@ public class Invocation implements Serializable {
 
 	private Object returnValue;
 
-	@XmlElement(name = "returnValue")
 	private ObjectInfo returnValueInfo;
 
 	private Throwable t;
 
-	@XmlElement(name = "t")
 	private ObjectInfo throwableInfo;
 
 	protected boolean equalsJoinPoint(Invocation another) {

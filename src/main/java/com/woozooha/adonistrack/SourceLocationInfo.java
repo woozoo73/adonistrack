@@ -17,11 +17,6 @@ package com.woozooha.adonistrack;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.aspectj.lang.reflect.SourceLocation;
 
 /**
@@ -29,71 +24,63 @@ import org.aspectj.lang.reflect.SourceLocation;
  * 
  * @author woozoo73
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
 public class SourceLocationInfo implements SourceLocation, Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@XmlAttribute
-	private Class<?> withinType;
+    private Class<?> withinType;
 
-	private String fileName;
+    private String fileName;
 
-	@XmlAttribute
-	private int line;
+    private int line;
 
-	private int column;
+    private int column;
 
-	public SourceLocationInfo() {
-	}
+    public SourceLocationInfo() {
+    }
 
-//	@SuppressWarnings("deprecation")
-	public SourceLocationInfo(SourceLocation sourceLocation) {
-		if (sourceLocation == null) {
-			return;
-		}
+    public SourceLocationInfo(SourceLocation sourceLocation) {
+        if (sourceLocation == null) {
+            return;
+        }
 
-		this.withinType = sourceLocation.getWithinType();
-//		this.fileName = sourceLocation.getFileName();
-//		this.line = sourceLocation.getLine();
-//		this.column = sourceLocation.getColumn();
-	}
+        this.withinType = sourceLocation.getWithinType();
+    }
 
-	@Override
-	public Class<?> getWithinType() {
-		return withinType;
-	}
+    @Override
+    public Class<?> getWithinType() {
+        return withinType;
+    }
 
-	@Override
-	public String getFileName() {
-		return fileName;
-	}
+    @Override
+    public String getFileName() {
+        return fileName;
+    }
 
-	@Override
-	public int getLine() {
-		return line;
-	}
+    @Override
+    public int getLine() {
+        return line;
+    }
 
-	@Override
-	public int getColumn() {
-		return column;
-	}
+    @Override
+    public int getColumn() {
+        return column;
+    }
 
-	public void setWithinType(Class<?> withinType) {
-		this.withinType = withinType;
-	}
+    public void setWithinType(Class<?> withinType) {
+        this.withinType = withinType;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public void setLine(int line) {
-		this.line = line;
-	}
+    public void setLine(int line) {
+        this.line = line;
+    }
 
-	public void setColumn(int column) {
-		this.column = column;
-	}
+    public void setColumn(int column) {
+        this.column = column;
+    }
 
 }

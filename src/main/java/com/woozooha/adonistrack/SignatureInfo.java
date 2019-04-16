@@ -17,11 +17,6 @@ package com.woozooha.adonistrack;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.aspectj.lang.Signature;
 
 /**
@@ -29,19 +24,14 @@ import org.aspectj.lang.Signature;
  * 
  * @author woozoo73
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
 public class SignatureInfo implements Signature, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@XmlAttribute
 	private Class<?> declaringType;
 
-	@XmlAttribute
 	private String name;
 
-	@XmlAttribute
 	private int modifiers;
 
 	private String shortString;

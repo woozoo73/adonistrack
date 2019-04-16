@@ -17,26 +17,17 @@ package com.woozooha.adonistrack;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Object data.
  * 
  * @author woozoo73
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
 public class ObjectInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@XmlAttribute
 	private Class<?> declaringType;
 
-	@XmlAttribute(name = "toString")
 	private String toStringValue;
 
 	public ObjectInfo() {
@@ -49,9 +40,11 @@ public class ObjectInfo implements Serializable {
 
 		this.declaringType = object.getClass();
 		if (object instanceof byte[]) {
+		    // FIXME: Use ToString
 			this.toStringValue = new String((byte[]) object);
 		} else {
 			try {
+			    // FIXME: Use ToString
 				this.toStringValue = object.toString();
 			} catch (Throwable t) {
 			}
