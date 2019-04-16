@@ -1,5 +1,5 @@
 # AdonisTrack
-Java profiling tool.
+Simple Java profiling tool.
 - You can trace the call stack immediately.
 - Provide method call information, parameters, return values and error information.
 - Compatible with Spring Framework.
