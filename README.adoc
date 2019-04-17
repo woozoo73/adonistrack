@@ -41,7 +41,7 @@ Simple Java profiling tool.
     }
 ----
 
-=== 2. Run your application with above aspect(`AdonisTrackAspect.java`)
+=== 2. Run your application with above aspect `AdonisTrackAspect.java`
 
 [indent=0]
 ----
