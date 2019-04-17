@@ -3,19 +3,18 @@
 Simple Java profiling tool.
 
 * You can trace the call stack immediately.
-* Do not need to write code to log method calls.
-* Provide method call information, parameters, return values and error information.
-* Compatible with Spring Framework.
-* Information is not mixed in concurrent calls.
-* Provides an extension point for custom.
+* There is no need to write code to track method calls.
+* Provide method call information(parameters, return, error and execution time).
+* Compatible with the Spring Framework.
+* The information is not intermixed with concurrent calls.
+* Provides extension points to customize.
 
 == Usage
 
 === 1. Configure your aspect to profile
 
-Make your aspect(`AdonisTrackAspect.java`) by extends `ProfileAspect`
-
-Configure `profilePointcut` and `executionPointcut` by using pointcut expression.
+* Create a aspect by extending the `ProfileAspect`, such as `AdonisTrackAspect.java`
+* Configure `profilePointcut` and `executionPointcut` of the aspect by using pointcut expression.
 
 [source,java,indent=0]
 ----
@@ -46,34 +45,46 @@ Configure `profilePointcut` and `executionPointcut` by using pointcut expression
 
 [indent=0]
 ----
-      .   ____          _            __ _ _
-     /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-    ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
-     \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-      '  |____| .__|_| |_|_| |_\__, | / / / /
-     =========|_|==============|___/=/_/_/_/
-     :: Spring Boot ::        (v2.1.3.RELEASE)
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.3.RELEASE)
 
-    2019-04-16 15:03:15.493  INFO 210736 --- [           main] com.woozooha.hello.Application           : Starting Application on woo-thinkpad with PID 210736
-    ...
-    2019-04-16 15:03:25.651  INFO 210736 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2019-04-17 13:45:18.014  INFO 254732 --- [           main] com.woozooha.hello.Application           : Starting Application ...
+2019-04-17 13:45:33.663  INFO 254732 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 10 ms
 ----
 
 === 3. Call your application and check the logs
 
-When your application is called via `GET /greeting?name=foo HTTP/1.1` request, 
-the following logs are printed.
+When your application is called via `GET /greeting?name=foo HTTP/1.1`
+
+* This is the log when the execution was successful.
 
 [indent=0]
 ----
-    ----> com.woozooha.hello.GreetingController.greeting(World) (6.89ms:100.00%)
-        ----> com.woozooha.hello.GreetingService.greeting(World) (3.76ms:100.00%)
-            ----> com.woozooha.hello.GreetingRepository.find(foo) (1.77ms:99.27%)
-            <---- hello (1.77ms:99.27%)
-            ----> com.woozooha.hello.GreetingRepository.find(bar) (0.01ms:0.73%)
-            <---- hello (0.01ms:0.73%)
-        <---- com.woozooha.hello.Greeting@2879ceae (3.76ms:100.00%)
-    <---- com.woozooha.hello.Greeting@2879ceae (6.89ms:100.00%)
+----> com.woozooha.hello.GreetingController.greeting(hello) (8.85ms:100.00%)
+    ----> com.woozooha.hello.GreetingService.greeting(hello) (5.05ms:100.00%)
+        ----> com.woozooha.hello.GreetingRepository.find(hello) (2.72ms:99.35%)
+        <---- hello (2.72ms:99.35%)
+        ----> com.woozooha.hello.GreetingRepository.find(foo-hello) (0.02ms:0.65%)
+        <---- hello (0.02ms:0.65%)
+    <---- com.woozooha.hello.Greeting@50fdbf1d (5.05ms:100.00%)
+<---- com.woozooha.hello.Greeting@50fdbf1d (8.85ms:100.00%)
+----
+
+* The log when the request execution failed.
+
+[indent=0]
+----
+----> com.woozooha.hello.GreetingController.greeting(null) (0.34ms:100.00%)
+    ----> com.woozooha.hello.GreetingService.greeting(null) (0.28ms:100.00%)
+        ----> com.woozooha.hello.GreetingRepository.find(null) (0.22ms:100.00%)
+        <<<<< java.lang.IllegalArgumentException: name can't be null. (0.22ms:100.00%)
+    <<<<< java.lang.IllegalArgumentException: name can't be null. (0.28ms:100.00%)
+<<<<< java.lang.IllegalArgumentException: name can't be null. (0.34ms:100.00%)
 ----
 
 == License
