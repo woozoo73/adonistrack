@@ -75,7 +75,7 @@ When your application is called via `GET /greeting?name=foo HTTP/1.1`
 <---- com.woozooha.hello.Greeting@50fdbf1d (8.85ms:100.00%)
 ----
 
-* The log when the request execution failed.
+* This is the log when the execution was failed.
 
 [indent=0]
 ----
