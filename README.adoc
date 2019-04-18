@@ -1,4 +1,4 @@
-= AdonisTract image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"]
+= AdonisTract image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"] image:https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack"]
 
 Simple Java profiling tool.
 
@@ -75,7 +75,7 @@ When your application is called via `GET /greeting?name=foo HTTP/1.1`
 <---- com.woozooha.hello.Greeting@50fdbf1d (8.85ms:100.00%)
 ----
 
-* The log when the request execution failed.
+* This is the log when the execution was failed.
 
 [indent=0]
 ----
