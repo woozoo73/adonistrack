@@ -11,37 +11,51 @@ Simple Java profiling tool.
 
 == Usage
 
-=== 1. Configure your aspect to profile
+=== 1. Add this library to your project
+
+image:https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack"]
+
+=== 2. Configure your aspect to profile
 
 * Create a aspect by extending the `ProfileAspect`, such as `AdonisTrackAspect.java`
 * Configure `profilePointcut` and `executionPointcut` of the aspect by using pointcut expression.
 
 [source,java,indent=0]
 ----
-    package com.woozooha.hello;
+package com.woozooha.adonistrack.test.spring;
 
-    import org.aspectj.lang.annotation.Aspect;
-    import org.aspectj.lang.annotation.Pointcut;
-    import org.springframework.stereotype.Component;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
-    import com.woozooha.adonistrack.ProfileAspect;
+import com.woozooha.adonistrack.ProfileAspect;
 
-    @Aspect
-    @Component
-    public class AdonisTrackAspect extends ProfileAspect {
+@Aspect
+@Component
+public class AdonisTrackAspect extends ProfileAspect {
 
-        @Pointcut("execution(* com.woozooha.hello.*Controller.*(..))")
-        protected void profilePointcut() {
-        }
-
-        @Pointcut("execution(* *(..)) && within(com.woozooha.hello..*)")
-        protected void executionPointcut() {
-        }
-
+    /**
+     * Fix this <code>@Pointcut</code> expression according to your situation. For
+     * example, modify "com.woozooha.adonistrack.test.spring" to your application's
+     * top-level package name "com.yourcompany.killerapp".
+     */
+    @Pointcut("execution(* com.woozooha.adonistrack.test.spring..*Controller.*(..))")
+    protected void profilePointcut() {
     }
+
+    /**
+     * Fix this <code>@Pointcut</code> expression according to your situation. For
+     * example, modify "com.woozooha.adonistrack.test.spring" to your application's
+     * top-level package name "com.yourcompany.killerapp".
+     */
+    @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+))")
+    protected void executionPointcut() {
+    }
+
+}
 ----
 
-=== 2. Run your application with above aspect `AdonisTrackAspect.java`
+=== 3. Run your application with above aspect `AdonisTrackAspect.java`
 
 [indent=0]
 ----
@@ -57,7 +71,7 @@ Simple Java profiling tool.
 2019-04-17 13:45:33.663  INFO 254732 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 10 ms
 ----
 
-=== 3. Call your application and check the logs
+=== 4. Call your application and check the log
 
 When your application is called via `GET /greeting?name=foo HTTP/1.1`
 
