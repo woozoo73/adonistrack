@@ -103,3 +103,6 @@ When your application is called via `GET /greeting?name=foo HTTP/1.1`
 
 == License
 AdonisTrack is Open Source software released under the Apache 2.0 license.
+
+== AdonisTrack?
+image:adonis-flower.jpg["Adonis", link="https://www.maxpixel.net/The-Amur-Adonis-Amur-Adonis-Adonis-Amurensis-3066269"]
