@@ -35,7 +35,7 @@ import com.woozooha.adonistrack.ProfileAspect;
 public class AdonisTrackAspect extends ProfileAspect {
 
     /**
-     * Fix this <code>@Pointcut</code> expression according to your situation. For
+     * Fix this @Pointcut expression according to your situation. For
      * example, modify "com.woozooha.adonistrack.test.spring" to your application's
      * top-level package name "com.yourcompany.killerapp".
      */
@@ -44,7 +44,7 @@ public class AdonisTrackAspect extends ProfileAspect {
     }
 
     /**
-     * Fix this <code>@Pointcut</code> expression according to your situation. For
+     * Fix this @Pointcut expression according to your situation. For
      * example, modify "com.woozooha.adonistrack.test.spring" to your application's
      * top-level package name "com.yourcompany.killerapp".
      */
