@@ -10,11 +10,21 @@ import com.woozooha.adonistrack.ProfileAspect;
 @Component
 public class AdonisTrackAspect extends ProfileAspect {
 
-    @Pointcut("execution(* com.woozooha.adonistrack.test.spring.*Controller.*(..))")
+    /**
+     * Fix this <code>@Pointcut</code> expression according to your situation. For
+     * example, modify "com.woozooha.adonistrack.test.spring" to your application's
+     * top-level package name "com.yourcompany.killerapp".
+     */
+    @Pointcut("execution(* com.woozooha.adonistrack.test.spring..*Controller.*(..))")
     protected void profilePointcut() {
     }
 
-    @Pointcut("execution(* *(..)) && within(com.woozooha.adonistrack.test.spring..*)")
+    /**
+     * Fix this <code>@Pointcut</code> expression according to your situation. For
+     * example, modify "com.woozooha.adonistrack.test.spring" to your application's
+     * top-level package name "com.yourcompany.killerapp".
+     */
+    @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+))")
     protected void executionPointcut() {
     }
 
