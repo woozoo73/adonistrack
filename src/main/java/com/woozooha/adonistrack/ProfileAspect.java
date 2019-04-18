@@ -25,7 +25,7 @@ import com.woozooha.adonistrack.callback.WriterCallback;
 import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.format.Format;
 import com.woozooha.adonistrack.format.TextFormat;
-import com.woozooha.adonistrack.writer.ConsoleWriter;
+import com.woozooha.adonistrack.writer.LogWriter;
 import com.woozooha.adonistrack.writer.Writer;
 
 /**
@@ -46,8 +46,8 @@ public abstract class ProfileAspect {
         try {
             config = new Config();
 
-            Format format = new TextFormat();
-            Writer writer = new ConsoleWriter();
+            Format format = new TextFormat("\n", null);
+            Writer writer = new LogWriter();
             writer.setFormat(format);
 
             WriterCallback invocationCallback = new WriterCallback();
