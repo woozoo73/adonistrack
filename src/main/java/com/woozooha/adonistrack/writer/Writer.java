@@ -25,10 +25,10 @@ import com.woozooha.adonistrack.format.Format;
  */
 public interface Writer {
 
-	Format getFormat();
+    Format getFormat();
 
-	void setFormat(Format format);
+    void setFormat(Format format);
 
-	void write(Invocation invocation);
+    void write(Invocation invocation);
 
 }

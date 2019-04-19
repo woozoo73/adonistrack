@@ -27,47 +27,47 @@ import com.woozooha.adonistrack.format.Format;
  */
 public class CompositeWriter implements Writer {
 
-	private List<Writer> writers;
+    private List<Writer> writers;
 
-	private Format format;
+    private Format format;
 
-	private boolean appliedFormat;
+    private boolean appliedFormat;
 
-	@Override
-	public Format getFormat() {
-		return format;
-	}
+    @Override
+    public Format getFormat() {
+        return format;
+    }
 
-	@Override
-	public void setFormat(Format format) {
-		this.format = format;
-	}
+    @Override
+    public void setFormat(Format format) {
+        this.format = format;
+    }
 
-	@Override
-	public void write(Invocation invocation) {
-		if (writers == null) {
-			return;
-		}
+    @Override
+    public void write(Invocation invocation) {
+        if (writers == null) {
+            return;
+        }
 
-		if (!appliedFormat) {
-			applyFormat();
-		}
+        if (!appliedFormat) {
+            applyFormat();
+        }
 
-		for (Writer writer : writers) {
-			writer.write(invocation);
-		}
-	}
+        for (Writer writer : writers) {
+            writer.write(invocation);
+        }
+    }
 
-	protected void applyFormat() {
-		if (writers == null) {
-			return;
-		}
+    protected void applyFormat() {
+        if (writers == null) {
+            return;
+        }
 
-		for (Writer writer : writers) {
-			writer.setFormat(format);
-		}
+        for (Writer writer : writers) {
+            writer.setFormat(format);
+        }
 
-		appliedFormat = true;
-	}
+        appliedFormat = true;
+    }
 
 }

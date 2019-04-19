@@ -24,52 +24,52 @@ import java.io.Serializable;
  */
 public class ObjectInfo implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Class<?> declaringType;
+    private Class<?> declaringType;
 
-	private String toStringValue;
+    private String toStringValue;
 
-	public ObjectInfo() {
-	}
+    public ObjectInfo() {
+    }
 
-	public ObjectInfo(Object object) {
-		if (object == null) {
-			return;
-		}
+    public ObjectInfo(Object object) {
+        if (object == null) {
+            return;
+        }
 
-		this.declaringType = object.getClass();
-		if (object instanceof byte[]) {
-		    // FIXME: Use ToString
-			this.toStringValue = new String((byte[]) object);
-		} else {
-			try {
-			    // FIXME: Use ToString
-				this.toStringValue = object.toString();
-			} catch (Throwable t) {
-			}
-		}
-	}
+        this.declaringType = object.getClass();
+        if (object instanceof byte[]) {
+            // FIXME: Use ToString
+            this.toStringValue = new String((byte[]) object);
+        } else {
+            try {
+                // FIXME: Use ToString
+                this.toStringValue = object.toString();
+            } catch (Throwable t) {
+            }
+        }
+    }
 
-	public Class<?> getDeclaringType() {
-		return declaringType;
-	}
+    public Class<?> getDeclaringType() {
+        return declaringType;
+    }
 
-	public void setDeclaringType(Class<?> declaringType) {
-		this.declaringType = declaringType;
-	}
+    public void setDeclaringType(Class<?> declaringType) {
+        this.declaringType = declaringType;
+    }
 
-	public String getToStringValue() {
-		return toStringValue;
-	}
+    public String getToStringValue() {
+        return toStringValue;
+    }
 
-	public void setToStringValue(String toStringValue) {
-		this.toStringValue = toStringValue;
-	}
+    public void setToStringValue(String toStringValue) {
+        this.toStringValue = toStringValue;
+    }
 
-	@Override
-	public String toString() {
-		return toStringValue;
-	}
+    @Override
+    public String toString() {
+        return toStringValue;
+    }
 
 }

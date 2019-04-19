@@ -25,23 +25,23 @@ import com.woozooha.adonistrack.writer.Writer;
  */
 public class WriterCallback implements InvocationCallback {
 
-	private Writer writer;
+    private Writer writer;
 
-	@Override
-	public void before(Invocation invocation) {
-	}
+    @Override
+    public void before(Invocation invocation) {
+    }
 
-	@Override
-	public void after(Invocation invocation) {
-		writer.write(invocation);
-	}
+    @Override
+    public void after(Invocation invocation) {
+        writer.write(invocation);
+    }
 
-	public Writer getWriter() {
-		return writer;
-	}
+    public Writer getWriter() {
+        return writer;
+    }
 
-	public void setWriter(Writer writer) {
-		this.writer = writer;
-	}
+    public void setWriter(Writer writer) {
+        this.writer = writer;
+    }
 
 }

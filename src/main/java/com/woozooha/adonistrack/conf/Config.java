@@ -26,25 +26,25 @@ import com.woozooha.adonistrack.callback.InvocationCallback;
  */
 public class Config implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private InvocationCallback invocationCallback;
+    private InvocationCallback invocationCallback;
 
-	public InvocationCallback getInvocationCallback() {
-		return invocationCallback;
-	}
+    public InvocationCallback getInvocationCallback() {
+        return invocationCallback;
+    }
 
-	public void setInvocationCallback(InvocationCallback invocationCallback) {
-		this.invocationCallback = invocationCallback;
-	}
+    public void setInvocationCallback(InvocationCallback invocationCallback) {
+        this.invocationCallback = invocationCallback;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Config [invocationCallback=");
-		builder.append(invocationCallback);
-		builder.append("]");
-		return builder.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Config [invocationCallback=");
+        builder.append(invocationCallback);
+        builder.append("]");
+        return builder.toString();
+    }
 
 }

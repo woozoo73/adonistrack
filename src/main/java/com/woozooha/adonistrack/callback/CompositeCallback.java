@@ -26,36 +26,36 @@ import com.woozooha.adonistrack.Invocation;
  */
 public class CompositeCallback implements InvocationCallback {
 
-	private List<InvocationCallback> callbacks;
+    private List<InvocationCallback> callbacks;
 
-	@Override
-	public void before(Invocation invocation) {
-		if (callbacks == null) {
-			return;
-		}
+    @Override
+    public void before(Invocation invocation) {
+        if (callbacks == null) {
+            return;
+        }
 
-		for (InvocationCallback callback : callbacks) {
-			callback.before(invocation);
-		}
-	}
+        for (InvocationCallback callback : callbacks) {
+            callback.before(invocation);
+        }
+    }
 
-	@Override
-	public void after(Invocation invocation) {
-		if (callbacks == null) {
-			return;
-		}
+    @Override
+    public void after(Invocation invocation) {
+        if (callbacks == null) {
+            return;
+        }
 
-		for (InvocationCallback callback : callbacks) {
-			callback.after(invocation);
-		}
-	}
+        for (InvocationCallback callback : callbacks) {
+            callback.after(invocation);
+        }
+    }
 
-	public List<InvocationCallback> getCallbacks() {
-		return callbacks;
-	}
+    public List<InvocationCallback> getCallbacks() {
+        return callbacks;
+    }
 
-	public void setCallbacks(List<InvocationCallback> callbacks) {
-		this.callbacks = callbacks;
-	}
+    public void setCallbacks(List<InvocationCallback> callbacks) {
+        this.callbacks = callbacks;
+    }
 
 }

@@ -24,6 +24,6 @@ import com.woozooha.adonistrack.Invocation;
  */
 public interface Format {
 
-	String format(Invocation invocation);
+    String format(Invocation invocation);
 
 }

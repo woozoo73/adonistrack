@@ -29,65 +29,65 @@ import com.woozooha.adonistrack.stats.Record;
 
 public class StatisticsRecorder implements InvocationCallback {
 
-	private static Map<Method, Record> recordMap = new HashMap<Method, Record>();
+    private static Map<Method, Record> recordMap = new HashMap<Method, Record>();
 
-	public static Map<Method, Record> getRecordMap() {
-		return recordMap;
-	}
+    public static Map<Method, Record> getRecordMap() {
+        return recordMap;
+    }
 
-	@Override
-	public void before(Invocation invocation) {
-	}
+    @Override
+    public void before(Invocation invocation) {
+    }
 
-	@Override
-	public void after(Invocation invocation) {
-		if (invocation == null) {
-			return;
-		}
+    @Override
+    public void after(Invocation invocation) {
+        if (invocation == null) {
+            return;
+        }
 
-		JoinPoint joinPoint = invocation.getJoinPoint();
-		if (joinPoint == null) {
-			return;
-		}
+        JoinPoint joinPoint = invocation.getJoinPoint();
+        if (joinPoint == null) {
+            return;
+        }
 
-		Signature signature = joinPoint.getSignature();
-		if (signature == null) {
-			return;
-		}
+        Signature signature = joinPoint.getSignature();
+        if (signature == null) {
+            return;
+        }
 
-		if (!(signature instanceof MethodSignature)) {
-			return;
-		}
+        if (!(signature instanceof MethodSignature)) {
+            return;
+        }
 
-		MethodSignature methodSignature = (MethodSignature) signature;
-		Method method = methodSignature.getMethod();
+        MethodSignature methodSignature = (MethodSignature) signature;
+        Method method = methodSignature.getMethod();
 
-		record(method, invocation);
-	}
+        record(method, invocation);
+    }
 
-	public static String prettyPrint() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Statistics Records").append("\n");
-		builder.append("------------------------------").append("\n");
-		Set<Method> methods = recordMap.keySet();
-		for (Method method : methods) {
-			Record record = recordMap.get(method);
-			builder.append(method.toString()).append(" : ");
-			builder.append(record.prettyPrint()).append("\n");
-		}
-		builder.append("------------------------------").append("\n");
+    public static String prettyPrint() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Statistics Records").append("\n");
+        builder.append("------------------------------").append("\n");
+        Set<Method> methods = recordMap.keySet();
+        for (Method method : methods) {
+            Record record = recordMap.get(method);
+            builder.append(method.toString()).append(" : ");
+            builder.append(record.prettyPrint()).append("\n");
+        }
+        builder.append("------------------------------").append("\n");
 
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 
-	protected void record(Method method, Invocation invocation) {
-		Record record = recordMap.get(method);
-		if (record == null) {
-			record = new Record();
-			recordMap.put(method, record);
-		}
+    protected void record(Method method, Invocation invocation) {
+        Record record = recordMap.get(method);
+        if (record == null) {
+            record = new Record();
+            recordMap.put(method, record);
+        }
 
-		record.record(invocation);
-	}
+        record.record(invocation);
+    }
 
 }

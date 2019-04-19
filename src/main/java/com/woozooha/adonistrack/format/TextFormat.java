@@ -160,14 +160,14 @@ public class TextFormat implements Format {
 
     private void returnInfo(StringBuilder builder, Invocation invocation) {
         builder.append(invocation.getReturnValueInfo());
-        builder.append(" ");
-        durationInfo(builder, invocation);
+        // builder.append(" ");
+        // durationInfo(builder, invocation);
     }
 
     private void throwInfo(StringBuilder builder, Invocation invocation) {
         builder.append(invocation.getThrowableInfo());
-        builder.append(" ");
-        durationInfo(builder, invocation);
+        // builder.append(" ");
+        // durationInfo(builder, invocation);
     }
 
     private void durationInfo(StringBuilder builder, Invocation invocation) {

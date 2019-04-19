@@ -24,14 +24,14 @@ import com.woozooha.adonistrack.Invocation;
  */
 public class NullCallback implements InvocationCallback {
 
-	@Override
-	public void before(Invocation invocation) {
-		// do nothing.
-	}
+    @Override
+    public void before(Invocation invocation) {
+        // do nothing.
+    }
 
-	@Override
-	public void after(Invocation invocation) {
-		// do nothing.
-	}
+    @Override
+    public void after(Invocation invocation) {
+        // do nothing.
+    }
 
 }

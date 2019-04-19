@@ -24,8 +24,8 @@ import com.woozooha.adonistrack.Invocation;
  */
 public interface InvocationCallback {
 
-	void before(Invocation invocation);
+    void before(Invocation invocation);
 
-	void after(Invocation invocation);
+    void after(Invocation invocation);
 
 }

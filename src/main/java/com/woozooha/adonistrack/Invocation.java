@@ -28,193 +28,193 @@ import org.aspectj.lang.JoinPoint;
  */
 public class Invocation implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Integer depth = 0;
+    private Integer depth = 0;
 
-	private List<Invocation> childInvocationList;
+    private List<Invocation> childInvocationList;
 
-	private JoinPoint joinPoint;
+    private JoinPoint joinPoint;
 
-	private JoinPointInfo joinPointInfo;
+    private JoinPointInfo joinPointInfo;
 
-	private Long durationNanoTime;
+    private Long durationNanoTime;
 
-	private Double durationPercentage = 100D;
+    private Double durationPercentage = 100D;
 
-	private Long startNanoTime;
+    private Long startNanoTime;
 
-	private Long endNanoTime;
+    private Long endNanoTime;
 
-	private Object returnValue;
+    private Object returnValue;
 
-	private ObjectInfo returnValueInfo;
+    private ObjectInfo returnValueInfo;
 
-	private Throwable t;
+    private Throwable t;
 
-	private ObjectInfo throwableInfo;
+    private ObjectInfo throwableInfo;
 
-	protected boolean equalsJoinPoint(Invocation another) {
-		if (another == null) {
-			return false;
-		}
+    protected boolean equalsJoinPoint(Invocation another) {
+        if (another == null) {
+            return false;
+        }
 
-		return equalsJoinPoint(another.joinPoint);
-	}
+        return equalsJoinPoint(another.joinPoint);
+    }
 
-	protected boolean equalsJoinPoint(JoinPoint anotherJoinPoint) {
-		if (joinPoint == null) {
-			return false;
-		}
+    protected boolean equalsJoinPoint(JoinPoint anotherJoinPoint) {
+        if (joinPoint == null) {
+            return false;
+        }
 
-		return joinPoint.equals(anotherJoinPoint);
-	}
+        return joinPoint.equals(anotherJoinPoint);
+    }
 
-	protected Invocation getInvocationByJoinPoint(JoinPoint search) {
-		if (search == null) {
-			return null;
-		}
+    protected Invocation getInvocationByJoinPoint(JoinPoint search) {
+        if (search == null) {
+            return null;
+        }
 
-		if (equalsJoinPoint(search)) {
-			return this;
-		}
+        if (equalsJoinPoint(search)) {
+            return this;
+        }
 
-		if (childInvocationList != null) {
-			for (Invocation childInvocation : childInvocationList) {
-				Invocation match = childInvocation.getInvocationByJoinPoint(search);
-				if (match != null) {
-					return match;
-				}
-			}
-		}
+        if (childInvocationList != null) {
+            for (Invocation childInvocation : childInvocationList) {
+                Invocation match = childInvocation.getInvocationByJoinPoint(search);
+                if (match != null) {
+                    return match;
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	protected void start() {
-		startNanoTime = System.nanoTime();
-	}
+    protected void start() {
+        startNanoTime = System.nanoTime();
+    }
 
-	protected void stop() {
-		endNanoTime = System.nanoTime();
-		durationNanoTime = endNanoTime - startNanoTime;
-	}
+    protected void stop() {
+        endNanoTime = System.nanoTime();
+        durationNanoTime = endNanoTime - startNanoTime;
+    }
 
-	public void add(Invocation childInvocation) {
-		childInvocation.setDepth(depth + 1);
+    public void add(Invocation childInvocation) {
+        childInvocation.setDepth(depth + 1);
 
-		if (childInvocationList == null) {
-			childInvocationList = new ArrayList<Invocation>();
-		}
-		childInvocationList.add(childInvocation);
-	}
+        if (childInvocationList == null) {
+            childInvocationList = new ArrayList<Invocation>();
+        }
+        childInvocationList.add(childInvocation);
+    }
 
-	protected void calculateChildDurationPercentage() {
-		Long totalSibling = 0L;
+    protected void calculateChildDurationPercentage() {
+        Long totalSibling = 0L;
 
-		if (childInvocationList != null) {
-			for (Invocation invocation : childInvocationList) {
-				if (invocation.durationNanoTime != null) {
-					totalSibling += invocation.durationNanoTime;
-				}
-			}
-		}
+        if (childInvocationList != null) {
+            for (Invocation invocation : childInvocationList) {
+                if (invocation.durationNanoTime != null) {
+                    totalSibling += invocation.durationNanoTime;
+                }
+            }
+        }
 
-		if (childInvocationList != null) {
-			for (Invocation invocation : childInvocationList) {
-				Double percentage = 0D;
-				if (totalSibling > 0L) {
-					percentage = (100D * invocation.durationNanoTime) / totalSibling;
-				}
-				invocation.setDurationPercentage(percentage);
+        if (childInvocationList != null) {
+            for (Invocation invocation : childInvocationList) {
+                Double percentage = 0D;
+                if (totalSibling > 0L) {
+                    percentage = (100D * invocation.durationNanoTime) / totalSibling;
+                }
+                invocation.setDurationPercentage(percentage);
 
-				invocation.calculateChildDurationPercentage();
-			}
-		}
-	}
+                invocation.calculateChildDurationPercentage();
+            }
+        }
+    }
 
-	public Double getDurationMiliTime() {
-		if (durationNanoTime == null) {
-			return null;
-		}
+    public Double getDurationMiliTime() {
+        if (durationNanoTime == null) {
+            return null;
+        }
 
-		return durationNanoTime.doubleValue() / (1000 * 1000);
-	}
+        return durationNanoTime.doubleValue() / (1000 * 1000);
+    }
 
-	public Integer getDepth() {
-		return depth;
-	}
+    public Integer getDepth() {
+        return depth;
+    }
 
-	public void setDepth(Integer depth) {
-		this.depth = depth;
-	}
+    public void setDepth(Integer depth) {
+        this.depth = depth;
+    }
 
-	public List<Invocation> getChildInvocationList() {
-		return childInvocationList;
-	}
+    public List<Invocation> getChildInvocationList() {
+        return childInvocationList;
+    }
 
-	public JoinPoint getJoinPoint() {
-		return joinPoint;
-	}
+    public JoinPoint getJoinPoint() {
+        return joinPoint;
+    }
 
-	public void setJoinPoint(JoinPoint joinPoint) {
-		this.joinPoint = joinPoint;
-	}
+    public void setJoinPoint(JoinPoint joinPoint) {
+        this.joinPoint = joinPoint;
+    }
 
-	public JoinPointInfo getJoinPointInfo() {
-		return joinPointInfo;
-	}
+    public JoinPointInfo getJoinPointInfo() {
+        return joinPointInfo;
+    }
 
-	public void setJoinPointInfo(JoinPointInfo joinPointInfo) {
-		this.joinPointInfo = joinPointInfo;
-	}
+    public void setJoinPointInfo(JoinPointInfo joinPointInfo) {
+        this.joinPointInfo = joinPointInfo;
+    }
 
-	public Long getDurationNanoTime() {
-		return durationNanoTime;
-	}
+    public Long getDurationNanoTime() {
+        return durationNanoTime;
+    }
 
-	public void setDurationNanoTime(Long durationNanoTime) {
-		this.durationNanoTime = durationNanoTime;
-	}
+    public void setDurationNanoTime(Long durationNanoTime) {
+        this.durationNanoTime = durationNanoTime;
+    }
 
-	public Double getDurationPercentage() {
-		return durationPercentage;
-	}
+    public Double getDurationPercentage() {
+        return durationPercentage;
+    }
 
-	public void setDurationPercentage(Double durationPercentage) {
-		this.durationPercentage = durationPercentage;
-	}
+    public void setDurationPercentage(Double durationPercentage) {
+        this.durationPercentage = durationPercentage;
+    }
 
-	public Object getReturnValue() {
-		return returnValue;
-	}
+    public Object getReturnValue() {
+        return returnValue;
+    }
 
-	public void setReturnValue(Object returnValue) {
-		this.returnValue = returnValue;
-	}
+    public void setReturnValue(Object returnValue) {
+        this.returnValue = returnValue;
+    }
 
-	public ObjectInfo getReturnValueInfo() {
-		return returnValueInfo;
-	}
+    public ObjectInfo getReturnValueInfo() {
+        return returnValueInfo;
+    }
 
-	public void setReturnValueInfo(ObjectInfo returnValueInfo) {
-		this.returnValueInfo = returnValueInfo;
-	}
+    public void setReturnValueInfo(ObjectInfo returnValueInfo) {
+        this.returnValueInfo = returnValueInfo;
+    }
 
-	public Throwable getT() {
-		return t;
-	}
+    public Throwable getT() {
+        return t;
+    }
 
-	public void setT(Throwable t) {
-		this.t = t;
-	}
+    public void setT(Throwable t) {
+        this.t = t;
+    }
 
-	public ObjectInfo getThrowableInfo() {
-		return throwableInfo;
-	}
+    public ObjectInfo getThrowableInfo() {
+        return throwableInfo;
+    }
 
-	public void setThrowableInfo(ObjectInfo throwableInfo) {
-		this.throwableInfo = throwableInfo;
-	}
+    public void setThrowableInfo(ObjectInfo throwableInfo) {
+        this.throwableInfo = throwableInfo;
+    }
 
 }
