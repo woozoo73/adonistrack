@@ -73,7 +73,7 @@ public class AdonisTrackAspect extends ProfileAspect {
 
 === 4. Call your application and check the log
 
-When your application is called via `GET /greeting?name=foo HTTP/1.1`
+When your application is called via `GET /greeting?name=hello HTTP/1.1`
 
 * This is the log when the execution was successful.
 
