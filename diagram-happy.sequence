@@ -1,0 +1,8 @@
+User->GreetingController: greeting(hello)
+GreetingController->GreetingService: greeting(hello)
+GreetingService->GreetingRepository: find(hello)
+GreetingRepository-->GreetingService: hello
+GreetingService->GreetingRepository: find(foo-hello)
+GreetingRepository-->GreetingService: foo-hello
+GreetingService-->GreetingController: Greeting
+GreetingController-->User: Greeting

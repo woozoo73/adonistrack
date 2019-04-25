@@ -1,0 +1,6 @@
+User->GreetingController: greeting(null)
+GreetingController->GreetingService: greeting(null)
+GreetingService->GreetingRepository: find(null)
+GreetingRepository-->GreetingService: throw Exception
+GreetingService-->GreetingController: throw Exception
+GreetingController-->User: throw Exception
