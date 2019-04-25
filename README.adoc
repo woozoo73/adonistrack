@@ -89,6 +89,10 @@ When your application is called via `GET /greeting?name=hello HTTP/1.1`
 <---- com.woozooha.hello.Greeting@50fdbf1d (8.85ms:100.00%)
 ----
 
+* This log means the following sequence diagram.
+
+image:diagram-happy.png["Diagrams", link="https://github.com/francoislaberge/diagrams"]
+
 * This is the log when the execution was failed.
 
 [indent=0]
@@ -100,6 +104,10 @@ When your application is called via `GET /greeting?name=hello HTTP/1.1`
     <<<<< java.lang.IllegalArgumentException: name can't be null. (0.28ms:100.00%)
 <<<<< java.lang.IllegalArgumentException: name can't be null. (0.34ms:100.00%)
 ----
+
+* This log means the following sequence diagram.
+
+image:diagram-unhappy.png["Diagrams", link="https://github.com/francoislaberge/diagrams"]
 
 == License
 AdonisTrack is Open Source software released under the Apache 2.0 license.
