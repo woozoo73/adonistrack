@@ -29,7 +29,7 @@ public class SpringTest {
     public void greetingWithText() {
         Long id = 1L;
         String content = greeting(id);
-        assertEquals("Hello-1", content);
+        assertEquals("Hello\nfoo", content);
     }
 
     @Test(expected = IllegalArgumentException.class)

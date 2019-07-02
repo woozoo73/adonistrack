@@ -19,7 +19,7 @@ public class GreetingService {
 
     @PostConstruct
     public void init() {
-        Greeting greeting = new Greeting(1L, "Hello-1\nfoo");
+        Greeting greeting = new Greeting(1L, "Hello\nfoo");
         greetingRepository.save(greeting);
     }
 
