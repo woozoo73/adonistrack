@@ -1,24 +1,26 @@
 package com.woozooha.adonistrack.test.spring;
 
-import java.util.concurrent.atomic.AtomicLong;
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class GreetingService {
-
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
 
     @Autowired
     GreetingRepository greetingRepository;
 
-    public Greeting greeting(String name) {
-        greetingRepository.find(name);
-        greetingRepository.find("foo-" + name);
+    public Greeting greeting(Long id) {
+        return greetingRepository.findById(id).get();
+    }
 
-        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    @PostConstruct
+    public void init() {
+        Greeting greeting = new Greeting(1L, "Hello-1");
+        greetingRepository.save(greeting);
     }
 
 }

@@ -1,14 +1,22 @@
 package com.woozooha.adonistrack.test.spring;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Greeting {
 
-    private final long id;
-    private final String content;
+    @Id
+    private Long id;
 
-    public Greeting(long id, String content) {
-        this.id = id;
-        this.content = content;
-    }
+    private String content;
 
     public long getId() {
         return id;
@@ -17,4 +25,5 @@ public class Greeting {
     public String getContent() {
         return content;
     }
+
 }

@@ -27,19 +27,18 @@ public class SpringTest {
 
     @Test
     public void greetingWithText() {
-        String name = "world";
-        String content = greeting(name);
-        assertEquals("Hello, " + name + "!", content);
+        Long id = 1L;
+        String content = greeting(id);
+        assertEquals("Hello-1", content);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void greetingWithNull() {
-
         greeting(null);
     }
 
-    private String greeting(String name) {
-        Response response = request().post("/greeting?name={name}", name);
+    private String greeting(Long id) {
+        Response response = request().post("/greeting/{id}", id);
         JsonPath jsonPath = response.jsonPath();
         String content = jsonPath.get("content");
 
