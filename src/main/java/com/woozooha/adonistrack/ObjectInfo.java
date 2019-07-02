@@ -17,6 +17,8 @@ package com.woozooha.adonistrack;
 
 import java.io.Serializable;
 
+import com.woozooha.adonistrack.util.ToStringUtils;
+
 /**
  * Object data.
  * 
@@ -39,16 +41,7 @@ public class ObjectInfo implements Serializable {
         }
 
         this.declaringType = object.getClass();
-        if (object instanceof byte[]) {
-            // FIXME: Use ToString
-            this.toStringValue = new String((byte[]) object);
-        } else {
-            try {
-                // FIXME: Use ToString
-                this.toStringValue = object.toString();
-            } catch (Throwable t) {
-            }
-        }
+        this.toStringValue = ToStringUtils.format(object);
     }
 
     public Class<?> getDeclaringType() {
