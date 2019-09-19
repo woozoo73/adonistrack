@@ -1,6 +1,6 @@
 = AdonisTrack image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"] image:https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack"]
 
-Simple Java profiling tool.
+Simple Java profiling tool. (The light version of 'hazin-tracer')
 
 * You can trace the call stack immediately.
 * There is no need to write code to track method calls.
