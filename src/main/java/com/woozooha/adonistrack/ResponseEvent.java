@@ -33,6 +33,7 @@ public class ResponseEvent extends Event {
         StringBuilder builder = new StringBuilder();
 
         int status = response.getStatus();
+
         builder.append(status);
 
         return builder.toString();
