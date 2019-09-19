@@ -36,7 +36,7 @@ import com.woozooha.adonistrack.writer.Writer;
 @Aspect
 public abstract class ProfileAspect {
 
-    private Config config;
+    private static Config config;
 
     public ProfileAspect() {
         initConfig();
@@ -59,36 +59,11 @@ public abstract class ProfileAspect {
         }
     }
 
-    protected abstract void profilePointcut();
+    public static Config getConfig() {
+        return config;
+    }
 
     protected abstract void executionPointcut();
-
-    @Before("profilePointcut()")
-    public void profileBefore(JoinPoint joinPoint) {
-        Invocation endpointInvocation = Context.getEndpointInvocation();
-
-        Invocation invocation = new Invocation();
-        invocation.setJoinPoint(joinPoint);
-        invocation.setJoinPointInfo(new JoinPointInfo(joinPoint));
-
-        if (endpointInvocation == null) {
-            Context.setEndpointInvocation(invocation);
-
-            try {
-                config.getInvocationCallback().before(invocation);
-            } catch (Throwable t) {
-            }
-        }
-
-        Invocation currentInvocation = Context.peekFromInvocationStack();
-        if (currentInvocation != null) {
-            currentInvocation.add(invocation);
-        }
-
-        Context.addToInvocationStack(invocation);
-
-        invocation.start();
-    }
 
     @Before("executionPointcut()")
     public void executionBefore(JoinPoint joinPoint) {
@@ -99,6 +74,7 @@ public abstract class ProfileAspect {
         }
 
         Invocation invocation = new Invocation();
+        invocation.setType(Invocation.Type.Exec);
         invocation.setJoinPoint(joinPoint);
         invocation.setJoinPointInfo(new JoinPointInfo(joinPoint));
 
@@ -156,15 +132,6 @@ public abstract class ProfileAspect {
         invocation.stop();
 
         Context.popFromInvocationStack();
-
-        if (invocation.equalsJoinPoint(Context.getEndpointInvocation())) {
-            Invocation i = Context.dump();
-
-            try {
-                config.getInvocationCallback().after(i);
-            } catch (Throwable t) {
-            }
-        }
     }
 
 }

@@ -32,6 +32,8 @@ public class Invocation implements Serializable {
 
     private Integer depth = 0;
 
+    private Type type;
+
     private List<Invocation> childInvocationList;
 
     private JoinPoint joinPoint;
@@ -54,6 +56,8 @@ public class Invocation implements Serializable {
 
     private ObjectInfo throwableInfo;
 
+    private List<Event> eventList;
+
     protected boolean equalsJoinPoint(Invocation another) {
         if (another == null) {
             return false;
@@ -64,7 +68,7 @@ public class Invocation implements Serializable {
 
     protected boolean equalsJoinPoint(JoinPoint anotherJoinPoint) {
         if (joinPoint == null) {
-            return false;
+            return anotherJoinPoint == null;
         }
 
         return joinPoint.equals(anotherJoinPoint);
@@ -109,6 +113,13 @@ public class Invocation implements Serializable {
         childInvocationList.add(childInvocation);
     }
 
+    public void add(Event event) {
+        if (eventList == null) {
+            eventList = new ArrayList<Event>();
+        }
+        eventList.add(event);
+    }
+    
     protected void calculateChildDurationPercentage() {
         Long totalSibling = 0L;
 
@@ -147,6 +158,14 @@ public class Invocation implements Serializable {
 
     public void setDepth(Integer depth) {
         this.depth = depth;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public List<Invocation> getChildInvocationList() {
@@ -215,6 +234,18 @@ public class Invocation implements Serializable {
 
     public void setThrowableInfo(ObjectInfo throwableInfo) {
         this.throwableInfo = throwableInfo;
+    }
+
+    public List<Event> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<Event> eventList) {
+        this.eventList = eventList;
+    }
+
+    public enum Type {
+        HttpRequest, Exec
     }
 
 }

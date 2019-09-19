@@ -45,23 +45,29 @@ public class TextFormat implements Format {
 
     @Override
     public String format(Invocation invocation) {
-        StringBuilder builder = new StringBuilder();
-
-        if (prefix != null) {
-            builder.append(prefix);
-        }
-
         try {
-            builder.append(formatInternal(invocation));
+            StringBuilder builder = new StringBuilder();
+
+            if (prefix != null) {
+                builder.append(prefix);
+            }
+
+            try {
+                builder.append(formatInternal(invocation));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (suffix != null) {
+                builder.append(suffix);
+            }
+
+            return builder.toString();
         } catch (Exception e) {
             e.printStackTrace();
-        }
 
-        if (suffix != null) {
-            builder.append(suffix);
+            return null;
         }
-
-        return builder.toString();
     }
 
     private String formatInternal(Invocation invocation) {
@@ -100,6 +106,14 @@ public class TextFormat implements Format {
     }
 
     private void callInfo(StringBuilder builder, Invocation invocation) {
+        if (invocation.getType() == Invocation.Type.HttpRequest) {
+            builder.append(invocation.getEventList().get(0));
+            builder.append(" ");
+            durationInfo(builder, invocation);
+
+            return;
+        }
+
         JoinPointInfo joinPoint = invocation.getJoinPointInfo();
         SignatureInfo signature = joinPoint.getSignatureInfo();
         if (signature != null) {
