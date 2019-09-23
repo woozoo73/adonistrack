@@ -142,4 +142,7 @@ AdonisTrack is Open Source software released under the Apache 2.0 license.
 
 The flower language of Adonis is "sad memories" in the West but "eternal happiness" in the East.
 
-image:adonis-flower.jpg["Adonis amurensis", link="https://en.wikipedia.org/wiki/Adonis_amurensis"]
+image:adonis-flower-01.jpg["Adonis amurensis", link="https://en.wikipedia.org/wiki/Adonis_amurensis", width=42%]
+image:adonis-flower-02.jpg["Adonis amurensis", link="https://en.wikipedia.org/wiki/Adonis_amurensis", width=42%]
+image:adonis-flower-03.jpg["Adonis amurensis", link="https://en.wikipedia.org/wiki/Adonis_amurensis", width=42%]
+image:adonis-flower-04.jpg["Adonis amurensis", link="https://en.wikipedia.org/wiki/Adonis_amurensis", width=42%]
