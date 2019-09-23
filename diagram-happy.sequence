@@ -1,8 +1,8 @@
-User->GreetingController: greeting(hello)
-GreetingController->GreetingService: greeting(hello)
-GreetingService->GreetingRepository: find(hello)
-GreetingRepository-->GreetingService: hello
-GreetingService->GreetingRepository: find(foo-hello)
-GreetingRepository-->GreetingService: foo-hello
-GreetingService-->GreetingController: Greeting
-GreetingController-->User: Greeting
+User->Application: GET /greeting/1
+Application->GreetingController: greeting(1)
+GreetingController->GreetingService: greeting(1)
+GreetingService->GreetingRepository: findById(1)
+GreetingRepository-->GreetingService: Optional[Greeting(id=1, ..)]
+GreetingService-->GreetingController: Greeting(id=1, ..)
+GreetingController-->Application: Greeting(id=1, ..)
+Application-->User: 200

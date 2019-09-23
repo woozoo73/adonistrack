@@ -1,6 +1,8 @@
-User->GreetingController: greeting(null)
-GreetingController->GreetingService: greeting(null)
-GreetingService->GreetingRepository: find(null)
-GreetingRepository-->GreetingService: throw Exception
-GreetingService-->GreetingController: throw Exception
-GreetingController-->User: throw Exception
+User->Application: GET /greeting/2
+Application->GreetingController: greeting(2)
+GreetingController->GreetingService: greeting(2)
+GreetingService->GreetingRepository: findById(2)
+GreetingRepository-->GreetingService: Optional.empty
+GreetingService-->GreetingController: NoSuchElementException
+GreetingController-->Application: NoSuchElementException
+Application-->User: 200
