@@ -103,14 +103,14 @@ When your application is called via `GET /greeting?name=hello HTTP/1.1`
 
 [indent=0]
 ----
-----> com.woozooha.hello.GreetingController.greeting(hello) (8.85ms:100.00%)
-    ----> com.woozooha.hello.GreetingService.greeting(hello) (5.05ms:100.00%)
-        ----> com.woozooha.hello.GreetingRepository.find(hello) (2.72ms:99.35%)
-        <---- hello (2.72ms:99.35%)
-        ----> com.woozooha.hello.GreetingRepository.find(foo-hello) (0.02ms:0.65%)
-        <---- hello (0.02ms:0.65%)
-    <---- com.woozooha.hello.Greeting@50fdbf1d (5.05ms:100.00%)
-<---- com.woozooha.hello.Greeting@50fdbf1d (8.85ms:100.00%)
+----> GET http://localhost:8080/greeting/1 (230.83ms:100.00%)
+    ----> com.woozooha.adonistrack.test.spring.GreetingController.greeting(1) (29.40ms:100.00%)
+        ----> com.woozooha.adonistrack.test.spring.GreetingService.greeting(1) (25.33ms:100.00%)
+            ----> com.sun.proxy.$Proxy87.findById(1) (19.92ms:100.00%)
+            <---- Optional[Greeting(id=1, content=Hello\nfoo)]
+        <---- Greeting(id=1, content=Hello\nfoo)
+    <---- Greeting(id=1, content=Hello\nfoo)
+<---- 200
 ----
 
 * The above log means the following sequence diagram.
@@ -121,12 +121,14 @@ image:diagram-happy.png["Diagrams", link="https://github.com/francoislaberge/dia
 
 [indent=0]
 ----
-----> com.woozooha.hello.GreetingController.greeting(null) (0.34ms:100.00%)
-    ----> com.woozooha.hello.GreetingService.greeting(null) (0.28ms:100.00%)
-        ----> com.woozooha.hello.GreetingRepository.find(null) (0.22ms:100.00%)
-        <<<<< java.lang.IllegalArgumentException: name can't be null. (0.22ms:100.00%)
-    <<<<< java.lang.IllegalArgumentException: name can't be null. (0.28ms:100.00%)
-<<<<< java.lang.IllegalArgumentException: name can't be null. (0.34ms:100.00%)
+----> GET http://localhost:8080/greeting/2 (21.97ms:100.00%)
+    ----> com.woozooha.adonistrack.test.spring.GreetingController.greeting(2) (5.60ms:100.00%)
+        ----> com.woozooha.adonistrack.test.spring.GreetingService.greeting(2) (1.66ms:100.00%)
+            ----> com.sun.proxy.$Proxy87.findById(2) (0.71ms:100.00%)
+            <---- Optional.empty
+        <<<<< java.util.NoSuchElementException: No value present
+    <<<<< java.util.NoSuchElementException: No value present
+<---- 200
 ----
 
 * The above log means the following sequence diagram.
