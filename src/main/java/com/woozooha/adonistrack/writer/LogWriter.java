@@ -18,7 +18,7 @@ package com.woozooha.adonistrack.writer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
 
 /**

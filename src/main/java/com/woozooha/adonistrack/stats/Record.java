@@ -18,7 +18,7 @@ package com.woozooha.adonistrack.stats;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 
 public class Record {
 

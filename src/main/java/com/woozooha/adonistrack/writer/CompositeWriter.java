@@ -17,7 +17,7 @@ package com.woozooha.adonistrack.writer;
 
 import java.util.List;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
 
 /**

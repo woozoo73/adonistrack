@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
-import com.woozooha.adonistrack.AdonistrackFilter;
+import com.woozooha.adonistrack.filter.AdonistrackFilter;
 
 @SpringBootApplication
 public class Application {

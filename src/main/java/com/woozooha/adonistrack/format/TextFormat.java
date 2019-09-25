@@ -18,9 +18,9 @@ package com.woozooha.adonistrack.format;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import com.woozooha.adonistrack.Invocation;
-import com.woozooha.adonistrack.JoinPointInfo;
-import com.woozooha.adonistrack.SignatureInfo;
+import com.woozooha.adonistrack.domain.Invocation;
+import com.woozooha.adonistrack.domain.JoinPointInfo;
+import com.woozooha.adonistrack.domain.SignatureInfo;
 
 /**
  * Text output format.

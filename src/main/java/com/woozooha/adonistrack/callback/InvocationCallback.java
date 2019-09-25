@@ -15,7 +15,7 @@
  */
 package com.woozooha.adonistrack.callback;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 
 /**
  * Invocation callback called before and after profiling.

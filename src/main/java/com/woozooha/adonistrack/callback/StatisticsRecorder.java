@@ -24,7 +24,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.stats.Record;
 
 public class StatisticsRecorder implements InvocationCallback {

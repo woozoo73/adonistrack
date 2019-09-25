@@ -15,7 +15,7 @@
  */
 package com.woozooha.adonistrack.format;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 
 /**
  * Output format.

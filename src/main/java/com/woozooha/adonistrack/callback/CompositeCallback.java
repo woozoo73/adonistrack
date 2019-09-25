@@ -17,7 +17,7 @@ package com.woozooha.adonistrack.callback;
 
 import java.util.List;
 
-import com.woozooha.adonistrack.Invocation;
+import com.woozooha.adonistrack.domain.Invocation;
 
 /**
  * Composite invocation callback can holds many callbacks.

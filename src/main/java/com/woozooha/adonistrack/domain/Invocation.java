@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.woozooha.adonistrack;
+package com.woozooha.adonistrack.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class Invocation implements Serializable {
 
     private List<Event> eventList;
 
-    protected boolean equalsJoinPoint(Invocation another) {
+    public boolean equalsJoinPoint(Invocation another) {
         if (another == null) {
             return false;
         }
@@ -66,7 +66,7 @@ public class Invocation implements Serializable {
         return equalsJoinPoint(another.joinPoint);
     }
 
-    protected boolean equalsJoinPoint(JoinPoint anotherJoinPoint) {
+    public boolean equalsJoinPoint(JoinPoint anotherJoinPoint) {
         if (joinPoint == null) {
             return anotherJoinPoint == null;
         }
@@ -74,7 +74,7 @@ public class Invocation implements Serializable {
         return joinPoint.equals(anotherJoinPoint);
     }
 
-    protected Invocation getInvocationByJoinPoint(JoinPoint search) {
+    public Invocation getInvocationByJoinPoint(JoinPoint search) {
         if (search == null) {
             return null;
         }
@@ -95,11 +95,11 @@ public class Invocation implements Serializable {
         return null;
     }
 
-    protected void start() {
+    public void start() {
         startNanoTime = System.nanoTime();
     }
 
-    protected void stop() {
+    public void stop() {
         endNanoTime = System.nanoTime();
         durationNanoTime = endNanoTime - startNanoTime;
     }
@@ -120,7 +120,7 @@ public class Invocation implements Serializable {
         eventList.add(event);
     }
     
-    protected void calculateChildDurationPercentage() {
+    public void calculateChildDurationPercentage() {
         Long totalSibling = 0L;
 
         if (childInvocationList != null) {

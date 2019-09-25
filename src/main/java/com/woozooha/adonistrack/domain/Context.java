@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.woozooha.adonistrack;
+package com.woozooha.adonistrack.domain;
 
 import java.io.Serializable;
 import java.util.Stack;
@@ -36,25 +36,25 @@ public class Context implements Serializable {
         }
     };
 
-    protected static Invocation getEndpointInvocation() {
+    public static Invocation getEndpointInvocation() {
         return ENDPOINT_INVOCATION_CONTEXT.get();
     }
 
-    protected static void setEndpointInvocation(Invocation invocation) {
+    public static void setEndpointInvocation(Invocation invocation) {
         ENDPOINT_INVOCATION_CONTEXT.set(invocation);
     }
 
-    protected static void addToInvocationStack(Invocation invocation) {
+    public static void addToInvocationStack(Invocation invocation) {
         Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
         stack.add(invocation);
     }
 
-    protected static Invocation popFromInvocationStack() {
+    public static Invocation popFromInvocationStack() {
         Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
         return stack.pop();
     }
 
-    protected static Invocation peekFromInvocationStack() {
+    public static Invocation peekFromInvocationStack() {
         Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
         if (stack.isEmpty()) {
             return null;
@@ -63,7 +63,7 @@ public class Context implements Serializable {
         return stack.peek();
     }
 
-    protected static Invocation dump() {
+    public static Invocation dump() {
         Invocation invocation = ENDPOINT_INVOCATION_CONTEXT.get();
         invocation.calculateChildDurationPercentage();
 
