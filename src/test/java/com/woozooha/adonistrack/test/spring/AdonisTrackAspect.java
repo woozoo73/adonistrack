@@ -15,7 +15,10 @@ public class AdonisTrackAspect extends ProfileAspect {
      * example, modify "com.woozooha.adonistrack.test.spring" to your application's
      * top-level package name "com.yourcompany.killerapp".
      */
-    @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+))")
+    // @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+))")
+    // @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+) || within(org.springframework.data.jpa.repository.JpaRepository+))")
+    @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+) || within(org.springframework.data.jpa.repository.query.JpaQueryExecution+))")
+    
     protected void executionPointcut() {
     }
 

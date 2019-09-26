@@ -17,10 +17,14 @@ package com.woozooha.adonistrack.format;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 import com.woozooha.adonistrack.domain.Invocation;
+import com.woozooha.adonistrack.domain.JdbcInfo;
+import com.woozooha.adonistrack.domain.JdbcStatementInfo;
 import com.woozooha.adonistrack.domain.JoinPointInfo;
 import com.woozooha.adonistrack.domain.SignatureInfo;
+import com.woozooha.adonistrack.util.ToStringUtils;
 
 /**
  * Text output format.
@@ -80,6 +84,9 @@ public class TextFormat implements Format {
         indent(builder, invocation.getDepth());
         builder.append("----> ");
         callInfo(builder, invocation);
+        if (invocation.getJdbcInfo() != null) {
+            jdbcInfo(builder, invocation);
+        }
         if (invocation.getChildInvocationList() != null) {
             for (Invocation childInvocation : invocation.getChildInvocationList()) {
                 builder.append("\n");
@@ -160,28 +167,22 @@ public class TextFormat implements Format {
                     if (!firstArg) {
                         builder.append(", ");
                     }
-                    // FIXME: Use ToString
-                    builder.append(arg);
+                    builder.append(ToStringUtils.format(arg));
                     firstArg = false;
                 }
             }
             builder.append("]");
         } else {
-            // FIXME: Use ToString
-            builder.append(argument);
+            builder.append(ToStringUtils.format(argument));
         }
     }
 
     private void returnInfo(StringBuilder builder, Invocation invocation) {
         builder.append(invocation.getReturnValueInfo());
-        // builder.append(" ");
-        // durationInfo(builder, invocation);
     }
 
     private void throwInfo(StringBuilder builder, Invocation invocation) {
         builder.append(invocation.getThrowableInfo());
-        // builder.append(" ");
-        // durationInfo(builder, invocation);
     }
 
     private void durationInfo(StringBuilder builder, Invocation invocation) {
@@ -193,6 +194,48 @@ public class TextFormat implements Format {
         builder.append(timeFormat.format(invocation.getDurationPercentage()));
         builder.append("%");
         builder.append(")");
+    }
+
+    private void jdbcInfo(StringBuilder builder, Invocation invocation) {
+        JdbcInfo jdbcInfo = invocation.getJdbcInfo();
+        List<JdbcStatementInfo> statements = jdbcInfo.getStatements();
+        if (statements != null) {
+            for (JdbcStatementInfo statement : statements) {
+                builder.append("\n");
+                indentJdbc(builder, invocation.getDepth(), false);
+                builder.append("[JDBC/Statement]");
+                builder.append("\n");
+                indentJdbc(builder, invocation.getDepth(), true);
+                builder.append("sql: ");
+                builder.append(statement.getSql());
+                builder.append("\n");
+                if (statement.getParameterMap() != null) {
+                    indentJdbc(builder, invocation.getDepth(), true);
+                    builder.append("parameters: ");
+                    builder.append(statement.getParameterMap());
+                    builder.append("\n");
+                }
+                indentJdbc(builder, invocation.getDepth(), true);
+                builder.append("duration: ");
+                builder.append(statement.getDurationMiliTime() == null ? "0" : timeFormat.format(statement
+                        .getDurationMiliTime() / 1000));
+                builder.append("ms");
+                if (statement.getThrowableInfo() != null) {
+                    builder.append("\n");
+                    indentJdbc(builder, invocation.getDepth(), true);
+                    builder.append("throw: ");
+                    builder.append(statement.getThrowableInfo());
+                }
+            }
+        }
+    }
+
+    private void indentJdbc(StringBuilder builder, int depth, boolean sub) {
+        indent(builder, depth);
+        builder.append("       ");
+        if (sub) {
+            builder.append("    | ");
+        }
     }
 
 }

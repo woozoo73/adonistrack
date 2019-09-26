@@ -40,6 +40,8 @@ public class Invocation implements Serializable {
 
     private JoinPointInfo joinPointInfo;
 
+    private JdbcInfo jdbcInfo;
+
     private Long durationNanoTime;
 
     private Double durationPercentage = 100D;
@@ -186,6 +188,14 @@ public class Invocation implements Serializable {
 
     public void setJoinPointInfo(JoinPointInfo joinPointInfo) {
         this.joinPointInfo = joinPointInfo;
+    }
+
+    public JdbcInfo getJdbcInfo() {
+        return jdbcInfo;
+    }
+
+    public void setJdbcInfo(JdbcInfo jdbcInfo) {
+        this.jdbcInfo = jdbcInfo;
     }
 
     public Long getDurationNanoTime() {
