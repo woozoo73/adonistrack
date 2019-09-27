@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -13,7 +14,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.util.StringUtils;
 
 import com.woozooha.adonistrack.domain.Context;
 import com.woozooha.adonistrack.domain.Invocation;
