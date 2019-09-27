@@ -17,6 +17,7 @@ image:https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack/
 
 === 2. Add AdonistrackFilter to your application
 
+.Application.java
 [source,java,indent=0]
 ----
 package com.woozooha.adonistrack.test.spring;
@@ -53,6 +54,7 @@ public class Application {
 * Create a aspect by extending the `ProfileAspect`, such as `AdonisTrackAspect.java`
 * Configure `profilePointcut` and `executionPointcut` of the aspect by using pointcut expression.
 
+.AdonisTrackAspect.java
 [source,java,indent=0]
 ----
 package com.woozooha.adonistrack.test.spring;
@@ -79,8 +81,9 @@ public class AdonisTrackAspect extends ProfileAspect {
 }
 ----
 
-=== 4. Run your application with above aspect `AdonisTrackAspect.java`
+=== 4. Run your application with above aspect `AdonistrackFilter` configuration and `AdonisTrackAspect.java`
 
+.Runing application log
 [indent=0]
 ----
   .   ____          _            __ _ _
@@ -101,6 +104,7 @@ When your application is called via `GET /greeting?name=hello HTTP/1.1`
 
 * This is the log when the execution was successful.
 
+.Output log
 [indent=0]
 ----
 ----> GET http://localhost:8080/greeting/1 (230.83ms:100.00%)
@@ -119,6 +123,7 @@ image:diagram-happy.png["Diagrams", link="https://github.com/francoislaberge/dia
 
 * This is the log when the execution was failed.
 
+.Output log
 [indent=0]
 ----
 ----> GET http://localhost:8080/greeting/2 (21.97ms:100.00%)
@@ -142,8 +147,7 @@ If you want to profile JDBC queries, do the following.
 
 * Add aop.xml file to your application project.
 
-==== /META-INF/aop.xml
-
+./META-INF/aop.xml
 [source,xml,indent=0]
 ----
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
@@ -161,14 +165,14 @@ If you want to profile JDBC queries, do the following.
 
 * Add VM arguments when run your application. 
 
-==== VM arguments
-
+.Vm arguments
 ----
 -javaagent:/{your-home-path}/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
 ----
 
 You can further profile JDBC query as shown below.
 
+.Output log
 [indent=0]
 ----
 ----> GET http://localhost:8080/greeting/1 (227.91ms:100.00%)
