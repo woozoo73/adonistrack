@@ -140,6 +140,8 @@ image:diagram-unhappy.png["Diagrams", link="https://github.com/francoislaberge/d
 Adonistrack supports load-time-weaving for even more powerful profiling.
 If you want to profile JDBC queries, do the following.
 
+* Add aop.xml file to your application project.
+
 ==== /META-INF/aop.xml
 
 [source,xml,indent=0]
@@ -157,13 +159,15 @@ If you want to profile JDBC queries, do the following.
 </aspectj>
 ----
 
+* Add VM arguments when run your application. 
+
 ==== VM arguments
 
 ----
 -javaagent:/{your-home-path}/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
 ----
 
-You can further profile jdbc query as shown below..
+You can further profile jdbc query as shown below.
 
 [indent=0]
 ----
