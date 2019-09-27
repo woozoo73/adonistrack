@@ -177,7 +177,7 @@ You can further profile jdbc query as shown below.
             ----> com.sun.proxy.$Proxy88.findById(1) (26.41ms:100.00%)
                    [JDBC/Statement]
                        | sql: select greeting0_.id as id1_0_0_, greeting0_.content as content2_0_0_ from greeting greeting0_ where greeting0_.id=?
-                       | parameters: [1]
+                       | parameters: {1=1}
                        | duration: 0.00ms
             <---- Optional[Greeting(id=1, content=Hello\nfoo)]
         <---- Greeting(id=1, content=Hello\nfoo)
