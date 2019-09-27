@@ -167,7 +167,7 @@ If you want to profile JDBC queries, do the following.
 -javaagent:/{your-home-path}/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
 ----
 
-You can further profile jdbc query as shown below.
+You can further profile JDBC query as shown below.
 
 [indent=0]
 ----
