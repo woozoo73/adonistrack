@@ -17,7 +17,9 @@ package com.woozooha.adonistrack.domain;
 
 import javax.servlet.http.HttpServletResponse;
 
-public class ResponseEvent extends Event {
+public class ResponseEvent extends Event<HttpServletResponse> {
+
+    protected String type = "RESPONSE";
 
     public ResponseEvent() {
     }
@@ -28,11 +30,13 @@ public class ResponseEvent extends Event {
 
     @Override
     public String toString() {
-        HttpServletResponse response = (HttpServletResponse) value;
-
         StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        builder.append(type);
+        builder.append("]");
+        builder.append(" ");
 
-        int status = response.getStatus();
+        int status = value.getStatus();
 
         builder.append(status);
 

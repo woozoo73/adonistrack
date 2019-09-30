@@ -40,8 +40,6 @@ public class Invocation implements Serializable {
 
     private JoinPointInfo joinPointInfo;
 
-    private JdbcInfo jdbcInfo;
-
     private Long durationNanoTime;
 
     private Double durationPercentage = 100D;
@@ -58,7 +56,7 @@ public class Invocation implements Serializable {
 
     private ObjectInfo throwableInfo;
 
-    private List<Event> eventList;
+    private List<Event<?>> eventList;
 
     public boolean equalsJoinPoint(Invocation another) {
         if (another == null) {
@@ -115,9 +113,9 @@ public class Invocation implements Serializable {
         childInvocationList.add(childInvocation);
     }
 
-    public void add(Event event) {
+    public void add(Event<?> event) {
         if (eventList == null) {
-            eventList = new ArrayList<Event>();
+            eventList = new ArrayList<Event<?>>();
         }
         eventList.add(event);
     }
@@ -190,14 +188,6 @@ public class Invocation implements Serializable {
         this.joinPointInfo = joinPointInfo;
     }
 
-    public JdbcInfo getJdbcInfo() {
-        return jdbcInfo;
-    }
-
-    public void setJdbcInfo(JdbcInfo jdbcInfo) {
-        this.jdbcInfo = jdbcInfo;
-    }
-
     public Long getDurationNanoTime() {
         return durationNanoTime;
     }
@@ -246,16 +236,16 @@ public class Invocation implements Serializable {
         this.throwableInfo = throwableInfo;
     }
 
-    public List<Event> getEventList() {
+    public List<Event<?>> getEventList() {
         return eventList;
     }
 
-    public void setEventList(List<Event> eventList) {
+    public void setEventList(List<Event<?>> eventList) {
         this.eventList = eventList;
     }
 
     public enum Type {
-        HttpRequest, Exec
+        Event, Exec
     }
 
 }

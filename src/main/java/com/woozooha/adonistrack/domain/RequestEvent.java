@@ -17,7 +17,9 @@ package com.woozooha.adonistrack.domain;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class RequestEvent extends Event {
+public class RequestEvent extends Event<HttpServletRequest> {
+
+    protected String type = "REQUEST";
 
     public RequestEvent() {
     }
@@ -27,15 +29,17 @@ public class RequestEvent extends Event {
     }
 
     public String toString() {
-        HttpServletRequest request = (HttpServletRequest) value;
-
         StringBuilder builder = new StringBuilder();
-        builder.append(request.getMethod());
+        builder.append("[");
+        builder.append(type);
+        builder.append("]");
         builder.append(" ");
-        builder.append(request.getRequestURL());
-        if (request.getQueryString() != null) {
+        builder.append(value.getMethod());
+        builder.append(" ");
+        builder.append(value.getRequestURL());
+        if (value.getQueryString() != null) {
             builder.append("?");
-            builder.append(request.getQueryString());
+            builder.append(value.getQueryString());
         }
 
         return builder.toString();

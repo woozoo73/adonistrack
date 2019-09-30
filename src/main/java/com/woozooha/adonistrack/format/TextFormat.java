@@ -17,11 +17,9 @@ package com.woozooha.adonistrack.format;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.List;
 
+import com.woozooha.adonistrack.domain.Event;
 import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.JdbcInfo;
-import com.woozooha.adonistrack.domain.JdbcStatementInfo;
 import com.woozooha.adonistrack.domain.JoinPointInfo;
 import com.woozooha.adonistrack.domain.SignatureInfo;
 import com.woozooha.adonistrack.util.ToStringUtils;
@@ -82,11 +80,13 @@ public class TextFormat implements Format {
         StringBuilder builder = new StringBuilder();
 
         indent(builder, invocation.getDepth());
+
         builder.append("----> ");
+
         callInfo(builder, invocation);
-        if (invocation.getJdbcInfo() != null) {
-            jdbcInfo(builder, invocation);
-        }
+
+        eventInfo(builder, invocation);
+
         if (invocation.getChildInvocationList() != null) {
             for (Invocation childInvocation : invocation.getChildInvocationList()) {
                 builder.append("\n");
@@ -113,7 +113,7 @@ public class TextFormat implements Format {
     }
 
     private void callInfo(StringBuilder builder, Invocation invocation) {
-        if (invocation.getType() == Invocation.Type.HttpRequest) {
+        if (invocation.getType() == Invocation.Type.Event) {
             builder.append(invocation.getEventList().get(0));
             builder.append(" ");
             durationInfo(builder, invocation);
@@ -196,41 +196,23 @@ public class TextFormat implements Format {
         builder.append(")");
     }
 
-    private void jdbcInfo(StringBuilder builder, Invocation invocation) {
-        JdbcInfo jdbcInfo = invocation.getJdbcInfo();
-        List<JdbcStatementInfo> statements = jdbcInfo.getStatements();
-        if (statements != null) {
-            for (JdbcStatementInfo statement : statements) {
-                builder.append("\n");
-                indentJdbc(builder, invocation.getDepth(), false);
-                builder.append("[JDBC/Statement]");
-                builder.append("\n");
-                indentJdbc(builder, invocation.getDepth(), true);
-                builder.append("sql: ");
-                builder.append(statement.getSql());
-                builder.append("\n");
-                if (statement.getParameterMap() != null) {
-                    indentJdbc(builder, invocation.getDepth(), true);
-                    builder.append("parameters: ");
-                    builder.append(statement.getParameterMap());
-                    builder.append("\n");
-                }
-                indentJdbc(builder, invocation.getDepth(), true);
-                builder.append("duration: ");
-                builder.append(statement.getDurationMiliTime() == null ? "0" : timeFormat.format(statement
-                        .getDurationMiliTime() / 1000));
-                builder.append("ms");
-                if (statement.getThrowableInfo() != null) {
-                    builder.append("\n");
-                    indentJdbc(builder, invocation.getDepth(), true);
-                    builder.append("throw: ");
-                    builder.append(statement.getThrowableInfo());
-                }
-            }
+    private void eventInfo(StringBuilder builder, Invocation invocation) {
+        if (invocation.getType() == Invocation.Type.Event) {
+            return;
+        }
+
+        if (invocation.getEventList() == null || invocation.getEventList().size() == 0) {
+            return;
+        }
+
+        for (Event<?> event : invocation.getEventList()) {
+            builder.append("\n");
+            indentEvent(builder, invocation.getDepth(), true);
+            builder.append(event);
         }
     }
 
-    private void indentJdbc(StringBuilder builder, int depth, boolean sub) {
+    private void indentEvent(StringBuilder builder, int depth, boolean sub) {
         indent(builder, depth);
         builder.append("       ");
         if (sub) {

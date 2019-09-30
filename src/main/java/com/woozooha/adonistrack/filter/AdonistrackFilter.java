@@ -63,7 +63,7 @@ public class AdonistrackFilter implements Filter {
         Invocation endpointInvocation = Context.getEndpointInvocation();
 
         Invocation invocation = new Invocation();
-        invocation.setType(Invocation.Type.HttpRequest);
+        invocation.setType(Invocation.Type.Event);
         invocation.add(new RequestEvent(request));
 
         if (endpointInvocation == null) {
@@ -90,7 +90,7 @@ public class AdonistrackFilter implements Filter {
     private void after(Invocation invocation, HttpServletRequest request, HttpServletResponse response) {
         invocation.stop();
 
-        Event responseEvent = new ResponseEvent(response);
+        Event<HttpServletResponse> responseEvent = new ResponseEvent(response);
         invocation.setReturnValue(responseEvent);
         invocation.setReturnValueInfo(new ObjectInfo(responseEvent));
 

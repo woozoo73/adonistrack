@@ -91,18 +91,16 @@ public class JdbcStatementInfo implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("JdbcStatementInfo [sql=");
+        builder.append("[sql=");
         builder.append(sql);
-        builder.append(", start=");
-        builder.append(start);
-        builder.append(", end=");
-        builder.append(end);
-        builder.append(", durationNanoTime=");
-        builder.append(durationNanoTime);
-        builder.append(", parameterMap=");
-        builder.append(parameterMap);
-        builder.append(", throwableInfo=");
-        builder.append(throwableInfo);
+        if (parameterMap != null) {
+            builder.append(", parameterMap=");
+            builder.append(parameterMap);
+        }
+        if (throwableInfo != null) {
+            builder.append(", throwableInfo=");
+            builder.append(throwableInfo);
+        }
         builder.append("]");
         return builder.toString();
     }

@@ -15,22 +15,32 @@
  */
 package com.woozooha.adonistrack.domain;
 
-public abstract class Event {
+public abstract class Event<V> {
 
-    protected Object value;
+    protected String type = "UNKNOWN";
+
+    protected V value;
 
     public Event() {
     }
 
-    public Event(Object value) {
+    public Event(V value) {
         this.value = value;
     }
 
-    public Object getValue() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public V getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(V value) {
         this.value = value;
     }
 

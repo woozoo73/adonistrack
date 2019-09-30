@@ -18,7 +18,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import com.woozooha.adonistrack.domain.Context;
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.domain.JdbcContext;
-import com.woozooha.adonistrack.domain.JdbcInfo;
+import com.woozooha.adonistrack.domain.JdbcEvent;
 import com.woozooha.adonistrack.domain.JdbcStatementInfo;
 import com.woozooha.adonistrack.domain.ObjectInfo;
 
@@ -85,14 +85,8 @@ public class JdbcAspect {
         Invocation invocation = Context.peekFromInvocationStack();
 
         if (invocation != null) {
-            // TODO: Modify to Event
-            JdbcInfo jdbcInfo = invocation.getJdbcInfo();
-            if (jdbcInfo == null) {
-                jdbcInfo = new JdbcInfo();
-                invocation.setJdbcInfo(jdbcInfo);
-            }
-
-            jdbcInfo.add(statementInfo);
+            JdbcEvent jdbcEvent = new JdbcEvent(statementInfo);
+            invocation.add(jdbcEvent);
         }
     }
 
