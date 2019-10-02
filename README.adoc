@@ -107,14 +107,14 @@ When your application is called via `GET /greeting?name=hello HTTP/1.1`
 .Output log
 [indent=0]
 ----
-----> GET http://localhost:8080/greeting/1 (230.83ms:100.00%)
+----> [REQUEST] GET http://localhost:8080/greeting/1 (230.83ms:100.00%)
     ----> com.woozooha.adonistrack.test.spring.GreetingController.greeting(1) (29.40ms:100.00%)
         ----> com.woozooha.adonistrack.test.spring.GreetingService.greeting(1) (25.33ms:100.00%)
             ----> com.sun.proxy.$Proxy87.findById(1) (19.92ms:100.00%)
             <---- Optional[Greeting(id=1, content=Hello\nfoo)]
         <---- Greeting(id=1, content=Hello\nfoo)
     <---- Greeting(id=1, content=Hello\nfoo)
-<---- 200
+<---- [RESPONSE] 200
 ----
 
 * The above log means the following sequence diagram.
@@ -126,14 +126,14 @@ image:diagram-happy.png["Diagrams", link="https://github.com/francoislaberge/dia
 .Output log
 [indent=0]
 ----
-----> GET http://localhost:8080/greeting/2 (21.97ms:100.00%)
+----> [REQUEST] GET http://localhost:8080/greeting/2 (21.97ms:100.00%)
     ----> com.woozooha.adonistrack.test.spring.GreetingController.greeting(2) (5.60ms:100.00%)
         ----> com.woozooha.adonistrack.test.spring.GreetingService.greeting(2) (1.66ms:100.00%)
             ----> com.sun.proxy.$Proxy87.findById(2) (0.71ms:100.00%)
             <---- Optional.empty
         <<<<< java.util.NoSuchElementException: No value present
     <<<<< java.util.NoSuchElementException: No value present
-<---- 200
+<---- [RESPONSE] 200
 ----
 
 * The above log means the following sequence diagram.
@@ -175,18 +175,15 @@ You can now see that the JDBC query is profiled as shown below.
 .Output log
 [indent=0]
 ----
-----> GET http://localhost:8080/greeting/1 (227.91ms:100.00%)
+----> [REQUEST] GET http://localhost:8080/greeting/1 (227.91ms:100.00%)
     ----> com.woozooha.adonistrack.test.spring.GreetingController.greeting(1) (36.04ms:100.00%)
         ----> com.woozooha.adonistrack.test.spring.GreetingService.greeting(1) (31.40ms:100.00%)
             ----> com.sun.proxy.$Proxy88.findById(1) (26.41ms:100.00%)
-                   [JDBC/Statement]
-                       | sql: select greeting0_.id as id1_0_0_, greeting0_.content as content2_0_0_ from greeting greeting0_ where greeting0_.id=?
-                       | parameters: {1=1}
-                       | duration: 0.00ms
+                  | [JDBC] [sql=select greeting0_.id as id1_0_0_, greeting0_.content as content2_0_0_ from greeting greeting0_ where greeting0_.id=?, parameterMap={1=1}]
             <---- Optional[Greeting(id=1, content=Hello\nfoo)]
         <---- Greeting(id=1, content=Hello\nfoo)
     <---- Greeting(id=1, content=Hello\nfoo)
-<---- 200
+<---- [RESPONSE] 200
 ----
 
 == License
