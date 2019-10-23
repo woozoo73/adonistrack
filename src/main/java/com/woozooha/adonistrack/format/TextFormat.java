@@ -207,17 +207,14 @@ public class TextFormat implements Format {
 
         for (Event<?> event : invocation.getEventList()) {
             builder.append("\n");
-            indentEvent(builder, invocation.getDepth(), true);
-            builder.append(event);
+            indentEvent(builder, invocation.getDepth());
+            builder.append(ToStringUtils.format(event));
         }
     }
 
-    private void indentEvent(StringBuilder builder, int depth, boolean sub) {
+    private void indentEvent(StringBuilder builder, int depth) {
         indent(builder, depth);
-        builder.append("       ");
-        if (sub) {
-            builder.append("    | ");
-        }
+        builder.append("      | ");
     }
 
 }
