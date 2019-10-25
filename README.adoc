@@ -53,6 +53,10 @@ public class Application {
 
 * Create a aspect by extending the `ProfileAspect`, such as `AdonisTrackAspect.java`
 * Configure `profilePointcut` and `executionPointcut` of the aspect by using pointcut expression.
+* You can set profile targets using pointcut expressions.
+If you run into problems, you may need to change this @Pointcut expression.
+The page below will help you.
+https://howtodoinjava.com/spring-aop/aspectj-pointcut-expressions/
 
 .AdonisTrackAspect.java
 [source,java,indent=0]
