@@ -67,20 +67,23 @@ public abstract class ProfileAspect {
         return config;
     }
 
-    protected abstract void executionPointcut();
-
     @Before("executionPointcut()")
     public void executionBefore(JoinPoint joinPoint) {
         Invocation endpointInvocation = Context.getEndpointInvocation();
-
-        if (endpointInvocation == null) {
-            return;
-        }
 
         Invocation invocation = new Invocation();
         invocation.setType(Invocation.Type.Exec);
         invocation.setJoinPoint(joinPoint);
         invocation.setJoinPointInfo(new JoinPointInfo(joinPoint));
+
+        if (endpointInvocation == null) {
+            Context.setEndpointInvocation(invocation);
+
+            try {
+                config.getInvocationCallback().before(invocation);
+            } catch (Throwable t) {
+            }
+        }
 
         Invocation currentInvocation = Context.peekFromInvocationStack();
         if (currentInvocation != null) {
@@ -136,6 +139,15 @@ public abstract class ProfileAspect {
         invocation.stop();
 
         Context.popFromInvocationStack();
+
+        if (invocation.equalsJoinPoint(Context.getEndpointInvocation())) {
+            Invocation i = Context.dump();
+
+            try {
+                config.getInvocationCallback().after(i);
+            } catch (Throwable t) {
+            }
+        }
     }
 
 }
