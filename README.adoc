@@ -17,6 +17,8 @@ image:https://maven-badges.herokuapp.com/maven-central/com.woozooha/adonistrack/
 
 === 2. Add AdonistrackFilter to your application
 
+* If your application is not a web application, skip this section.
+
 .Application.java
 [source,java,indent=0]
 ----
