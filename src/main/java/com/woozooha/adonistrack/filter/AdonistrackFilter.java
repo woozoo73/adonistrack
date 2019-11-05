@@ -60,31 +60,9 @@ public class AdonistrackFilter implements Filter {
     }
 
     private Invocation before(HttpServletRequest request) {
-        Invocation endpointInvocation = Context.getEndpointInvocation();
+        Event<HttpServletRequest> event = new RequestEvent(request);
 
-        Invocation invocation = new Invocation();
-        invocation.setType(Invocation.Type.Event);
-        invocation.add(new RequestEvent(request));
-
-        if (endpointInvocation == null) {
-            Context.setEndpointInvocation(invocation);
-
-            try {
-                ProfileAspect.getConfig().getInvocationCallback().before(invocation);
-            } catch (Throwable t) {
-            }
-        }
-
-        Invocation currentInvocation = Context.peekFromInvocationStack();
-        if (currentInvocation != null) {
-            currentInvocation.add(invocation);
-        }
-
-        Context.addToInvocationStack(invocation);
-
-        invocation.start();
-
-        return invocation;
+        return ProfileAspect.before(event);
     }
 
     private void after(Invocation invocation, HttpServletRequest request, HttpServletResponse response) {
