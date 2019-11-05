@@ -20,6 +20,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 
 import com.woozooha.adonistrack.callback.WriterCallback;
 import com.woozooha.adonistrack.conf.Config;
@@ -165,7 +166,8 @@ public abstract class ProfileAspect {
         return invocation;
     }
 
-    protected abstract void executionPointcut();
+    @Pointcut
+    public abstract void executionPointcut();
 
     @Before("executionPointcut()")
     public void executionBefore(JoinPoint joinPoint) {

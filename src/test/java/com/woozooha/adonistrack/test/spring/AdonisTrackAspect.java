@@ -16,7 +16,7 @@ public class AdonisTrackAspect extends ProfileAspect {
      * top-level package name "com.yourcompany.killerapp".
      */
     @Pointcut("execution(* *(..)) && (within(com.woozooha.adonistrack.test.spring..*) || within(com.woozooha.adonistrack.test.spring..*+))")
-    protected void executionPointcut() {
+    public void executionPointcut() {
     }
 
 }
