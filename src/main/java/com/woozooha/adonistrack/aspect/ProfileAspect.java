@@ -20,10 +20,12 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 
 import com.woozooha.adonistrack.callback.WriterCallback;
 import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.domain.Context;
+import com.woozooha.adonistrack.domain.Event;
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.domain.JoinPointInfo;
 import com.woozooha.adonistrack.domain.ObjectInfo;
@@ -67,21 +69,42 @@ public abstract class ProfileAspect {
         return config;
     }
 
-    @Before("executionPointcut()")
-    public void executionBefore(JoinPoint joinPoint) {
+    public static <V> Invocation before(JoinPoint joinPoint) {
+        return before(Invocation.Type.Exec, joinPoint, null);
+    }
+
+    public static <V> Invocation before(Event<V> event) {
+        return before(Invocation.Type.Event, null, event);
+    }
+
+    public static Invocation after(JoinPoint joinPoint, Object r) {
+        return after(joinPoint, r, null);
+    }
+
+    public static Invocation after(JoinPoint joinPoint, Throwable t) {
+        return after(joinPoint, null, t);
+    }
+
+    private static <V> Invocation before(Invocation.Type type, JoinPoint joinPoint, Event<V> event) {
         Invocation endpointInvocation = Context.getEndpointInvocation();
 
         Invocation invocation = new Invocation();
-        invocation.setType(Invocation.Type.Exec);
-        invocation.setJoinPoint(joinPoint);
-        invocation.setJoinPointInfo(new JoinPointInfo(joinPoint));
+        invocation.setType(type);
+
+        if (joinPoint != null) {
+            invocation.setJoinPoint(joinPoint);
+            invocation.setJoinPointInfo(new JoinPointInfo(joinPoint));
+        }
+        if (event != null) {
+            invocation.add(event);
+        }
 
         if (endpointInvocation == null) {
             Context.setEndpointInvocation(invocation);
 
             try {
                 config.getInvocationCallback().before(invocation);
-            } catch (Throwable t) {
+            } catch (Throwable throwable) {
             }
         }
 
@@ -93,35 +116,43 @@ public abstract class ProfileAspect {
         Context.addToInvocationStack(invocation);
 
         invocation.start();
+
+        return invocation;
     }
 
-    @AfterThrowing(pointcut = "executionPointcut()", throwing = "t")
-    public void profileAfterThrowing(JoinPoint joinPoint, Throwable t) {
+    private static Invocation after(JoinPoint joinPoint, Object r, Throwable t) {
         Invocation invocation = getInvocation(joinPoint);
+
         if (invocation == null) {
-            return;
+            return null;
         }
 
-        invocation.setT(t);
-        invocation.setThrowableInfo(new ObjectInfo(t));
-
-        afterProfile(invocation);
-    }
-
-    @AfterReturning(pointcut = "executionPointcut()", returning = "r")
-    public void profileAfterReturning(JoinPoint joinPoint, Object r) {
-        Invocation invocation = getInvocation(joinPoint);
-        if (invocation == null) {
-            return;
+        if (r != null) {
+            invocation.setReturnValue(r);
+            invocation.setReturnValueInfo(new ObjectInfo(r));
+        }
+        if (t != null) {
+            invocation.setT(t);
+            invocation.setThrowableInfo(new ObjectInfo(t));
         }
 
-        invocation.setReturnValue(r);
-        invocation.setReturnValueInfo(new ObjectInfo(r));
+        invocation.stop();
 
-        afterProfile(invocation);
+        Context.popFromInvocationStack();
+
+        if (invocation.equalsJoinPoint(Context.getEndpointInvocation())) {
+            Invocation i = Context.dump();
+
+            try {
+                config.getInvocationCallback().after(i);
+            } catch (Throwable throwable) {
+            }
+        }
+
+        return invocation;
     }
 
-    private Invocation getInvocation(JoinPoint joinPoint) {
+    public static Invocation getInvocation(JoinPoint joinPoint) {
         Invocation endpointInvocation = Context.getEndpointInvocation();
         if (endpointInvocation == null) {
             return null;
@@ -135,19 +166,22 @@ public abstract class ProfileAspect {
         return invocation;
     }
 
-    private void afterProfile(Invocation invocation) {
-        invocation.stop();
+    @Pointcut
+    public abstract void executionPointcut();
 
-        Context.popFromInvocationStack();
+    @Before("executionPointcut()")
+    public void executionBefore(JoinPoint joinPoint) {
+        before(joinPoint);
+    }
 
-        if (invocation.equalsJoinPoint(Context.getEndpointInvocation())) {
-            Invocation i = Context.dump();
+    @AfterThrowing(pointcut = "executionPointcut()", throwing = "t")
+    public void profileAfterThrowing(JoinPoint joinPoint, Throwable t) {
+        after(joinPoint, t);
+    }
 
-            try {
-                config.getInvocationCallback().after(i);
-            } catch (Throwable t) {
-            }
-        }
+    @AfterReturning(pointcut = "executionPointcut()", returning = "r")
+    public void profileAfterReturning(JoinPoint joinPoint, Object r) {
+        after(joinPoint, r);
     }
 
 }

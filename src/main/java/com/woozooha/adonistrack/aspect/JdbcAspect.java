@@ -25,11 +25,17 @@ import com.woozooha.adonistrack.domain.ObjectInfo;
 @Aspect
 public class JdbcAspect {
 
+    public static final String UNKNOWN_VALUE = "?";
+
+    public static final int MAX_VALUE_LENGTH = 20;
+
     public static final Class<?>[] SHOULD_LOG_PARAMETER_TYPES = {
             // Primative types
             Byte.TYPE, Short.TYPE, Integer.TYPE, Long.TYPE, Float.TYPE, Double.TYPE,
             // Wrapper types
             Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
+            // String
+            String.class,
             // Date & URL
             Date.class, Time.class, Timestamp.class, URL.class };
 
@@ -117,10 +123,16 @@ public class JdbcAspect {
         }
 
         Integer index = (Integer) args[0];
-        Object value = args[1];
+        final Object value = args[1];
 
         if (shouldProfileParameter(joinPoint, value)) {
-            statementInfo.setParameter(index, value);
+            Object v = value;
+            if (value.getClass() == String.class && value != null) {
+                v = StringUtils.abbreviate((String) value, MAX_VALUE_LENGTH);
+            }
+            statementInfo.setParameter(index, v);
+        } else {
+            statementInfo.setParameter(index, UNKNOWN_VALUE);
         }
     }
 
