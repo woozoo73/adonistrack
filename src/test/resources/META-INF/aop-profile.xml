@@ -1,0 +1,15 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+	<weaver options="">
+		<include within="com.woozooha.adonistrack.test.spring.*Controller" />
+		<include within="com.woozooha.adonistrack.test.spring.*Service" />
+		<include within="com.woozooha.adonistrack.test.spring.*Repository+" />
+	</weaver>
+	<aspects>
+	    <concrete-aspect name="com.woozooha.adonistrack.aspect.MyAdonisTrackAspect"
+            extends="com.woozooha.adonistrack.aspect.ProfileAspect">
+            <pointcut name="executionPointcut"
+                expression="execution(* com.woozooha.adonistrack.test.spring.*.*(..))" />
+        </concrete-aspect>
+	</aspects>
+</aspectj>
