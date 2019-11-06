@@ -85,6 +85,14 @@ public abstract class ProfileAspect {
         return after(joinPoint, null, t);
     }
 
+    public static Invocation after(Invocation invocation, Object r) {
+        return after(invocation, r, null);
+    }
+
+    public static Invocation after(Invocation invocation, Throwable t) {
+        return after(invocation, null, t);
+    }
+
     private static <V> Invocation before(Invocation.Type type, JoinPoint joinPoint, Event<V> event) {
         Invocation endpointInvocation = Context.getEndpointInvocation();
 
@@ -123,6 +131,10 @@ public abstract class ProfileAspect {
     private static Invocation after(JoinPoint joinPoint, Object r, Throwable t) {
         Invocation invocation = getInvocation(joinPoint);
 
+        return after(invocation, r, t);
+    }
+
+    private static Invocation after(Invocation invocation, Object r, Throwable t) {
         if (invocation == null) {
             return null;
         }

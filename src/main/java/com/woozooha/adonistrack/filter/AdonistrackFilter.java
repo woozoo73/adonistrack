@@ -27,10 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.woozooha.adonistrack.aspect.ProfileAspect;
-import com.woozooha.adonistrack.domain.Context;
 import com.woozooha.adonistrack.domain.Event;
 import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.ObjectInfo;
 import com.woozooha.adonistrack.domain.RequestEvent;
 import com.woozooha.adonistrack.domain.ResponseEvent;
 
@@ -66,22 +64,9 @@ public class AdonistrackFilter implements Filter {
     }
 
     private void after(Invocation invocation, HttpServletRequest request, HttpServletResponse response) {
-        invocation.stop();
+        Event<HttpServletResponse> event = new ResponseEvent(response);
 
-        Event<HttpServletResponse> responseEvent = new ResponseEvent(response);
-        invocation.setReturnValue(responseEvent);
-        invocation.setReturnValueInfo(new ObjectInfo(responseEvent));
-
-        Context.popFromInvocationStack();
-
-        if (invocation.equalsJoinPoint(Context.getEndpointInvocation())) {
-            Invocation i = Context.dump();
-
-            try {
-                ProfileAspect.getConfig().getInvocationCallback().after(i);
-            } catch (Throwable t) {
-            }
-        }
+        ProfileAspect.after(invocation, event);
     }
 
     @Override
