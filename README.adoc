@@ -148,6 +148,24 @@ image:diagram-unhappy.png["Diagrams", link="https://github.com/francoislaberge/d
 
 === 6. More options
 
+To replace default "ToStringFormat" with custom format, you need to set property "adonistrack.to-string.class".
+
+.Application.java
+[source,java,indent=0]
+----
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        System.setProperty("adonistrack.to-string.class", YourCustomToStringFormat.class.getName());
+        SpringApplication.run(Application.class, args);
+    }
+
+    ...
+
+}
+----
+
 Adonistrack supports load-time-weaving for even more powerful profiling.
 If you want to profile JDBC queries, do the following.
 
