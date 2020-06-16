@@ -15,8 +15,8 @@
  */
 package com.woozooha.adonistrack.writer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
@@ -28,7 +28,7 @@ import com.woozooha.adonistrack.format.Format;
  */
 public class LogWriter implements Writer {
 
-    private static final Logger log = LoggerFactory.getLogger(LogWriter.class);
+    private static final Log logger = LogFactory.getLog(LogWriter.class);
 
     private Format format;
 
@@ -44,7 +44,7 @@ public class LogWriter implements Writer {
 
     @Override
     public void write(Invocation invocation) {
-        log.info(format.format(invocation));
+        logger.info(format.format(invocation));
     }
 
 }

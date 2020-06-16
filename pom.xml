@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.woozooha</groupId>
 	<artifactId>adonistrack</artifactId>
-	<version>1.6.2</version>
+	<version>1.7.0</version>
 
 	<name>AdonisTrack</name>
 	<description>Simple profiling tool.</description>
@@ -51,8 +51,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -123,10 +123,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<aspectj.version>1.9.2</aspectj.version>
-		<log4j.version>1.2.17</log4j.version>
-		<slf4j.version>1.7.25</slf4j.version>
 		<commons-text.version>1.8</commons-text.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
+		<spring-jcl.version>5.2.7.RELEASE</spring-jcl.version>
 		<servlet-api.version>4.0.1</servlet-api.version>
 		<lombok.version>1.16.20</lombok.version>
 		<spring-boot.version>2.1.3.RELEASE</spring-boot.version>
@@ -145,16 +144,6 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectj.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
@@ -164,6 +153,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jcl</artifactId>
+            <version>${spring-jcl.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
