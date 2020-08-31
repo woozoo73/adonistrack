@@ -43,7 +43,7 @@ public class JdbcAspect {
     public void createStatementPointcut() {
     }
 
-    @Pointcut("within(java.sql.Statement+) && (execution(java.sql.ResultSet+ executeQuery()) || execution(int executeUpdate())) && !cflowbelow(execution(* java.sql..*+.*(..)))")
+    @Pointcut("within(java.sql.Statement+) && (execution(boolean execute()) || execution(java.sql.ResultSet+ executeQuery()) || execution(int executeUpdate())) && !cflowbelow(execution(* java.sql..*+.*(..)))")
     public void executePointcut() {
     }
 
@@ -59,7 +59,10 @@ public class JdbcAspect {
 
         Statement statement = (Statement) r;
         JdbcStatementInfo statementInfo = new JdbcStatementInfo();
-        statementInfo.setSql((String) joinPoint.getArgs()[0]);
+        String sql = (String) joinPoint.getArgs()[0];
+        sql = sql.replaceAll("\\n", " ");
+        sql = sql.replaceAll("\\t", " ");
+        statementInfo.setSql(sql);
 
         JdbcContext.put(statement, statementInfo);
     }
