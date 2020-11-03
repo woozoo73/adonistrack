@@ -128,7 +128,9 @@ public class JdbcAspect {
         Integer index = (Integer) args[0];
         final Object value = args[1];
 
-        if (shouldProfileParameter(joinPoint, value)) {
+        if (value == null) {
+            statementInfo.setParameter(index, "null");
+        } else if (shouldProfileParameter(joinPoint, value)) {
             Object v = value;
             if (value.getClass() == String.class && value != null) {
                 v = StringUtils.abbreviate((String) value, MAX_VALUE_LENGTH);
