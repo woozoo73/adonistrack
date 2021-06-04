@@ -15,6 +15,9 @@
  */
 package com.woozooha.adonistrack.domain;
 
+import lombok.Data;
+
+@Data
 public abstract class Event<V> {
 
     protected String type = "UNKNOWN";
@@ -25,22 +28,6 @@ public abstract class Event<V> {
     }
 
     public Event(V value) {
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public V getValue() {
-        return value;
-    }
-
-    public void setValue(V value) {
         this.value = value;
     }
 

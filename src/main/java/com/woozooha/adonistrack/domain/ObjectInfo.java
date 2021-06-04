@@ -19,11 +19,14 @@ import java.io.Serializable;
 
 import com.woozooha.adonistrack.util.ToStringUtils;
 
+import lombok.Data;
+
 /**
  * Object data.
  * 
  * @author woozoo73
  */
+@Data
 public class ObjectInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,22 +45,6 @@ public class ObjectInfo implements Serializable {
 
         this.declaringType = object.getClass();
         this.toStringValue = ToStringUtils.format(object);
-    }
-
-    public Class<?> getDeclaringType() {
-        return declaringType;
-    }
-
-    public void setDeclaringType(Class<?> declaringType) {
-        this.declaringType = declaringType;
-    }
-
-    public String getToStringValue() {
-        return toStringValue;
-    }
-
-    public void setToStringValue(String toStringValue) {
-        this.toStringValue = toStringValue;
     }
 
     @Override

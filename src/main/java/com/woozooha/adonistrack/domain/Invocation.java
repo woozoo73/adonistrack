@@ -21,11 +21,14 @@ import java.util.List;
 
 import org.aspectj.lang.JoinPoint;
 
+import lombok.Data;
+
 /**
  * Invocation data.
  * 
  * @author woozoo73
  */
+@Data
 public class Invocation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -150,98 +153,6 @@ public class Invocation implements Serializable {
         }
 
         return durationNanoTime.doubleValue() / (1000 * 1000);
-    }
-
-    public Integer getDepth() {
-        return depth;
-    }
-
-    public void setDepth(Integer depth) {
-        this.depth = depth;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public List<Invocation> getChildInvocationList() {
-        return childInvocationList;
-    }
-
-    public JoinPoint getJoinPoint() {
-        return joinPoint;
-    }
-
-    public void setJoinPoint(JoinPoint joinPoint) {
-        this.joinPoint = joinPoint;
-    }
-
-    public JoinPointInfo getJoinPointInfo() {
-        return joinPointInfo;
-    }
-
-    public void setJoinPointInfo(JoinPointInfo joinPointInfo) {
-        this.joinPointInfo = joinPointInfo;
-    }
-
-    public Long getDurationNanoTime() {
-        return durationNanoTime;
-    }
-
-    public void setDurationNanoTime(Long durationNanoTime) {
-        this.durationNanoTime = durationNanoTime;
-    }
-
-    public Double getDurationPercentage() {
-        return durationPercentage;
-    }
-
-    public void setDurationPercentage(Double durationPercentage) {
-        this.durationPercentage = durationPercentage;
-    }
-
-    public Object getReturnValue() {
-        return returnValue;
-    }
-
-    public void setReturnValue(Object returnValue) {
-        this.returnValue = returnValue;
-    }
-
-    public ObjectInfo getReturnValueInfo() {
-        return returnValueInfo;
-    }
-
-    public void setReturnValueInfo(ObjectInfo returnValueInfo) {
-        this.returnValueInfo = returnValueInfo;
-    }
-
-    public Throwable getT() {
-        return t;
-    }
-
-    public void setT(Throwable t) {
-        this.t = t;
-    }
-
-    public ObjectInfo getThrowableInfo() {
-        return throwableInfo;
-    }
-
-    public void setThrowableInfo(ObjectInfo throwableInfo) {
-        this.throwableInfo = throwableInfo;
-    }
-
-    public List<Event<?>> getEventList() {
-        return eventList;
-    }
-
-    public void setEventList(List<Event<?>> eventList) {
-        this.eventList = eventList;
     }
 
     public enum Type {
