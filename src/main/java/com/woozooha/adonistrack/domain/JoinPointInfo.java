@@ -20,11 +20,14 @@ import java.io.Serializable;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 
+import lombok.Data;
+
 /**
  * JoinPoint data.
  * 
  * @author woozoo73
  */
+@Data
 public class JoinPointInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,46 +68,6 @@ public class JoinPointInfo implements Serializable {
         }
 
         signatureInfo = new SignatureInfo(signature);
-    }
-
-    public ObjectInfo getTarget() {
-        return target;
-    }
-
-    public void setTarget(ObjectInfo target) {
-        this.target = target;
-    }
-
-    public SignatureInfo getSignatureInfo() {
-        return signatureInfo;
-    }
-
-    public void setSignatureInfo(SignatureInfo signatureInfo) {
-        this.signatureInfo = signatureInfo;
-    }
-
-    public void setArgs(Object[] args) {
-        this.args = args;
-    }
-
-    public Object[] getArgs() {
-        return args;
-    }
-
-    public ObjectInfo[] getArgsInfo() {
-        return argsInfo;
-    }
-
-    public void setArgsInfo(ObjectInfo[] argsInfo) {
-        this.argsInfo = argsInfo;
-    }
-
-    public SourceLocationInfo getSourceLocation() {
-        return sourceLocation;
-    }
-
-    public void setSourceLocation(SourceLocationInfo sourceLocation) {
-        this.sourceLocation = sourceLocation;
     }
 
 }

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
+import lombok.Data;
+
+@Data
 public class JdbcStatementInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,50 +45,6 @@ public class JdbcStatementInfo implements Serializable {
         }
 
         durationNanoTime = end - start;
-    }
-
-    public String getSql() {
-        return sql;
-    }
-
-    public void setSql(String sql) {
-        this.sql = sql;
-    }
-
-    public Long getStart() {
-        return start;
-    }
-
-    public void setStart(Long start) {
-        this.start = start;
-    }
-
-    public Long getEnd() {
-        return end;
-    }
-
-    public void setEnd(Long end) {
-        this.end = end;
-    }
-
-    public Long getDurationNanoTime() {
-        return durationNanoTime;
-    }
-
-    public void setDurationNanoTime(Long durationNanoTime) {
-        this.durationNanoTime = durationNanoTime;
-    }
-
-    public Map<Integer, ObjectInfo> getParameterMap() {
-        return parameterMap;
-    }
-
-    public ObjectInfo getThrowableInfo() {
-        return throwableInfo;
-    }
-
-    public void setThrowableInfo(ObjectInfo throwableInfo) {
-        this.throwableInfo = throwableInfo;
     }
 
     @Override

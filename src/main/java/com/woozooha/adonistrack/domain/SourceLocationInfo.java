@@ -19,11 +19,14 @@ import java.io.Serializable;
 
 import org.aspectj.lang.reflect.SourceLocation;
 
+import lombok.Data;
+
 /**
  * SourceLocation data.
  * 
  * @author woozoo73
  */
+@Data
 public class SourceLocationInfo implements SourceLocation, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,42 +48,6 @@ public class SourceLocationInfo implements SourceLocation, Serializable {
         }
 
         this.withinType = sourceLocation.getWithinType();
-    }
-
-    @Override
-    public Class<?> getWithinType() {
-        return withinType;
-    }
-
-    @Override
-    public String getFileName() {
-        return fileName;
-    }
-
-    @Override
-    public int getLine() {
-        return line;
-    }
-
-    @Override
-    public int getColumn() {
-        return column;
-    }
-
-    public void setWithinType(Class<?> withinType) {
-        this.withinType = withinType;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public void setLine(int line) {
-        this.line = line;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
     }
 
 }

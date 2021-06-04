@@ -19,83 +19,54 @@ import java.io.Serializable;
 
 import org.aspectj.lang.Signature;
 
+import lombok.Data;
+
 /**
  * Signature data.
  * 
  * @author woozoo73
  */
+@Data
 public class SignatureInfo implements Signature, Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Class<?> declaringType;
+	private Class<?> declaringType;
 
-    private String name;
+	private String name;
 
-    private int modifiers;
+	private int modifiers;
 
-    private String shortString;
+	private String shortString;
 
-    private String longString;
+	private String longString;
 
-    private String declaringTypeName;
+	private String declaringTypeName;
 
-    public SignatureInfo() {
-    }
+	public SignatureInfo() {
+	}
 
-    public SignatureInfo(Signature signature) {
-        if (signature == null) {
-            return;
-        }
+	public SignatureInfo(Signature signature) {
+		if (signature == null) {
+			return;
+		}
 
-        this.shortString = signature.toShortString();
-        this.longString = signature.toLongString();
-        this.name = signature.getName();
-        this.modifiers = signature.getModifiers();
-        this.declaringType = signature.getDeclaringType();
-        this.declaringTypeName = signature.getDeclaringTypeName();
-    }
+		this.shortString = signature.toShortString();
+		this.longString = signature.toLongString();
+		this.name = signature.getName();
+		this.modifiers = signature.getModifiers();
+		this.declaringType = signature.getDeclaringType();
+		this.declaringTypeName = signature.getDeclaringTypeName();
+	}
 
-    @Override
-    public String toShortString() {
-        return shortString;
-    }
+	@Override
+	public String toShortString() {
+		return shortString;
+	}
 
-    @Override
-    public String toLongString() {
-        return longString;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public int getModifiers() {
-        return modifiers;
-    }
-
-    public void setDeclaringType(Class<?> declaringType) {
-        this.declaringType = declaringType;
-    }
-
-    @Override
-    public Class<?> getDeclaringType() {
-        return declaringType;
-    }
-
-    public void setDeclaringTypeName(String declaringTypeName) {
-        this.declaringTypeName = declaringTypeName;
-    }
-
-    @Override
-    public String getDeclaringTypeName() {
-        return declaringTypeName;
-    }
+	@Override
+	public String toLongString() {
+		return longString;
+	}
 
 }
