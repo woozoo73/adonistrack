@@ -210,6 +210,134 @@ You can now see that the JDBC query is profiled as shown below.
 <---- [RESPONSE] 200
 ----
 
+== Known issues
+
+=== 1. HTTP status code mismatch errors can occur when using `AdonisTrackFilter`
+
+* To fix this error:
+* 1. Remove `AdonisTrackFilter`.
+
+.Application.java
+[source,java,indent=0]
+----
+package com.woozooha.adonistrack.test.spring;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+
+import com.woozooha.adonistrack.filter.AdonistrackFilter;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+}
+----
+
+* 2. Depending on the situation, you can correct the HTTP status code by create a little bit of code as shown below.
+
+.AdonistrackInterceptor.java
+[source,java,indent=0]
+----
+package com.woozooha.adonistrack.test.spring;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.lang.Nullable;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.woozooha.adonistrack.aspect.ProfileAspect;
+import com.woozooha.adonistrack.domain.Event;
+import com.woozooha.adonistrack.domain.Invocation;
+import com.woozooha.adonistrack.domain.RequestInfo;
+import com.woozooha.adonistrack.domain.RequestInfoEvent;
+import com.woozooha.adonistrack.domain.ResponseInfo;
+import com.woozooha.adonistrack.domain.ResponseInfoEvent;
+
+public class AdonistrackInterceptor implements HandlerInterceptor {
+
+    private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<Invocation>();
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        Invocation invocation = CONTEXT.get();
+        if (invocation == null) {
+            invocation = before(request);
+            CONTEXT.set(invocation);
+        }
+
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+            @Nullable ModelAndView modelAndView) throws Exception {
+        Invocation invocation = CONTEXT.get();
+        after(invocation, request, response);
+    }
+
+    private Invocation before(HttpServletRequest request) {
+        Event<RequestInfo> event = new RequestInfoEvent(new RequestInfo(request));
+
+        return ProfileAspect.before(event);
+    }
+
+    private void after(Invocation invocation, HttpServletRequest request, HttpServletResponse response) {
+        Event<ResponseInfo> event = new ResponseInfoEvent(new ResponseInfo(response));
+
+        ProfileAspect.after(invocation, event);
+    }
+
+}
+----
+
+* 3. Add your `AdonisTrackInterceptor`.
+
+.WebConfig.java
+[source,java,indent=0]
+----
+package com.woozooha.adonistrack.test.spring;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        AdonistrackInterceptor adonistrackInterceptor = new AdonistrackInterceptor();
+        registry.addInterceptor(adonistrackInterceptor).addPathPatterns("/**/*");
+    }
+
+}
+----
+
+* 4. Now, RESPONSE status code is `500`.
+
+.Output log
+[indent=0]
+----
+----> [REQUEST] GET http://localhost:8080/greeting/2 (134.97ms:100.00%)
+    ----> com.woozooha.adonistrack.test.spring.GreetingController.greeting(2) (29.34ms:100.00%)
+        ----> com.woozooha.adonistrack.test.spring.GreetingService.greeting(2) (9.78ms:100.00%)
+            ----> com.sun.proxy.$Proxy96.findById(2) (6.15ms:100.00%)
+                  | [JDBC] [sql=select greeting0_.id as id1_0_0_, greeting0_.content as content2_0_0_ from greeting greeting0_ where greeting0_.id=?, parameterMap={1=2}]
+            <---- Optional.empty
+        <<<<< java.util.NoSuchElementException: No value present
+    <<<<< java.util.NoSuchElementException: No value present
+<---- [RESPONSE] 500
+----
+
 == License
 
 AdonisTrack is Open Source software released under the Apache 2.0 license.
