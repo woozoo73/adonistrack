@@ -45,7 +45,7 @@ public class Record {
         }
 
         requestCount++;
-        if (invocation.getT() == null) {
+        if (invocation.getThrowableInfo() == null) {
             successCount++;
 
             if (totalDurationNanoTime == null) {

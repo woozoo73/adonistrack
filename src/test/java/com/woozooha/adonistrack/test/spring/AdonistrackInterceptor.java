@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.woozooha.adonistrack.filter;
+package com.woozooha.adonistrack.test.spring;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.lang.Nullable;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.woozooha.adonistrack.aspect.ProfileAspect;
 import com.woozooha.adonistrack.domain.Event;
@@ -34,29 +30,27 @@ import com.woozooha.adonistrack.domain.RequestInfoEvent;
 import com.woozooha.adonistrack.domain.ResponseInfo;
 import com.woozooha.adonistrack.domain.ResponseInfoEvent;
 
-public class AdonistrackFilter implements Filter {
+public class AdonistrackInterceptor implements HandlerInterceptor {
+
+    private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<Invocation>();
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
-            doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
-
-            return;
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        Invocation invocation = CONTEXT.get();
+        if (invocation == null) {
+            invocation = before(request);
+            CONTEXT.set(invocation);
         }
 
-        chain.doFilter(request, response);
+        return true;
     }
 
-    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        Invocation invocation = before(request);
-
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            after(invocation, request, response);
-        }
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+            @Nullable ModelAndView modelAndView) throws Exception {
+        Invocation invocation = CONTEXT.get();
+        after(invocation, request, response);
     }
 
     private Invocation before(HttpServletRequest request) {
@@ -69,14 +63,6 @@ public class AdonistrackFilter implements Filter {
         Event<ResponseInfo> event = new ResponseInfoEvent(new ResponseInfo(response));
 
         ProfileAspect.after(invocation, event);
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    @Override
-    public void destroy() {
     }
 
 }

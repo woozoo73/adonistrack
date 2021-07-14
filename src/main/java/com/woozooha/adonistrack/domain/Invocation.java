@@ -18,10 +18,13 @@ package com.woozooha.adonistrack.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.aspectj.lang.JoinPoint;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * Invocation data.
@@ -33,12 +36,15 @@ public class Invocation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String id = UUID.randomUUID().toString();
+
     private Integer depth = 0;
 
     private Type type;
 
     private List<Invocation> childInvocationList;
 
+    @Getter(value = AccessLevel.NONE)
     private JoinPoint joinPoint;
 
     private JoinPointInfo joinPointInfo;
@@ -51,10 +57,12 @@ public class Invocation implements Serializable {
 
     private Long endNanoTime;
 
+    @Getter(value = AccessLevel.NONE)
     private Object returnValue;
 
     private ObjectInfo returnValueInfo;
 
+    @Getter(value = AccessLevel.NONE)
     private Throwable t;
 
     private ObjectInfo throwableInfo;
@@ -122,7 +130,7 @@ public class Invocation implements Serializable {
         }
         eventList.add(event);
     }
-    
+
     public void calculateChildDurationPercentage() {
         Long totalSibling = 0L;
 

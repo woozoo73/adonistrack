@@ -31,7 +31,9 @@ import com.woozooha.adonistrack.domain.JoinPointInfo;
 import com.woozooha.adonistrack.domain.ObjectInfo;
 import com.woozooha.adonistrack.format.Format;
 import com.woozooha.adonistrack.format.TextFormat;
+import com.woozooha.adonistrack.writer.CompositeWriter;
 import com.woozooha.adonistrack.writer.LogWriter;
+import com.woozooha.adonistrack.writer.MemoryWriter;
 import com.woozooha.adonistrack.writer.Writer;
 
 /**
@@ -52,14 +54,23 @@ public abstract class ProfileAspect {
         try {
             config = new Config();
 
+            CompositeWriter compositeWriter = new CompositeWriter();
+            
+            Writer logWriter = new LogWriter();
             Format format = new TextFormat("\n", null);
-            Writer writer = new LogWriter();
-            writer.setFormat(format);
+            logWriter.setFormat(format);
+            compositeWriter.add(logWriter);
 
+            MemoryWriter memoryWriter = new MemoryWriter();
+            memoryWriter.setMaxSize(100);
+            compositeWriter.add(memoryWriter);
+            
             WriterCallback invocationCallback = new WriterCallback();
-            invocationCallback.setWriter(writer);
+            invocationCallback.setWriter(compositeWriter);
 
             config.setInvocationCallback(invocationCallback);
+            
+            config.setHistory(memoryWriter);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

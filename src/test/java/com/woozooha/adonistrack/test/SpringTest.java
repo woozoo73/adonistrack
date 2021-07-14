@@ -2,6 +2,7 @@ package com.woozooha.adonistrack.test;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -31,6 +32,13 @@ public class SpringTest {
         String content = greeting(id);
         assertEquals("Hello\nfoo", content);
     }
+    
+    @Test
+    public void greetingWithInvalidText() {
+        Long id = 2L;
+        String content = greeting(id);
+        assertNull(content);
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void greetingWithNull() {
@@ -38,7 +46,7 @@ public class SpringTest {
     }
 
     private String greeting(Long id) {
-        Response response = request().post("/greeting/{id}", id);
+        Response response = request().get("/greeting/{id}", id);
         JsonPath jsonPath = response.jsonPath();
         String content = jsonPath.get("content");
 

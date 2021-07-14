@@ -15,6 +15,7 @@
  */
 package com.woozooha.adonistrack.writer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.woozooha.adonistrack.domain.Invocation;
@@ -27,20 +28,16 @@ import com.woozooha.adonistrack.format.Format;
  */
 public class CompositeWriter implements Writer {
 
-    private List<Writer> writers;
-
-    private Format format;
-
-    private boolean appliedFormat;
+    private List<Writer> writers = new ArrayList<>();
 
     @Override
     public Format getFormat() {
-        return format;
+        return null;
     }
 
     @Override
     public void setFormat(Format format) {
-        this.format = format;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -49,25 +46,13 @@ public class CompositeWriter implements Writer {
             return;
         }
 
-        if (!appliedFormat) {
-            applyFormat();
-        }
-
         for (Writer writer : writers) {
             writer.write(invocation);
         }
     }
 
-    protected void applyFormat() {
-        if (writers == null) {
-            return;
-        }
-
-        for (Writer writer : writers) {
-            writer.setFormat(format);
-        }
-
-        appliedFormat = true;
+    public void add(Writer writer) {
+        writers.add(writer);
     }
 
 }
