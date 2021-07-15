@@ -189,7 +189,7 @@ If you want to profile JDBC queries, do the following.
 
 * Add VM arguments when run your application. 
 
-.Vm arguments
+.VM arguments
 ----
 -javaagent:/{your-home-path}/.m2/repository/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
 ----
@@ -210,7 +210,7 @@ You can now see that the JDBC query is profiled as shown below.
 <---- [RESPONSE] 200
 ----
 
-== Known issues
+== 7. Known issues
 
 === 1. HTTP status code mismatch errors can occur when using `AdonisTrackFilter`
 
