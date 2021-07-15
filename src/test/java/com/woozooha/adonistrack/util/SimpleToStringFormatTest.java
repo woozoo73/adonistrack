@@ -70,6 +70,9 @@ public class SimpleToStringFormatTest {
         assertNotNull(value);
     }
 
+    /**
+     * Safety check for StackOverflowError.
+     */
     @Test
     public void testFormtRecursive() {
         RecursiveObject parent = new RecursiveObject();

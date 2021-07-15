@@ -20,7 +20,9 @@ import java.io.Serializable;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * JoinPoint data.
@@ -36,6 +38,7 @@ public class JoinPointInfo implements Serializable {
 
     private SignatureInfo signatureInfo;
 
+    @Getter(value = AccessLevel.NONE)
     private Object[] args;
 
     private ObjectInfo[] argsInfo;

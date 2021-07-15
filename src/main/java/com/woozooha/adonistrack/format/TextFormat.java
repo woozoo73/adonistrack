@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import com.woozooha.adonistrack.domain.Event;
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.domain.JoinPointInfo;
+import com.woozooha.adonistrack.domain.ObjectInfo;
 import com.woozooha.adonistrack.domain.SignatureInfo;
 import com.woozooha.adonistrack.util.ToStringUtils;
 
@@ -144,36 +145,16 @@ public class TextFormat implements Format {
 
     private void argsInfo(StringBuilder builder, Invocation invocation) {
         JoinPointInfo joinPoint = invocation.getJoinPointInfo();
-        Object[] arguments = joinPoint.getArgs();
-        if (arguments != null) {
+        ObjectInfo[] argsInfo = joinPoint.getArgsInfo();
+        if (argsInfo != null) {
             boolean first = true;
-            for (Object arg : arguments) {
+            for (ObjectInfo argInfo : argsInfo) {
                 if (!first) {
                     builder.append(", ");
                 }
-                argInfo(builder, arg);
+                builder.append(argInfo.toString());
                 first = false;
             }
-        }
-    }
-
-    private void argInfo(StringBuilder builder, Object argument) {
-        if (argument != null && argument instanceof Object[]) {
-            Object[] arguments = (Object[]) argument;
-            builder.append("[");
-            if (arguments != null) {
-                boolean firstArg = true;
-                for (Object arg : arguments) {
-                    if (!firstArg) {
-                        builder.append(", ");
-                    }
-                    builder.append(ToStringUtils.format(arg));
-                    firstArg = false;
-                }
-            }
-            builder.append("]");
-        } else {
-            builder.append(ToStringUtils.format(argument));
         }
     }
 
