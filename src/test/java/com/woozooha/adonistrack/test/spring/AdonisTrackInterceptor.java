@@ -30,7 +30,7 @@ import com.woozooha.adonistrack.domain.RequestInfoEvent;
 import com.woozooha.adonistrack.domain.ResponseInfo;
 import com.woozooha.adonistrack.domain.ResponseInfoEvent;
 
-public class AdonistrackInterceptor implements HandlerInterceptor {
+public class AdonisTrackInterceptor implements HandlerInterceptor {
 
     private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<Invocation>();
 

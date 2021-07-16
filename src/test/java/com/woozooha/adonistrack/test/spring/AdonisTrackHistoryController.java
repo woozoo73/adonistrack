@@ -12,7 +12,7 @@ import com.woozooha.adonistrack.writer.History;
 public class AdonisTrackHistoryController {
 
     @GetMapping("/adonistrack/histories")
-    public List<Invocation> greeting() {
+    public List<Invocation> histories() {
         History history = AdonisTrackAspect.getConfig().getHistory();
         
         List<Invocation> invocationList = history.getInvocationList();

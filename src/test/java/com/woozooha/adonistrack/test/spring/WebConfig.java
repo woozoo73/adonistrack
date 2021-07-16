@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        AdonistrackInterceptor adonistrackInterceptor = new AdonistrackInterceptor();
+        AdonisTrackInterceptor adonistrackInterceptor = new AdonisTrackInterceptor();
         registry.addInterceptor(adonistrackInterceptor).addPathPatterns("/**/*");
     }
 

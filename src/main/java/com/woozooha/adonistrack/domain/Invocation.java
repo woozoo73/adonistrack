@@ -23,15 +23,16 @@ import java.util.UUID;
 import org.aspectj.lang.JoinPoint;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Invocation data.
  * 
  * @author woozoo73
  */
-@Data
+@Getter
+@Setter
 public class Invocation implements Serializable {
 
     private static final long serialVersionUID = 1L;
