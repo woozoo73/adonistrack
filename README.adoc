@@ -268,6 +268,10 @@ public class AdonistrackInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+        if (request.getRequestURI().startsWith("/adonistrack")) {
+            return true;
+        }
+
         Invocation invocation = CONTEXT.get();
         if (invocation == null) {
             invocation = before(request);
@@ -279,9 +283,16 @@ public class AdonistrackInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            @Nullable ModelAndView modelAndView) throws Exception {
+                           @Nullable ModelAndView modelAndView) throws Exception {
+        if (request.getRequestURI().startsWith("/adonistrack")) {
+            return;
+        }
+
         Invocation invocation = CONTEXT.get();
-        after(invocation, request, response);
+        if (invocation != null) {
+            after(invocation, request, response);
+            CONTEXT.set(null);
+        }
     }
 
     private Invocation before(HttpServletRequest request) {
