@@ -1,6 +1,6 @@
 [
   {
-    "durationMiliTime": 81.1237,
+    "durationMilliTime": 81.1237,
     "eventList": null,
     "joinPointInfo": {
       "signatureInfo": {
@@ -43,7 +43,7 @@
     "durationNanoTime": 81123700
   },
   {
-    "durationMiliTime": 6.6552,
+    "durationMilliTime": 6.6552,
     "eventList": null,
     "joinPointInfo": {
       "signatureInfo": {
@@ -83,7 +83,7 @@
     "durationNanoTime": 6655200
   },
   {
-    "durationMiliTime": 155.309,
+    "durationMilliTime": 155.309,
     "eventList": [
       {
         "type": "REQUEST",
@@ -109,7 +109,7 @@
     "id": "192bcd30-353b-4d34-9936-282729cd4558",
     "childInvocationList": [
       {
-        "durationMiliTime": 29.8176,
+        "durationMilliTime": 29.8176,
         "eventList": null,
         "joinPointInfo": {
           "signatureInfo": {
@@ -150,7 +150,7 @@
         "id": "8fe1dd70-502a-4fb1-b8bb-5f57089b540f",
         "childInvocationList": [
           {
-            "durationMiliTime": 23.7547,
+            "durationMilliTime": 23.7547,
             "eventList": null,
             "joinPointInfo": {
               "signatureInfo": {
@@ -191,7 +191,7 @@
             "id": "1b3f54be-aa11-46dc-8ac2-cffeb0cb552c",
             "childInvocationList": [
               {
-                "durationMiliTime": 18.6848,
+                "durationMilliTime": 18.6848,
                 "eventList": null,
                 "joinPointInfo": {
                   "signatureInfo": {
@@ -243,7 +243,7 @@
     "durationNanoTime": 155309000
   },
   {
-    "durationMiliTime": 62.0778,
+    "durationMilliTime": 62.0778,
     "eventList": [
       {
         "type": "REQUEST",
@@ -269,7 +269,7 @@
     "id": "e0f99921-0570-4d89-ba0b-0c06c18c5256",
     "childInvocationList": [
       {
-        "durationMiliTime": 3.8763,
+        "durationMilliTime": 3.8763,
         "eventList": null,
         "joinPointInfo": {
           "signatureInfo": {
@@ -310,7 +310,7 @@
         "id": "e8b27d56-b788-4432-8bef-9a041b80e42d",
         "childInvocationList": [
           {
-            "durationMiliTime": 1.4334,
+            "durationMilliTime": 1.4334,
             "eventList": null,
             "joinPointInfo": {
               "signatureInfo": {
@@ -351,7 +351,7 @@
             "id": "d384fc2a-3453-4be3-b3df-1f2f038229c1",
             "childInvocationList": [
               {
-                "durationMiliTime": 0.9107,
+                "durationMilliTime": 0.9107,
                 "eventList": null,
                 "joinPointInfo": {
                   "signatureInfo": {
