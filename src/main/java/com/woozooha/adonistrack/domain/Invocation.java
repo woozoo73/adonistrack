@@ -156,7 +156,7 @@ public class Invocation implements Serializable {
         }
     }
 
-    public Double getDurationMiliTime() {
+    public Double getDurationMilliTime() {
         if (durationNanoTime == null) {
             return null;
         }

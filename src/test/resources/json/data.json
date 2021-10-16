@@ -1,0 +1,405 @@
+[
+  {
+    "durationMiliTime": 81.1237,
+    "eventList": null,
+    "joinPointInfo": {
+      "signatureInfo": {
+        "declaringTypeName": "org.springframework.data.repository.CrudRepository",
+        "name": "save",
+        "longString": "public abstract java.lang.Object org.springframework.data.repository.CrudRepository.save(java.lang.Object)",
+        "modifiers": 1025,
+        "shortString": "CrudRepository.save(..)",
+        "declaringType": "org.springframework.data.repository.CrudRepository"
+      },
+      "argsInfo": [
+        {
+          "toStringValue": "Greeting(id=1, content=Hello\\nfoo)",
+          "declaringType": "com.woozooha.adonistrack.test.spring.Greeting"
+        }
+      ],
+      "sourceLocation": {
+        "fileName": null,
+        "line": 0,
+        "column": 0,
+        "withinType": "com.sun.proxy.$Proxy97"
+      },
+      "target": {
+        "toStringValue": "org.springframework.data.jpa.repository.support.SimpleJpaRepository@d1c5cf2",
+        "declaringType": "com.sun.proxy.$Proxy97"
+      }
+    },
+    "startNanoTime": 236710771608300,
+    "endNanoTime": 236710852732000,
+    "type": "Exec",
+    "durationPercentage": 100.0,
+    "depth": 0,
+    "throwableInfo": null,
+    "returnValueInfo": {
+      "toStringValue": "Greeting(id=1, content=Hello\\nfoo)",
+      "declaringType": "com.woozooha.adonistrack.test.spring.Greeting"
+    },
+    "id": "0bec81f9-746f-4626-af9d-0df7b59da25d",
+    "childInvocationList": null,
+    "durationNanoTime": 81123700
+  },
+  {
+    "durationMiliTime": 6.6552,
+    "eventList": null,
+    "joinPointInfo": {
+      "signatureInfo": {
+        "declaringTypeName": "com.woozooha.adonistrack.test.spring.WebConfig",
+        "name": "addInterceptors",
+        "longString": "public void com.woozooha.adonistrack.test.spring.WebConfig.addInterceptors(org.springframework.web.servlet.config.annotation.InterceptorRegistry)",
+        "modifiers": 1,
+        "shortString": "WebConfig.addInterceptors(..)",
+        "declaringType": "com.woozooha.adonistrack.test.spring.WebConfig"
+      },
+      "argsInfo": [
+        {
+          "toStringValue": "org.springframework.web.servlet.config.annotation.InterceptorRegistry@15f519f7",
+          "declaringType": "org.springframework.web.servlet.config.annotation.InterceptorRegistry"
+        }
+      ],
+      "sourceLocation": {
+        "fileName": null,
+        "line": 0,
+        "column": 0,
+        "withinType": "com.woozooha.adonistrack.test.spring.WebConfig$$EnhancerBySpringCGLIB$$932f34ae"
+      },
+      "target": {
+        "toStringValue": "com.woozooha.adonistrack.test.spring.WebConfig$$EnhancerBySpringCGLIB$$932f34ae@5731caaf",
+        "declaringType": "com.woozooha.adonistrack.test.spring.WebConfig$$EnhancerBySpringCGLIB$$932f34ae"
+      }
+    },
+    "startNanoTime": 236711600715600,
+    "endNanoTime": 236711607370800,
+    "type": "Exec",
+    "durationPercentage": 100.0,
+    "depth": 0,
+    "throwableInfo": null,
+    "returnValueInfo": null,
+    "id": "5a229a91-c59a-4c98-8d30-85d8de5b3b34",
+    "childInvocationList": null,
+    "durationNanoTime": 6655200
+  },
+  {
+    "durationMiliTime": 155.309,
+    "eventList": [
+      {
+        "type": "REQUEST",
+        "value": {
+          "method": "GET",
+          "requestURL": "http://localhost:8080/greeting/1",
+          "type": "REQUEST",
+          "queryString": null
+        }
+      }
+    ],
+    "joinPointInfo": null,
+    "startNanoTime": 236714435326000,
+    "endNanoTime": 236714590635000,
+    "type": "Event",
+    "durationPercentage": 100.0,
+    "depth": 0,
+    "throwableInfo": null,
+    "returnValueInfo": {
+      "toStringValue": "[RESPONSE] 200",
+      "declaringType": "com.woozooha.adonistrack.domain.ResponseInfoEvent"
+    },
+    "id": "192bcd30-353b-4d34-9936-282729cd4558",
+    "childInvocationList": [
+      {
+        "durationMiliTime": 29.8176,
+        "eventList": null,
+        "joinPointInfo": {
+          "signatureInfo": {
+            "declaringTypeName": "com.woozooha.adonistrack.test.spring.GreetingController",
+            "name": "greeting",
+            "longString": "public com.woozooha.adonistrack.test.spring.Greeting com.woozooha.adonistrack.test.spring.GreetingController.greeting(java.lang.Long)",
+            "modifiers": 1,
+            "shortString": "GreetingController.greeting(..)",
+            "declaringType": "com.woozooha.adonistrack.test.spring.GreetingController"
+          },
+          "argsInfo": [
+            {
+              "toStringValue": "1",
+              "declaringType": "java.lang.Long"
+            }
+          ],
+          "sourceLocation": {
+            "fileName": null,
+            "line": 0,
+            "column": 0,
+            "withinType": "com.woozooha.adonistrack.test.spring.GreetingController"
+          },
+          "target": {
+            "toStringValue": "com.woozooha.adonistrack.test.spring.GreetingController@29147c12",
+            "declaringType": "com.woozooha.adonistrack.test.spring.GreetingController"
+          }
+        },
+        "startNanoTime": 236714457606300,
+        "endNanoTime": 236714487423900,
+        "type": "Exec",
+        "durationPercentage": 100.0,
+        "depth": 1,
+        "throwableInfo": null,
+        "returnValueInfo": {
+          "toStringValue": "Greeting(id=1, content=Hello\\nfoo)",
+          "declaringType": "com.woozooha.adonistrack.test.spring.Greeting"
+        },
+        "id": "8fe1dd70-502a-4fb1-b8bb-5f57089b540f",
+        "childInvocationList": [
+          {
+            "durationMiliTime": 23.7547,
+            "eventList": null,
+            "joinPointInfo": {
+              "signatureInfo": {
+                "declaringTypeName": "com.woozooha.adonistrack.test.spring.GreetingService",
+                "name": "greeting",
+                "longString": "public com.woozooha.adonistrack.test.spring.Greeting com.woozooha.adonistrack.test.spring.GreetingService.greeting(java.lang.Long)",
+                "modifiers": 1,
+                "shortString": "GreetingService.greeting(..)",
+                "declaringType": "com.woozooha.adonistrack.test.spring.GreetingService"
+              },
+              "argsInfo": [
+                {
+                  "toStringValue": "1",
+                  "declaringType": "java.lang.Long"
+                }
+              ],
+              "sourceLocation": {
+                "fileName": null,
+                "line": 0,
+                "column": 0,
+                "withinType": "com.woozooha.adonistrack.test.spring.GreetingService"
+              },
+              "target": {
+                "toStringValue": "com.woozooha.adonistrack.test.spring.GreetingService@5ab5924c",
+                "declaringType": "com.woozooha.adonistrack.test.spring.GreetingService"
+              }
+            },
+            "startNanoTime": 236714463224900,
+            "endNanoTime": 236714486979600,
+            "type": "Exec",
+            "durationPercentage": 100.0,
+            "depth": 2,
+            "throwableInfo": null,
+            "returnValueInfo": {
+              "toStringValue": "Greeting(id=1, content=Hello\\nfoo)",
+              "declaringType": "com.woozooha.adonistrack.test.spring.Greeting"
+            },
+            "id": "1b3f54be-aa11-46dc-8ac2-cffeb0cb552c",
+            "childInvocationList": [
+              {
+                "durationMiliTime": 18.6848,
+                "eventList": null,
+                "joinPointInfo": {
+                  "signatureInfo": {
+                    "declaringTypeName": "org.springframework.data.repository.CrudRepository",
+                    "name": "findById",
+                    "longString": "public abstract java.util.Optional org.springframework.data.repository.CrudRepository.findById(java.lang.Object)",
+                    "modifiers": 1025,
+                    "shortString": "CrudRepository.findById(..)",
+                    "declaringType": "org.springframework.data.repository.CrudRepository"
+                  },
+                  "argsInfo": [
+                    {
+                      "toStringValue": "1",
+                      "declaringType": "java.lang.Long"
+                    }
+                  ],
+                  "sourceLocation": {
+                    "fileName": null,
+                    "line": 0,
+                    "column": 0,
+                    "withinType": "com.sun.proxy.$Proxy97"
+                  },
+                  "target": {
+                    "toStringValue": "org.springframework.data.jpa.repository.support.SimpleJpaRepository@d1c5cf2",
+                    "declaringType": "com.sun.proxy.$Proxy97"
+                  }
+                },
+                "startNanoTime": 236714468223500,
+                "endNanoTime": 236714486908300,
+                "type": "Exec",
+                "durationPercentage": 100.0,
+                "depth": 3,
+                "throwableInfo": null,
+                "returnValueInfo": {
+                  "toStringValue": "Optional[Greeting(id=1, content=Hello\\nfoo)]",
+                  "declaringType": "java.util.Optional"
+                },
+                "id": "8e4facea-d9fb-4147-b886-4dffa61f9134",
+                "childInvocationList": null,
+                "durationNanoTime": 18684800
+              }
+            ],
+            "durationNanoTime": 23754700
+          }
+        ],
+        "durationNanoTime": 29817600
+      }
+    ],
+    "durationNanoTime": 155309000
+  },
+  {
+    "durationMiliTime": 62.0778,
+    "eventList": [
+      {
+        "type": "REQUEST",
+        "value": {
+          "method": "GET",
+          "requestURL": "http://localhost:8080/greeting/2",
+          "type": "REQUEST",
+          "queryString": null
+        }
+      }
+    ],
+    "joinPointInfo": null,
+    "startNanoTime": 236714843330100,
+    "endNanoTime": 236714905407900,
+    "type": "Event",
+    "durationPercentage": 100.0,
+    "depth": 0,
+    "throwableInfo": null,
+    "returnValueInfo": {
+      "toStringValue": "[RESPONSE] 500",
+      "declaringType": "com.woozooha.adonistrack.domain.ResponseInfoEvent"
+    },
+    "id": "e0f99921-0570-4d89-ba0b-0c06c18c5256",
+    "childInvocationList": [
+      {
+        "durationMiliTime": 3.8763,
+        "eventList": null,
+        "joinPointInfo": {
+          "signatureInfo": {
+            "declaringTypeName": "com.woozooha.adonistrack.test.spring.GreetingController",
+            "name": "greeting",
+            "longString": "public com.woozooha.adonistrack.test.spring.Greeting com.woozooha.adonistrack.test.spring.GreetingController.greeting(java.lang.Long)",
+            "modifiers": 1,
+            "shortString": "GreetingController.greeting(..)",
+            "declaringType": "com.woozooha.adonistrack.test.spring.GreetingController"
+          },
+          "argsInfo": [
+            {
+              "toStringValue": "2",
+              "declaringType": "java.lang.Long"
+            }
+          ],
+          "sourceLocation": {
+            "fileName": null,
+            "line": 0,
+            "column": 0,
+            "withinType": "com.woozooha.adonistrack.test.spring.GreetingController"
+          },
+          "target": {
+            "toStringValue": "com.woozooha.adonistrack.test.spring.GreetingController@29147c12",
+            "declaringType": "com.woozooha.adonistrack.test.spring.GreetingController"
+          }
+        },
+        "startNanoTime": 236714843911700,
+        "endNanoTime": 236714847788000,
+        "type": "Exec",
+        "durationPercentage": 100.0,
+        "depth": 1,
+        "throwableInfo": {
+          "toStringValue": "java.util.NoSuchElementException: No value present",
+          "declaringType": "java.util.NoSuchElementException"
+        },
+        "returnValueInfo": null,
+        "id": "e8b27d56-b788-4432-8bef-9a041b80e42d",
+        "childInvocationList": [
+          {
+            "durationMiliTime": 1.4334,
+            "eventList": null,
+            "joinPointInfo": {
+              "signatureInfo": {
+                "declaringTypeName": "com.woozooha.adonistrack.test.spring.GreetingService",
+                "name": "greeting",
+                "longString": "public com.woozooha.adonistrack.test.spring.Greeting com.woozooha.adonistrack.test.spring.GreetingService.greeting(java.lang.Long)",
+                "modifiers": 1,
+                "shortString": "GreetingService.greeting(..)",
+                "declaringType": "com.woozooha.adonistrack.test.spring.GreetingService"
+              },
+              "argsInfo": [
+                {
+                  "toStringValue": "2",
+                  "declaringType": "java.lang.Long"
+                }
+              ],
+              "sourceLocation": {
+                "fileName": null,
+                "line": 0,
+                "column": 0,
+                "withinType": "com.woozooha.adonistrack.test.spring.GreetingService"
+              },
+              "target": {
+                "toStringValue": "com.woozooha.adonistrack.test.spring.GreetingService@5ab5924c",
+                "declaringType": "com.woozooha.adonistrack.test.spring.GreetingService"
+              }
+            },
+            "startNanoTime": 236714844249700,
+            "endNanoTime": 236714845683100,
+            "type": "Exec",
+            "durationPercentage": 100.0,
+            "depth": 2,
+            "throwableInfo": {
+              "toStringValue": "java.util.NoSuchElementException: No value present",
+              "declaringType": "java.util.NoSuchElementException"
+            },
+            "returnValueInfo": null,
+            "id": "d384fc2a-3453-4be3-b3df-1f2f038229c1",
+            "childInvocationList": [
+              {
+                "durationMiliTime": 0.9107,
+                "eventList": null,
+                "joinPointInfo": {
+                  "signatureInfo": {
+                    "declaringTypeName": "org.springframework.data.repository.CrudRepository",
+                    "name": "findById",
+                    "longString": "public abstract java.util.Optional org.springframework.data.repository.CrudRepository.findById(java.lang.Object)",
+                    "modifiers": 1025,
+                    "shortString": "CrudRepository.findById(..)",
+                    "declaringType": "org.springframework.data.repository.CrudRepository"
+                  },
+                  "argsInfo": [
+                    {
+                      "toStringValue": "2",
+                      "declaringType": "java.lang.Long"
+                    }
+                  ],
+                  "sourceLocation": {
+                    "fileName": null,
+                    "line": 0,
+                    "column": 0,
+                    "withinType": "com.sun.proxy.$Proxy97"
+                  },
+                  "target": {
+                    "toStringValue": "org.springframework.data.jpa.repository.support.SimpleJpaRepository@d1c5cf2",
+                    "declaringType": "com.sun.proxy.$Proxy97"
+                  }
+                },
+                "startNanoTime": 236714844495000,
+                "endNanoTime": 236714845405700,
+                "type": "Exec",
+                "durationPercentage": 100.0,
+                "depth": 3,
+                "throwableInfo": null,
+                "returnValueInfo": {
+                  "toStringValue": "Optional.empty",
+                  "declaringType": "java.util.Optional"
+                },
+                "id": "a16bbb3c-c20c-40c9-97b0-44469429e36a",
+                "childInvocationList": null,
+                "durationNanoTime": 910700
+              }
+            ],
+            "durationNanoTime": 1433400
+          }
+        ],
+        "durationNanoTime": 3876300
+      }
+    ],
+    "durationNanoTime": 62077800
+  }
+]

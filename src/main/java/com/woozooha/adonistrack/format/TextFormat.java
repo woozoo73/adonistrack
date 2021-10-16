@@ -169,7 +169,7 @@ public class TextFormat implements Format {
     private void durationInfo(StringBuilder builder, Invocation invocation) {
         builder.append("(");
         builder.append(
-                invocation.getDurationMiliTime() == null ? "0" : timeFormat.format(invocation.getDurationMiliTime()));
+                invocation.getDurationMilliTime() == null ? "0" : timeFormat.format(invocation.getDurationMilliTime()));
         builder.append("ms");
         builder.append(":");
         builder.append(timeFormat.format(invocation.getDurationPercentage()));
