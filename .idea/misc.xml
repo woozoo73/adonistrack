@@ -11,6 +11,7 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../adonistrack-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/../adonistrack-springweb/pom.xml" />
       </list>
     </option>
   </component>

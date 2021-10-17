@@ -5,9 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.woozooha</groupId>
 	<artifactId>adonistrack</artifactId>
-	<version>2.0.2</version>
+    <packaging>pom</packaging>
+    <version>2.0.2</version>
+    <modules>
+        <module>adonistrack-springweb</module>
+    </modules>
 
-	<name>AdonisTrack</name>
+    <name>AdonisTrack</name>
 	<description>Simple profiling tool.</description>
 	<url>https://github.com/woozoo73/adonistrack</url>
 

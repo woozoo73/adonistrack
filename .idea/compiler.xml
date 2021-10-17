@@ -9,15 +9,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="adonistrack-ui" />
       </profile>
-      <profile name="Annotation profile for AdonisTrack" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+      <profile name="Annotation profile for Unknown" enabled="true">
+        <sourceOutputDir name="../../target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../../target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.16.20/lombok-1.16.20.jar" />
-        </processorPath>
-        <module name="adonistrack" />
+        <module name="wrapper" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="wrapper" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
