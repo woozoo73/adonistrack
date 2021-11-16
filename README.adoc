@@ -8,6 +8,7 @@ Simple Java profiling tool. (The light version of 'hazin-tracer')
 * Compatible with the Spring Framework.
 * The information is not intermixed with concurrent calls.
 * Provides extension points to customize.
+* ...
 
 == Usage
 
