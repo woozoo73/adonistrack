@@ -15,7 +15,7 @@ public class RequestInfo implements Serializable {
 
     private String method;
 
-    private String requestURL;
+    private String requestURI;
 
     private String queryString;
 
@@ -24,7 +24,7 @@ public class RequestInfo implements Serializable {
 
     public RequestInfo(HttpServletRequest request) {
         this.method = request.getMethod();
-        this.requestURL = request.getRequestURL().toString();
+        this.requestURI = request.getRequestURI().toString();
         this.queryString = request.getQueryString();
     }
 

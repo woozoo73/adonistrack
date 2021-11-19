@@ -189,7 +189,7 @@ public class Invocation implements Serializable {
 
         private String method;
 
-        private String requestURL;
+        private String requestURI;
 
         private String queryString;
 
@@ -214,7 +214,7 @@ public class Invocation implements Serializable {
             }
             if (req != null) {
                 this.method = req.getMethod();
-                this.requestURL = req.getRequestURL();
+                this.requestURI = req.getRequestURI();
                 this.queryString = req.getQueryString();
             }
             if (res != null) {
