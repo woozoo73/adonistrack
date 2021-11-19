@@ -30,17 +30,17 @@ public class Record {
 
     private int errorCount;
 
-    private Long quickestDurationNanoTime;
+    private Double quickestDuration;
 
-    private Long slowestDurationNanoTime;
+    private Double slowestDuration;
 
-    private Long totalDurationNanoTime;
+    private Double totalDuration;
 
     private Invocation slowestInvocation;
 
     public void record(Invocation invocation) {
-        Long durationNanoTime = invocation.getDurationNanoTime();
-        if (durationNanoTime == null) {
+        Double duration = invocation.getDuration();
+        if (duration == null) {
             return;
         }
 
@@ -48,18 +48,18 @@ public class Record {
         if (invocation.getThrowableInfo() == null) {
             successCount++;
 
-            if (totalDurationNanoTime == null) {
-                totalDurationNanoTime = 0L;
+            if (totalDuration == null) {
+                totalDuration = 0D;
             }
-            totalDurationNanoTime += durationNanoTime;
-            if (quickestDurationNanoTime == null || durationNanoTime < quickestDurationNanoTime) {
-                quickestDurationNanoTime = durationNanoTime;
+            totalDuration += duration;
+            if (quickestDuration == null || duration < quickestDuration) {
+                quickestDuration = duration;
             }
-            if (slowestDurationNanoTime == null || durationNanoTime > slowestDurationNanoTime) {
-                slowestDurationNanoTime = durationNanoTime;
+            if (slowestDuration == null || duration > slowestDuration) {
+                slowestDuration = duration;
             }
             if (slowestInvocation == null
-                    || (slowestDurationNanoTime == null || durationNanoTime > slowestDurationNanoTime)) {
+                    || (slowestDuration == null || duration > slowestDuration)) {
                 slowestInvocation = invocation;
             }
         } else {
@@ -67,12 +67,12 @@ public class Record {
         }
     }
 
-    public long getAverageDurationNanoTime() {
+    public double getAverageDuration() {
         if (successCount == 0) {
             return 0;
         }
 
-        return totalDurationNanoTime / successCount;
+        return totalDuration / successCount;
     }
 
     public int getRequestCount() {
@@ -91,16 +91,16 @@ public class Record {
         this.errorCount = errorCount;
     }
 
-    public long getQuickestDurationNanoTime() {
-        return quickestDurationNanoTime;
+    public double getQuickestDuration() {
+        return quickestDuration;
     }
 
-    public long getSlowestDurationNanoTime() {
-        return slowestDurationNanoTime;
+    public double getSlowestDuration() {
+        return slowestDuration;
     }
 
-    public long getTotalDurationNanoTime() {
-        return totalDurationNanoTime;
+    public double getTotalDuration() {
+        return totalDuration;
     }
 
     public Invocation getSlowestInvocation() {
@@ -116,12 +116,12 @@ public class Record {
         builder.append(successCount);
         builder.append(", errorCount=");
         builder.append(errorCount);
-        builder.append(", quickestDurationNanoTime=");
-        builder.append(quickestDurationNanoTime);
-        builder.append(", slowestDurationNanoTime=");
-        builder.append(slowestDurationNanoTime);
-        builder.append(", totalDurationNanoTime=");
-        builder.append(totalDurationNanoTime);
+        builder.append(", quickestDuration=");
+        builder.append(quickestDuration);
+        builder.append(", slowestDuration=");
+        builder.append(slowestDuration);
+        builder.append(", totalDuration=");
+        builder.append(totalDuration);
         builder.append(", slowestInvocation=");
         builder.append(slowestInvocation);
         builder.append("]");
@@ -134,16 +134,17 @@ public class Record {
         builder.append("success=").append(successCount).append(", ");
         builder.append("error=").append(errorCount).append(", ");
         double min = 0D;
-        if (quickestDurationNanoTime != null) {
-            min = quickestDurationNanoTime.doubleValue() / (1000 * 1000);
+        if (quickestDuration != null) {
+            min = quickestDuration.doubleValue() / (1000 * 1000);
         }
         double max = 0D;
-        if (slowestDurationNanoTime != null) {
-            max = slowestDurationNanoTime.doubleValue() / (1000 * 1000);
+        if (slowestDuration != null) {
+            max = slowestDuration.doubleValue() / (1000 * 1000);
         }
         builder.append("min=").append(timeFormat.format(min)).append("(ms)").append(", ");
         builder.append("max=").append(timeFormat.format(max)).append("(ms)");
 
         return builder.toString();
     }
+
 }

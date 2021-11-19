@@ -1,13 +1,11 @@
 package com.woozooha.adonistrack.test;
 
-import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Map;
-
+import com.jayway.restassured.builder.RequestSpecBuilder;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.RequestSpecification;
+import com.woozooha.adonistrack.test.spring.Application;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,14 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.path.json.JsonPath;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.test.spring.Application;
+import java.util.List;
+import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
+import static com.jayway.restassured.RestAssured.given;
+import static org.junit.Assert.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -57,8 +52,16 @@ public class SpringTest {
 
     @Test
     public void zHistories() {
-        List<Map<String, Invocation>> invocationList = histories();
+        List<Map<String, Object>> invocationList = histories();
         assertTrue(invocationList.size() > 0);
+    }
+
+    @Test
+    public void zHistory() {
+        List<Map<String, Object>> invocationList = histories();
+        assertTrue(invocationList.size() > 0);
+
+        Map<String, Object> invocation = history((String) invocationList.get(0).get("id"));
     }
 
     private Map<String, Object> greeting(Long id) {
@@ -69,16 +72,28 @@ public class SpringTest {
         return greeting;
     }
 
-    private List<Map<String, Invocation>> histories() {
-        Response response = request().get("/adonistrack/histories");
+    private List<Map<String, Object>> histories() {
+        Response response = request().get("/adonis-track/invocations");
         JsonPath jsonPath = response.jsonPath();
         String json = jsonPath.prettify();
 
         log.info(json);
 
-        List<Map<String, Invocation>> invocationList = jsonPath.get();
+        List<Map<String, Object>> invocationList = jsonPath.get();
 
         return invocationList;
+    }
+
+    private Map<String, Object> history(String id) {
+        Response response = request().get("/adonis-track/invocations/" + id);
+        JsonPath jsonPath = response.jsonPath();
+        String json = jsonPath.prettify();
+
+        log.info(json);
+
+        Map<String, Object> invocation = jsonPath.get();
+
+        return invocation;
     }
 
     private RequestSpecification request() {

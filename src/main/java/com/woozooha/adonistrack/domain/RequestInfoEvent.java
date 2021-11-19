@@ -39,7 +39,7 @@ public class RequestInfoEvent extends Event<RequestInfo> {
         builder.append(" ");
         builder.append(value.getMethod());
         builder.append(" ");
-        builder.append(value.getRequestURL());
+        builder.append(value.getRequestURI());
         if (value.getQueryString() != null) {
             builder.append("?");
             builder.append(value.getQueryString());

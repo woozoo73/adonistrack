@@ -15,26 +15,17 @@
  */
 package com.woozooha.adonistrack.aspect;
 
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-
 import com.woozooha.adonistrack.callback.WriterCallback;
 import com.woozooha.adonistrack.conf.Config;
-import com.woozooha.adonistrack.domain.Context;
-import com.woozooha.adonistrack.domain.Event;
-import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.JoinPointInfo;
-import com.woozooha.adonistrack.domain.ObjectInfo;
+import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.format.Format;
 import com.woozooha.adonistrack.format.TextFormat;
 import com.woozooha.adonistrack.writer.CompositeWriter;
 import com.woozooha.adonistrack.writer.LogWriter;
 import com.woozooha.adonistrack.writer.MemoryWriter;
 import com.woozooha.adonistrack.writer.Writer;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.*;
 
 /**
  * Profile invocations aspect.
@@ -55,21 +46,29 @@ public abstract class ProfileAspect {
             config = new Config();
 
             CompositeWriter compositeWriter = new CompositeWriter();
-            
+
             Writer logWriter = new LogWriter();
             Format format = new TextFormat("\n", null);
             logWriter.setFormat(format);
             compositeWriter.add(logWriter);
 
             MemoryWriter memoryWriter = new MemoryWriter();
+            // Take only web requests.
+            memoryWriter.setFilter((t) -> {
+                if (t.getEventList() == null || t.getEventList().size() == 0) {
+                    return false;
+                }
+                Event event = t.getEventList().get(0);
+                return event != null && event instanceof RequestInfoEvent;
+            });
             memoryWriter.setMaxSize(100);
             compositeWriter.add(memoryWriter);
-            
+
             WriterCallback invocationCallback = new WriterCallback();
             invocationCallback.setWriter(compositeWriter);
 
             config.setInvocationCallback(invocationCallback);
-            
+
             config.setHistory(memoryWriter);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -153,6 +152,9 @@ public abstract class ProfileAspect {
         if (r != null) {
             invocation.setReturnValue(r);
             invocation.setReturnValueInfo(new ObjectInfo(r));
+            if (r instanceof Event) {
+                invocation.add((Event) r);
+            }
         }
         if (t != null) {
             invocation.setT(t);
