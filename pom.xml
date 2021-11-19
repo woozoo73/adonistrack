@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.woozooha</groupId>
 	<artifactId>adonistrack</artifactId>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 
 	<name>AdonisTrack</name>
 	<description>Simple profiling tool.</description>
