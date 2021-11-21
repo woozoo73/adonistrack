@@ -1,12 +1,13 @@
 package com.woozooha.adonistrack.domain;
 
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
 public class RequestInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,6 +19,8 @@ public class RequestInfo implements Serializable {
     private String requestURI;
 
     private String queryString;
+
+    private String payload;
 
     public RequestInfo() {
     }

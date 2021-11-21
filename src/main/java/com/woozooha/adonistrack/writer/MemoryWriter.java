@@ -1,18 +1,17 @@
 package com.woozooha.adonistrack.writer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
-
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
-
 import lombok.Getter;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class MemoryWriter implements Writer, History {
 
     @Getter
-    private List<Invocation> invocationList = new ArrayList<>();
+    private LinkedList<Invocation> invocations = new LinkedList<>();
 
     private int maxSize = -1;
 
@@ -46,14 +45,16 @@ public class MemoryWriter implements Writer, History {
             return;
         }
 
-        invocationList.add(invocation);
+        invocations.addFirst(invocation);
 
-        if (maxSize > 0 && invocationList.size() > maxSize) {
-            int toIndex = invocationList.size();
-            int fromIndex = toIndex - maxSize;
-
-            invocationList = invocationList.subList(fromIndex, toIndex);
+        while (invocations.size() > maxSize) {
+            invocations.removeLast();
         }
+    }
+
+    @Override
+    public List<Invocation> getInvocationList() {
+        return invocations;
     }
 
 }
