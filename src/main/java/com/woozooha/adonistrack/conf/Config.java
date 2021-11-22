@@ -16,10 +16,12 @@
 package com.woozooha.adonistrack.conf;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 import com.woozooha.adonistrack.callback.InvocationCallback;
 import com.woozooha.adonistrack.writer.History;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -32,8 +34,49 @@ public class Config implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final Function<Class<?>, Class<?>> DEFAULT_PROXY_TARGET_FINDER = (proxyClass) -> {
+        Class<?>[] interfaces = proxyClass.getInterfaces();
+        for (Class<?> inf : interfaces) {
+            return inf;
+        }
+        return proxyClass;
+    };
+
     private InvocationCallback invocationCallback;
 
     private History history;
+
+    // Finder of Proxy class's real class(or interface).
+    // $Proxy1 --> Foo
+    private static Function<Class<?>, Class<?>> proxyTargetFinder = DEFAULT_PROXY_TARGET_FINDER;
+
+    public static Function<Class<?>, Class<?>> getProxyTargetFinder() {
+        return proxyTargetFinder;
+    }
+
+    public static void setProxyTargetFinder(Function<Class<?>, Class<?>> proxyTargetFinder) {
+        Config.proxyTargetFinder = proxyTargetFinder;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class BaseNameTargetFinder implements Function<Class<?>, Class<?>> {
+
+        private String[] baseNames;
+
+        @Override
+        public Class<?> apply(Class<?> proxyClass) {
+            Class<?>[] interfaces = proxyClass.getInterfaces();
+            for (Class<?> inf : interfaces) {
+                for (String baseName : baseNames) {
+                    if (inf.getName().startsWith(baseName)) {
+                        return inf;
+                    }
+                }
+            }
+            return proxyClass;
+        }
+
+    }
 
 }

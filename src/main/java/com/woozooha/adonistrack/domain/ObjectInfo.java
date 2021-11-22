@@ -16,7 +16,9 @@
 package com.woozooha.adonistrack.domain;
 
 import java.io.Serializable;
+import java.lang.reflect.Proxy;
 
+import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.util.ToStringUtils;
 
 import lombok.Data;
@@ -35,6 +37,10 @@ public class ObjectInfo implements Serializable {
 
     private String toStringValue;
 
+    private boolean proxy;
+
+    private Class<?> proxyTarget;
+
     public ObjectInfo() {
     }
 
@@ -45,6 +51,15 @@ public class ObjectInfo implements Serializable {
 
         this.declaringType = object.getClass();
         this.toStringValue = ToStringUtils.format(object);
+
+        this.proxy = Proxy.isProxyClass(this.declaringType);
+        if (this.proxy) {
+            try {
+                this.proxyTarget = Config.getProxyTargetFinder().apply(this.declaringType);
+            } catch (Throwable t) {
+                this.proxyTarget = this.declaringType;
+            }
+        }
     }
 
     @Override
