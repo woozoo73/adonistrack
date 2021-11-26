@@ -15,20 +15,14 @@
  */
 package com.woozooha.adonistrack.test.spring;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.woozooha.adonistrack.aspect.ProfileAspect;
+import com.woozooha.adonistrack.domain.*;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.woozooha.adonistrack.aspect.ProfileAspect;
-import com.woozooha.adonistrack.domain.Event;
-import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.RequestInfo;
-import com.woozooha.adonistrack.domain.RequestInfoEvent;
-import com.woozooha.adonistrack.domain.ResponseInfo;
-import com.woozooha.adonistrack.domain.ResponseInfoEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class AdonisTrackInterceptor implements HandlerInterceptor {
 
@@ -54,13 +48,13 @@ public class AdonisTrackInterceptor implements HandlerInterceptor {
     }
 
     private Invocation before(HttpServletRequest request) {
-        Event<RequestInfo> event = new RequestInfoEvent(new RequestInfo(request));
+        Event<RequestInfo> event = new RequestEvent(new RequestInfo(request));
 
         return ProfileAspect.before(event);
     }
 
     private void after(Invocation invocation, HttpServletRequest request, HttpServletResponse response) {
-        Event<ResponseInfo> event = new ResponseInfoEvent(new ResponseInfo(response));
+        Event<ResponseInfo> event = new ResponseEvent(new ResponseInfo(response));
 
         ProfileAspect.after(invocation, event);
     }

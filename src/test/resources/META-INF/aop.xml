@@ -3,9 +3,9 @@
 	<weaver options="">
 		<include within="java.sql.Statement+" />
 		<include within="java.sql.Connection+" />
-		<include within="com.woozooha.adonistrack.aspect.JdbcAspect" />
+		<include within="com.woozooha.adonistrack.aspect.SqlAspect" />
 	</weaver>
 	<aspects>
-		<aspect name="com.woozooha.adonistrack.aspect.JdbcAspect" />
+		<aspect name="com.woozooha.adonistrack.aspect.SqlAspect" />
 	</aspects>
 </aspectj>

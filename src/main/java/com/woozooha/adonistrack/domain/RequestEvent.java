@@ -15,17 +15,20 @@
  */
 package com.woozooha.adonistrack.domain;
 
-import javax.servlet.http.HttpServletRequest;
+import lombok.Getter;
+import lombok.Setter;
 
-public class RequestEvent extends Event<HttpServletRequest> {
+@Getter
+@Setter
+public class RequestEvent extends Event<RequestInfo> {
 
     protected String type = "REQUEST";
 
     public RequestEvent() {
     }
 
-    public RequestEvent(HttpServletRequest request) {
-        super(request);
+    public RequestEvent(RequestInfo requestInfo) {
+        super(requestInfo);
     }
 
     public String toString() {
@@ -36,7 +39,7 @@ public class RequestEvent extends Event<HttpServletRequest> {
         builder.append(" ");
         builder.append(value.getMethod());
         builder.append(" ");
-        builder.append(value.getRequestURL());
+        builder.append(value.getRequestURI());
         if (value.getQueryString() != null) {
             builder.append("?");
             builder.append(value.getQueryString());

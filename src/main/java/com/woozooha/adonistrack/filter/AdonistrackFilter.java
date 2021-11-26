@@ -15,24 +15,13 @@
  */
 package com.woozooha.adonistrack.filter;
 
-import java.io.IOException;
+import com.woozooha.adonistrack.aspect.ProfileAspect;
+import com.woozooha.adonistrack.domain.*;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.woozooha.adonistrack.aspect.ProfileAspect;
-import com.woozooha.adonistrack.domain.Event;
-import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.RequestInfo;
-import com.woozooha.adonistrack.domain.RequestInfoEvent;
-import com.woozooha.adonistrack.domain.ResponseInfo;
-import com.woozooha.adonistrack.domain.ResponseInfoEvent;
+import java.io.IOException;
 
 public class AdonistrackFilter implements Filter {
 
@@ -60,13 +49,13 @@ public class AdonistrackFilter implements Filter {
     }
 
     private Invocation before(HttpServletRequest request) {
-        Event<RequestInfo> event = new RequestInfoEvent(new RequestInfo(request));
+        Event<RequestInfo> event = new RequestEvent(new RequestInfo(request));
 
         return ProfileAspect.before(event);
     }
 
     private void after(Invocation invocation, HttpServletRequest request, HttpServletResponse response) {
-        Event<ResponseInfo> event = new ResponseInfoEvent(new ResponseInfo(response));
+        Event<ResponseInfo> event = new ResponseEvent(new ResponseInfo(response));
 
         ProfileAspect.after(invocation, event);
     }

@@ -15,22 +15,20 @@
  */
 package com.woozooha.adonistrack.domain;
 
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ResponseEvent extends Event<HttpServletResponse> {
+public class ResponseEvent extends Event<ResponseInfo> {
 
     protected String type = "RESPONSE";
 
     public ResponseEvent() {
     }
 
-    public ResponseEvent(HttpServletResponse response) {
-        super(response);
+    public ResponseEvent(ResponseInfo responseInfo) {
+        super(responseInfo);
     }
 
     @Override

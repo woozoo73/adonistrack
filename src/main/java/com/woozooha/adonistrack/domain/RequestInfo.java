@@ -9,7 +9,7 @@ import java.util.*;
 
 @Getter
 @Setter
-public class RequestInfo implements Serializable {
+public class RequestInfo implements Call, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,34 +25,17 @@ public class RequestInfo implements Serializable {
 
     private String payload;
 
+    private Long start;
+
     public RequestInfo() {
+        this.start = System.currentTimeMillis();
     }
 
     public RequestInfo(HttpServletRequest request) {
+        this.start = System.currentTimeMillis();
         this.method = request.getMethod();
         this.requestURI = request.getRequestURI().toString();
         this.queryString = request.getQueryString();
-
-//        this.headers = this.parseHeaders(request);
     }
-
-//    private List<Header> parseHeaders(HttpServletRequest request) {
-//        List<Header> headers = new ArrayList<>();
-//
-//        Enumeration<String> names = request.getHeaderNames();
-//        while (names.hasMoreElements()) {
-//            String name = names.nextElement();
-//
-//            Enumeration<String> values = request.getHeaders(name);
-//            List<String> valueList = new ArrayList<>();
-//            while (values.hasMoreElements()) {
-//                valueList.add(values.nextElement());
-//            }
-//
-//            headers.add(new Header(name, valueList));
-//        }
-//
-//        return headers;
-//    }
 
 }

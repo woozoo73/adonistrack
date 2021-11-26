@@ -59,7 +59,7 @@ public abstract class ProfileAspect {
                     return false;
                 }
                 Event event = t.getEventList().get(0);
-                return event != null && event instanceof RequestInfoEvent;
+                return event != null && event instanceof RequestEvent;
             });
             memoryWriter.setMaxSize(100);
             compositeWriter.add(memoryWriter);
@@ -83,7 +83,7 @@ public abstract class ProfileAspect {
         return before(Invocation.Type.Exec, joinPoint, null);
     }
 
-    public static <V> Invocation before(Event<V> event) {
+    public static <V extends Call> Invocation before(Event<V> event) {
         return before(Invocation.Type.Event, null, event);
     }
 

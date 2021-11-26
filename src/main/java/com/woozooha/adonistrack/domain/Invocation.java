@@ -33,7 +33,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Invocation implements Serializable {
+public class Invocation implements Call, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -204,11 +204,11 @@ public class Invocation implements Serializable {
             ResponseInfo res = null;
             if (invocation.getEventList() != null) {
                 for (Event event : invocation.getEventList()) {
-                    if (req == null && event instanceof RequestInfoEvent) {
-                        req = ((RequestInfoEvent) event).getValue();
+                    if (req == null && event instanceof RequestEvent) {
+                        req = ((RequestEvent) event).getValue();
                     }
-                    if (event instanceof ResponseInfoEvent) {
-                        res = ((ResponseInfoEvent) event).getValue();
+                    if (event instanceof ResponseEvent) {
+                        res = ((ResponseEvent) event).getValue();
                     }
                 }
             }
