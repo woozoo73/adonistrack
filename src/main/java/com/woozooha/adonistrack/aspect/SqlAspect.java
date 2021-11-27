@@ -1,6 +1,8 @@
 package com.woozooha.adonistrack.aspect;
 
 import com.woozooha.adonistrack.domain.*;
+import com.woozooha.adonistrack.format.SqlFormat;
+import com.woozooha.adonistrack.format.SqlMessageFormat;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
@@ -26,6 +28,12 @@ public class SqlAspect {
             String.class,
             // Date & URL
             Date.class, Time.class, Timestamp.class, URL.class };
+
+    private static SqlFormat sqlFormat = new SqlMessageFormat();
+
+    public static SqlFormat getSqlFormat() {
+        return sqlFormat;
+    }
 
     @Pointcut("within(java.sql.Connection+) && (execution(java.sql.PreparedStatement+ prepareStatement(String)) || execution(java.sql.Statement+ createStatement(String)))")
     public void createStatementPointcut() {

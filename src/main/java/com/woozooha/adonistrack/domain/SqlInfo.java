@@ -1,5 +1,7 @@
 package com.woozooha.adonistrack.domain;
 
+import com.woozooha.adonistrack.aspect.SqlAspect;
+import com.woozooha.adonistrack.format.SqlFormat;
 import lombok.Getter;
 import lombok.Setter;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -40,42 +42,9 @@ public class SqlInfo implements Call, Serializable {
     private ObjectInfo throwableInfo;
 
     public String getMessage() {
-        if (sql != null) {
-            try {
-                Statement statement = CCJSqlParserUtil.parse(sql);
-                if (statement instanceof Insert) {
-                    Insert insert = (Insert) statement;
-                    String tableName = insert.getTable().getName();
-                    return String.format("INSERT ~ INTO %s", tableName);
-                }
-                if (statement instanceof Update) {
-                    Update update = (Update) statement;
-                    String tableName = update.getTable().getName();
-                    return String.format("UPDATE %s ~", tableName);
-                }
-                if (statement instanceof Delete) {
-                    Delete delete = (Delete) statement;
-                    String tableName = delete.getTable().getName();
-                    return String.format("DELETE %s ~", tableName);
-                }
-                if (statement instanceof Select) {
-                    Select select = (Select) statement;
-                    SelectBody selectBody = select.getSelectBody();
-                    if (selectBody instanceof PlainSelect) {
-                        PlainSelect plainSelect = (PlainSelect) selectBody;
-                        FromItem fromItem = plainSelect.getFromItem();
-                        if (fromItem instanceof Table) {
-                            Table table = (Table) fromItem;
-                            String tableName = table.getName();
-                            return String.format("SELECT ~ FROM %s ~", tableName);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                //
-            }
-        }
-        return sql;
+        SqlFormat sqlFormat = SqlAspect.getSqlFormat();
+
+        return sqlFormat.format(sql);
     }
 
     public void setParameter(Integer index, Object value) {
