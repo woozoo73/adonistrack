@@ -3,17 +3,15 @@ package com.woozooha.adonistrack.aspect;
 import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.format.SqlFormat;
 import com.woozooha.adonistrack.format.SqlMessageFormat;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
 import java.net.URL;
-import java.sql.Date;
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 
 @Aspect
-public class SqlAspect {
+public class SqlAspect extends PrintableAspect {
 
     public static final String UNKNOWN_VALUE = "?";
 
@@ -35,11 +33,19 @@ public class SqlAspect {
         return sqlFormat;
     }
 
-    @Pointcut("within(java.sql.Connection+) && (execution(java.sql.PreparedStatement+ prepareStatement(String)) || execution(java.sql.Statement+ createStatement(String)))")
+    @Pointcut("within(java.sql.Connection+) && execution(java.sql.Statement+ createStatement())")
     public void createStatementPointcut() {
     }
 
-    @Pointcut("within(java.sql.Statement+) && (execution(boolean execute()) || execution(java.sql.ResultSet+ executeQuery()) || execution(int executeUpdate())) && !cflowbelow(execution(* java.sql..*+.*(..)))")
+    @Pointcut("within(java.sql.Connection+) && execution(java.sql.PreparedStatement+ prepareStatement(String))")
+    public void prepareStatementPointcut() {
+    }
+
+    @Pointcut("within(java.sql.Statement+) && (" +
+            "execution(boolean execute(..)) || execution(java.sql.ResultSet+ executeQuery(..)) || execution(int executeUpdate(..)) " +
+            "|| execution(long executeLargeUpdate(..)) || execution(int[] executeBatch(..)) || execution(int[] executeLargeBatch(..))" +
+            ") " +
+            "&& !cflowbelow(execution(* java.sql..*+.*(..)))")
     public void executePointcut() {
     }
 
@@ -49,49 +55,139 @@ public class SqlAspect {
 
     @AfterReturning(pointcut = "createStatementPointcut()", returning = "r")
     public void profileCreateStatement(JoinPoint joinPoint, Object r) {
+        print("profileCreateStatement", joinPoint);
+
         if (r == null) {
             return;
         }
 
         Statement statement = (Statement) r;
+        Integer id = System.identityHashCode(statement);
         SqlInfo sqlInfo = new SqlInfo();
-        sqlInfo.setId(System.identityHashCode(statement));
-        sqlInfo.setId(System.identityHashCode(joinPoint.getTarget()));
+        sqlInfo.setId(id);
+        sqlInfo.setConnectionId(System.identityHashCode(joinPoint.getTarget()));
+        sqlInfo.setType(SqlInfo.Type.Statement);
+
+        SqlContext.put(id, sqlInfo);
+    }
+
+    @AfterReturning(pointcut = "prepareStatementPointcut()", returning = "r")
+    public void profilePrepareStatementPointcut(JoinPoint joinPoint, Object r) {
+        print("profilePrepareStatementPointcut", joinPoint);
+
+        if (r == null) {
+            return;
+        }
+
+        PreparedStatement preparedStatement = (PreparedStatement) r;
+        Integer id = System.identityHashCode(preparedStatement);
+        SqlInfo sqlInfo = new SqlInfo();
+        sqlInfo.setId(id);
+        sqlInfo.setConnectionId(System.identityHashCode(joinPoint.getTarget()));
+        sqlInfo.setType(SqlInfo.Type.PreparedStatement);
 
         String sql = (String) joinPoint.getArgs()[0];
         sqlInfo.setSql(sql);
 
-        this.addEvent(sqlInfo);
+        SqlContext.put(id, sqlInfo);
     }
 
     @Before("executePointcut()")
     public void profileBeforeExecute(JoinPoint joinPoint) {
-        Statement statement = (Statement) joinPoint.getTarget();
-        SqlInfo sqlInfo = new SqlInfo();
-        sqlInfo.setId(System.identityHashCode(statement));
-        sqlInfo.setStart(System.currentTimeMillis());
+        print("profileBeforeExecute", joinPoint);
 
-        this.addEvent(sqlInfo);
+        Statement statement = (Statement) joinPoint.getTarget();
+        Integer id = System.identityHashCode(statement);
+        SqlInfo sqlInfo = SqlContext.get(id);
+
+        if (sqlInfo == null) {
+            return;
+        }
+
+        sqlInfo.setStart(System.currentTimeMillis());
     }
 
     @After("executePointcut()")
     public void profileAfterExecute(JoinPoint joinPoint) {
+        print("profileAfterExecute", joinPoint);
+
         Statement statement = (Statement) joinPoint.getTarget();
-        SqlInfo sqlInfo = new SqlInfo();
-        sqlInfo.setId(System.identityHashCode(statement));
+        Integer id = System.identityHashCode(statement);
+        SqlInfo sqlInfo = SqlContext.get(id);
+
+        if (sqlInfo == null) {
+            return;
+        }
+
         sqlInfo.setEnd(System.currentTimeMillis());
 
-        this.addEvent(sqlInfo);
+        if (joinPoint.getArgs().length > 0) {
+            String sql = (String) joinPoint.getArgs()[0];
+            sqlInfo.setSql(sql);
+        }
+
+        addEvent(sqlInfo);
     }
 
     @AfterThrowing(pointcut = "executePointcut()", throwing = "t")
     public void profileAfterThrowingExecute(JoinPoint joinPoint, Throwable t) {
-        Statement statement = (Statement) joinPoint.getTarget();
-        SqlInfo sqlInfo = new SqlInfo();
-        sqlInfo.setId(System.identityHashCode(statement));
-        sqlInfo.setThrowableInfo(new ObjectInfo(t));
+        print("profileAfterThrowingExecute", joinPoint);
 
-        this.addEvent(sqlInfo);
+        Statement statement = (Statement) joinPoint.getTarget();
+        Integer id = System.identityHashCode(statement);
+        SqlInfo sqlInfo = SqlContext.get(id);
+
+        if (sqlInfo == null) {
+            return;
+        }
+
+        sqlInfo.setThrowableInfo(new ObjectInfo(t));
+    }
+
+    @Before("setParameterPointcut()")
+    public void profileSetParameter(JoinPoint joinPoint) {
+        print("profileSetParameter", joinPoint);
+
+        PreparedStatement preparedStatement = (PreparedStatement) joinPoint.getTarget();
+        Integer id = System.identityHashCode(preparedStatement);
+        SqlInfo sqlInfo = SqlContext.get(id);
+
+        if (sqlInfo == null) {
+            return;
+        }
+
+        Object[] args = joinPoint.getArgs();
+        if (args[0] == null) {
+            return;
+        }
+
+        Integer index = (Integer) args[0];
+        final Object value = args[1];
+
+        if (value == null) {
+            sqlInfo.setParameter(index, "null");
+        } else if (shouldProfileParameter(joinPoint, value)) {
+            Object v = value;
+            if (value.getClass() == String.class && value != null) {
+                v = StringUtils.abbreviate((String) value, MAX_VALUE_LENGTH);
+            }
+            sqlInfo.setParameter(index, v);
+        } else {
+            sqlInfo.setParameter(index, UNKNOWN_VALUE);
+        }
+    }
+
+    private boolean shouldProfileParameter(JoinPoint joinPoint, Object value) {
+        String signatureName = joinPoint.getSignature().getName();
+
+        for (Class<?> type : SHOULD_LOG_PARAMETER_TYPES) {
+            String setParameterName = "set" + StringUtils.capitalize(type.getSimpleName());
+            if (value.getClass() == type && setParameterName.equals(signatureName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean addEvent(SqlInfo sqlInfo) {

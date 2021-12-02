@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
-public class TransactionAspect {
+public class TransactionAspect extends PrintableAspect {
 
     @Pointcut("within(java.sql.Connection+) && execution(void setAutoCommit(boolean))")
     public void setAutoCommitPointcut() {
@@ -23,6 +23,8 @@ public class TransactionAspect {
 
     @Around("setAutoCommitPointcut()")
     public Object profileSetAutoCommit(ProceedingJoinPoint joinPoint) throws Throwable {
+        print("profileSetAutoCommit", joinPoint);
+
         if (joinPoint == null) {
             return null;
         }
@@ -44,6 +46,8 @@ public class TransactionAspect {
 
     @Around("commitPointcut()")
     public Object profileCommit(ProceedingJoinPoint joinPoint) throws Throwable {
+        print("profileCommit", joinPoint);
+
         if (joinPoint == null) {
             return null;
         }
@@ -64,6 +68,8 @@ public class TransactionAspect {
 
     @Around("rollbackPointcut()")
     public Object profileRollback(ProceedingJoinPoint joinPoint) throws Throwable {
+        print("profileRollback", joinPoint);
+
         if (joinPoint == null) {
             return null;
         }

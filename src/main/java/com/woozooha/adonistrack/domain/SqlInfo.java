@@ -4,18 +4,9 @@ import com.woozooha.adonistrack.aspect.SqlAspect;
 import com.woozooha.adonistrack.format.SqlFormat;
 import lombok.Getter;
 import lombok.Setter;
-import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.delete.Delete;
-import net.sf.jsqlparser.statement.insert.Insert;
-import net.sf.jsqlparser.statement.select.FromItem;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectBody;
-import net.sf.jsqlparser.statement.update.Update;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,7 +18,9 @@ public class SqlInfo implements Call, Serializable {
 
     private Integer id;
 
-    private Integer connecitonId;
+    private Integer connectionId;
+
+    private Type type;
 
     private String sql;
 
@@ -37,7 +30,7 @@ public class SqlInfo implements Call, Serializable {
 
     private Long duration;
 
-    private Map<Integer, ObjectInfo> parameterMap;
+    private Map<Integer, ObjectInfo> parameterMap = new LinkedHashMap<>();
 
     private ObjectInfo throwableInfo;
 
@@ -61,6 +54,11 @@ public class SqlInfo implements Call, Serializable {
         }
 
         duration = end - start;
+    }
+
+    public static enum Type {
+        Statement,
+        PreparedStatement,
     }
 
     @Override
