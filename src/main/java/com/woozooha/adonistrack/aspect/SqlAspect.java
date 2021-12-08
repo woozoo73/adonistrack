@@ -197,6 +197,8 @@ public class SqlAspect extends PrintableAspect {
             return false;
         }
 
+        sqlInfo.setMessage(sqlInfo.getMessage());
+
         SqlEvent event = new SqlEvent(sqlInfo);
         invocation.add(event);
 

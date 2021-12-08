@@ -126,8 +126,8 @@ public class TextFormat implements Format {
         SignatureInfo signature = joinPoint.getSignatureInfo();
         if (signature != null) {
             String targetName = null;
-            if (joinPoint.getTarget().getDeclaringType() != null) {
-                targetName = joinPoint.getTarget().getDeclaringType().getName();
+            if (joinPoint.getTarget().getProxyTargetName() != null) {
+                targetName = joinPoint.getTarget().getProxyTargetName();
             } else {
                 targetName = signature.getDeclaringTypeName();
             }

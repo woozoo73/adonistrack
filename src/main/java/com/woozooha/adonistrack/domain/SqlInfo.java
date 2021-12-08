@@ -34,6 +34,8 @@ public class SqlInfo implements Call, Serializable {
 
     private ObjectInfo throwableInfo;
 
+    private String message;
+
     public String getMessage() {
         SqlFormat sqlFormat = SqlAspect.getSqlFormat();
 

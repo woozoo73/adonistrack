@@ -21,7 +21,9 @@ import java.lang.reflect.Proxy;
 import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.util.ToStringUtils;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * Object data.
@@ -33,13 +35,21 @@ public class ObjectInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter(value = AccessLevel.NONE)
     private Class<?> declaringType;
+
+    private String declaringTypeString;
 
     private String toStringValue;
 
     private boolean proxy;
 
+    @Getter(value = AccessLevel.NONE)
     private Class<?> proxyTarget;
+
+    private String proxyTargetString;
+
+    private String proxyTargetName;
 
     public ObjectInfo() {
     }
@@ -50,6 +60,9 @@ public class ObjectInfo implements Serializable {
         }
 
         this.declaringType = object.getClass();
+        if (this.declaringType != null) {
+            this.declaringTypeString = this.declaringType.getName();
+        }
         this.toStringValue = ToStringUtils.format(object);
 
         this.proxy = Proxy.isProxyClass(this.declaringType);
@@ -60,6 +73,16 @@ public class ObjectInfo implements Serializable {
                 this.proxyTarget = this.declaringType;
             }
         }
+        if (this.proxyTarget != null) {
+            this.proxyTargetString = this.proxyTarget.getName();
+        }
+    }
+
+    public String getProxyTargetName() {
+        if (this.proxyTarget == null) {
+            return null;
+        }
+        return this.proxyTarget.getName();
     }
 
     @Override

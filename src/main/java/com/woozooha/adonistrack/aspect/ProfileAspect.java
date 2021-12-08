@@ -20,16 +20,17 @@ import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.format.Format;
 import com.woozooha.adonistrack.format.TextFormat;
-import com.woozooha.adonistrack.writer.CompositeWriter;
-import com.woozooha.adonistrack.writer.LogWriter;
-import com.woozooha.adonistrack.writer.MemoryWriter;
-import com.woozooha.adonistrack.writer.Writer;
+import com.woozooha.adonistrack.writer.*;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
+import java.io.File;
+import java.util.List;
+import java.util.function.Predicate;
+
 /**
  * Profile invocations aspect.
- * 
+ *
  * @author woozoo73
  */
 @Aspect
@@ -47,32 +48,97 @@ public abstract class ProfileAspect {
 
             CompositeWriter compositeWriter = new CompositeWriter();
 
-            Writer logWriter = new LogWriter();
-            Format format = new TextFormat("\n", null);
-            logWriter.setFormat(format);
-            compositeWriter.add(logWriter);
-
-            MemoryWriter memoryWriter = new MemoryWriter();
-            // Take only web requests.
-            memoryWriter.setFilter((t) -> {
-                if (t.getEventList() == null || t.getEventList().size() == 0) {
-                    return false;
+            // default true.
+            if (useLogWriter()) {
+                LogWriter logWriter = makeLogWriter();
+                if (logWriter != null) {
+                    compositeWriter.add(logWriter);
                 }
-                Event event = t.getEventList().get(0);
-                return event != null && event instanceof RequestEvent;
-            });
-            memoryWriter.setMaxSize(100);
-            compositeWriter.add(memoryWriter);
+            }
+
+            Predicate<Invocation> filter = getFilter();
+
+            // default true.
+            if (useMemoryWriter()) {
+                int maxSize = getMemoryWriterMaxSize();
+                MemoryWriter memoryWriter = makeMemoryWriter(maxSize, filter);
+                if (memoryWriter != null) {
+                    compositeWriter.add(memoryWriter);
+                    config.setHistory(memoryWriter);
+                }
+            }
+
+            // default false.
+            if (useFileWriter()) {
+                File dir = getFileWriterRootDir();
+                FileWriter fileWriter = makeFileWriter(dir, filter);
+                if (fileWriter != null) {
+                    compositeWriter.add(fileWriter);
+                    config.setHistory(fileWriter);
+                }
+            }
 
             WriterCallback invocationCallback = new WriterCallback();
             invocationCallback.setWriter(compositeWriter);
 
             config.setInvocationCallback(invocationCallback);
-
-            config.setHistory(memoryWriter);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected LogWriter makeLogWriter() {
+        LogWriter logWriter = new LogWriter();
+        Format format = new TextFormat("\n", null);
+        logWriter.setFormat(format);
+
+        return logWriter;
+    }
+
+    protected MemoryWriter makeMemoryWriter(int maxSize, Predicate<Invocation> filter) {
+        MemoryWriter memoryWriter = new MemoryWriter();
+        memoryWriter.setFilter(filter);
+        memoryWriter.setMaxSize(maxSize);
+
+        return memoryWriter;
+    }
+
+    protected FileWriter makeFileWriter(File dir, Predicate<Invocation> filter) {
+        FileWriter fileWriter = new FileWriter();
+        fileWriter.setRoot(dir);
+        fileWriter.setFilter(filter);
+
+        return fileWriter;
+    }
+
+    protected Predicate<Invocation> getFilter() {
+        return (t) -> {
+            if (t.getEventList() == null || t.getEventList().size() == 0) {
+                return false;
+            }
+            Event event = t.getEventList().get(0);
+            return event != null && event instanceof RequestEvent;
+        };
+    }
+
+    protected int getMemoryWriterMaxSize() {
+        return 100;
+    }
+
+    protected File getFileWriterRootDir() {
+        return new File("/adonis-track");
+    }
+
+    protected boolean useLogWriter() {
+        return true;
+    }
+
+    protected boolean useMemoryWriter() {
+        return true;
+    }
+
+    protected boolean useFileWriter() {
+        return false;
     }
 
     public static Config getConfig() {

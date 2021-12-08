@@ -15,16 +15,17 @@
  */
 package com.woozooha.adonistrack.domain;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.aspectj.lang.JoinPoint;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.aspectj.lang.JoinPoint;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Invocation data.
@@ -37,7 +38,17 @@ public class Invocation implements Call, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id = UUID.randomUUID().toString();
+    public static final String DATE_PATTERN = "yyyyMMdd";
+    public static final String DATE_TIME_PATTERN = "yyyyMMdd-HHmmss";
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+    public static final int PSEUDO_UUID_LENGTH = 8;
+
+    // yyyyMMdd-HHmmss-pseudouu
+    // 20211206-184100-f26cbc90
+    public static final int ID_LENGTH = DATE_TIME_PATTERN.length() + 1 + PSEUDO_UUID_LENGTH;
+
+    private String id = generateId();
 
     private Integer depth = 0;
 
@@ -59,6 +70,8 @@ public class Invocation implements Call, Serializable {
 
     private Long end;
 
+    private Double duration;
+
     @Getter(value = AccessLevel.NONE)
     private Long startNanoTime;
 
@@ -76,6 +89,10 @@ public class Invocation implements Call, Serializable {
     private ObjectInfo throwableInfo;
 
     private List<Event<?>> eventList;
+
+    private String generateId() {
+        return String.format("%s-%s", DATE_TIME_FORMATTER.format(LocalDateTime.now()), UUID.randomUUID().toString().substring(0, 8));
+    }
 
     public boolean equalsJoinPoint(Invocation another) {
         if (another == null) {
@@ -123,6 +140,7 @@ public class Invocation implements Call, Serializable {
         end = System.currentTimeMillis();
         endNanoTime = System.nanoTime();
         durationNanoTime = endNanoTime - startNanoTime;
+        duration = durationNanoTime.doubleValue() / (1000 * 1000);
     }
 
     public void add(Invocation childInvocation) {
@@ -163,14 +181,6 @@ public class Invocation implements Call, Serializable {
                 invocation.calculateChildDurationPercentage();
             }
         }
-    }
-
-    public Double getDuration() {
-        if (durationNanoTime == null) {
-            return null;
-        }
-
-        return durationNanoTime.doubleValue() / (1000 * 1000);
     }
 
     public enum Type {

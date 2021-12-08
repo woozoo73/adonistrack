@@ -73,4 +73,16 @@ public class Context implements Serializable {
         return invocation;
     }
 
+    public static boolean add(Event event) {
+        Invocation invocation = Context.peekFromInvocationStack();
+
+        if (invocation == null) {
+            return false;
+        }
+
+        invocation.add(event);
+
+        return true;
+    }
+
 }

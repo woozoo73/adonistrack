@@ -20,6 +20,8 @@ public class TransactionInfo implements Call, Serializable {
 
     private Boolean rollback;
 
+    private String message;
+
     public String getMessage() {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("TX-%d", id));

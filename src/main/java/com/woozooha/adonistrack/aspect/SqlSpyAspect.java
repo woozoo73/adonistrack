@@ -36,6 +36,8 @@ public class SqlSpyAspect extends PrintableAspect {
             return false;
         }
 
+        sqlInfo.setMessage(sqlInfo.getMessage());
+
         SqlEvent event = new SqlEvent(sqlInfo);
         invocation.add(event);
 

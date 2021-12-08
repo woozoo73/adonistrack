@@ -15,8 +15,10 @@
  */
 package com.woozooha.adonistrack.domain;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 @Data
 public abstract class Event<V> {
 

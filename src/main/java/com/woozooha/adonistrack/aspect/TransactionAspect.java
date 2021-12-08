@@ -110,6 +110,8 @@ public class TransactionAspect extends PrintableAspect {
             transactionInfo.setRollback(rollback);
         }
 
+        transactionInfo.setMessage(transactionInfo.getMessage());
+
         TransactionEvent event = new TransactionEvent(transactionInfo);
         invocation.add(event);
 
