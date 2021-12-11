@@ -25,6 +25,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -177,7 +178,12 @@ public abstract class ProfileAspect {
 
         if (joinPoint != null) {
             invocation.setJoinPoint(joinPoint);
-            invocation.setJoinPointInfo(new JoinPointInfo(joinPoint));
+            JoinPointInfo joinPointInfo = new JoinPointInfo(joinPoint);
+            invocation.setJoinPointInfo(joinPointInfo);
+            // FIXME:
+            // SourceLocationInfo sourceLocation = joinPointInfo.getSourceLocation();
+            // int line = findSourceLine(joinPoint);
+            // sourceLocation.setLine(line);
         }
         if (event != null) {
             invocation.add(event);
@@ -202,6 +208,38 @@ public abstract class ProfileAspect {
         invocation.start();
 
         return invocation;
+    }
+
+    private static int findSourceLine(JoinPoint joinPoint) {
+        Object target = joinPoint.getTarget();
+        if (target == null) {
+            return 0;
+        }
+
+        Class<?> targetClass = target.getClass();
+        if (targetClass == null) {
+            return 0;
+        }
+
+        String targetClassName =  targetClass.getName();
+        if (targetClassName == null) {
+            return 0;
+        }
+
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            StackTraceElement[] traces = e.getStackTrace();
+            if (traces != null) {
+                for (StackTraceElement trace : traces) {
+                    if (targetClassName.equals(trace.getClassName())) {
+                        return trace.getLineNumber();
+                    }
+                }
+            }
+        }
+
+        return 0;
     }
 
     private static Invocation after(JoinPoint joinPoint, Object r, Throwable t) {

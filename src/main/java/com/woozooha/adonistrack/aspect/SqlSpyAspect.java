@@ -9,8 +9,16 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
+import java.util.function.UnaryOperator;
+
 @Aspect
 public class SqlSpyAspect extends PrintableAspect {
+
+    private static UnaryOperator<String> sqlConveter = (sql) -> sql;
+
+    public static void setSqlConveter(UnaryOperator<String> sqlConveter) {
+        SqlSpyAspect.sqlConveter = sqlConveter;
+    }
 
     @Pointcut("within(net.sf.log4jdbc.sql.jdbcapi.StatementSpy+) && execution(* reportSql(String, String))")
     public void reportSqlPointcut() {
@@ -22,7 +30,8 @@ public class SqlSpyAspect extends PrintableAspect {
 
         SqlInfo sqlInfo = new SqlInfo();
         String sql = (String) joinPoint.getArgs()[0];
-        sqlInfo.setSql(sql);
+        String convertedSql = sqlConveter.apply(sql);
+        sqlInfo.setSql(convertedSql);
         sqlInfo.setStart(System.currentTimeMillis());
         sqlInfo.setEnd(System.currentTimeMillis());
 

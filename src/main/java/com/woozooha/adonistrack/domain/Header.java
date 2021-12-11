@@ -20,9 +20,11 @@ public class Header {
     public Header(String name, List<String> values) {
         this.name = name;
         this.values = values;
+
+        this.value = makeValue();
     }
 
-    public String getValue() {
+    private String makeValue() {
         if (values == null) {
             return null;
         }
