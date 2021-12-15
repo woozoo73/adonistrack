@@ -16,6 +16,13 @@ import net.sf.jsqlparser.statement.update.Update;
 @Setter
 public class SqlMessageFormat implements SqlFormat {
 
+    public SqlMessageFormat() {
+    }
+
+    public SqlMessageFormat(int maxLength) {
+        this.maxLength = maxLength;
+    }
+
     private int maxLength = -1;
 
     @Override
@@ -156,11 +163,14 @@ public class SqlMessageFormat implements SqlFormat {
             return sql;
         }
 
-        if (maxLength < 0 || sql.length() <= maxLength) {
-            return sql;
+        String oneLine = sql.replaceAll("\r", " ");
+        oneLine = oneLine.replaceAll("\n", " ");
+
+        if (maxLength < 0 || oneLine.length() <= maxLength) {
+            return oneLine;
         }
 
-        return sql.substring(0, maxLength) + " ...";
+        return oneLine.substring(0, maxLength) + " ...";
     }
 
 }

@@ -82,11 +82,33 @@ public class SqlMessageFormatTest {
             "        where\n" +
             "            id=?";
 
+    String multiLine0 = "foo\n" +
+            "from\n" +
+            "foo\n" +
+            "where\n" +
+            "id=?";
+
+    String multiLine1 = "foo\n" +
+            "from from from from from\n" +
+            "from from from from from\n" +
+            "from from from from from\n" +
+            "from from from from from\n" +
+            "from from from from from\n" +
+            "from from from from from\n" +
+            "foo \n" +
+            "where\n" +
+            "id=?";
+
+    String multiLine2 = "foo0\r\n" +
+            "from from from from from0\n\r" +
+            "from from from from from0\r\n" +
+            "from from from from from0\n\r";
+
     SqlMessageFormat format;
 
     @Before
     public void setUp() {
-        format = new SqlMessageFormat();
+        format = new SqlMessageFormat(100);
     }
 
     @Test
@@ -162,6 +184,24 @@ public class SqlMessageFormatTest {
     public void delete0() {
         String message = format.format(delete0);
         assertEquals("DELETE FROM foo WHERE id = ? ~", message);
+    }
+
+    @Test
+    public void multiLine0() {
+        String message = format.format(multiLine0);
+        assertEquals("foo from foo where id=?", message);
+    }
+
+    @Test
+    public void multiLine1() {
+        String message = format.format(multiLine1);
+        assertEquals("foo from from from from from from from from from from from from from from from from from from from f ...", message);
+    }
+
+    @Test
+    public void multiLine2() {
+        String message = format.format(multiLine2);
+        assertEquals("foo0  from from from from from0  from from from from from0  from from from from from0  ", message);
     }
 
 }
