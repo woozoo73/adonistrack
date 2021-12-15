@@ -95,7 +95,16 @@ public class FileWriter implements Writer, History {
         File[] files = dayDir.listFiles();
         Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
 
-        return Arrays.stream(files).map(f -> readInvocation(f)).collect(Collectors.toList());
+        return Arrays.stream(files).map(f -> {
+                            try {
+                                return readInvocation(f);
+                            } catch (Exception e) {
+                                return null;
+                            }
+                        }
+                )
+                .filter(e -> e != null)
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows
