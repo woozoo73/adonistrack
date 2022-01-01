@@ -23,7 +23,7 @@ public class SqlMessageFormat implements SqlFormat {
         this.maxLength = maxLength;
     }
 
-    private int maxLength = -1;
+    private int maxLength = 100;
 
     @Override
     public String format(String sql) {
