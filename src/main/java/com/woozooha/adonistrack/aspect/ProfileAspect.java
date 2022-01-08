@@ -174,6 +174,7 @@ public abstract class ProfileAspect {
         Invocation endpointInvocation = Context.getEndpointInvocation();
 
         Invocation invocation = new Invocation();
+        invocation.setStartSeq(Context.sequence());
         invocation.setType(type);
 
         if (joinPoint != null) {
@@ -252,6 +253,8 @@ public abstract class ProfileAspect {
         if (invocation == null) {
             return null;
         }
+
+        invocation.setEndSeq(Context.sequence());
 
         if (r != null) {
             invocation.setReturnValue(r);

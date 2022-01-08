@@ -29,6 +29,13 @@ public class Context implements Serializable {
 
     private static ThreadLocal<Invocation> ENDPOINT_INVOCATION_CONTEXT = new ThreadLocal<Invocation>();
 
+    private static ThreadLocal<Integer> ENDPOINT_INVOCATION_SEQ = new ThreadLocal<Integer>() {
+        @Override
+        protected Integer initialValue() {
+            return 0;
+        }
+    };
+
     private static ThreadLocal<Stack<Invocation>> INVOCATION_STACK_CONTEXT = new ThreadLocal<Stack<Invocation>>() {
         @Override
         protected Stack<Invocation> initialValue() {
@@ -63,11 +70,19 @@ public class Context implements Serializable {
         return stack.peek();
     }
 
+    public static Integer sequence() {
+        Integer sequence = ENDPOINT_INVOCATION_SEQ.get();
+        ENDPOINT_INVOCATION_SEQ.set(++sequence);
+
+        return sequence;
+    }
+
     public static Invocation dump() {
         Invocation invocation = ENDPOINT_INVOCATION_CONTEXT.get();
         invocation.calculateChildDurationPercentage();
 
         ENDPOINT_INVOCATION_CONTEXT.set(null);
+        ENDPOINT_INVOCATION_SEQ.set(0);
         INVOCATION_STACK_CONTEXT.set(new Stack<Invocation>());
 
         return invocation;

@@ -66,6 +66,10 @@ public class Invocation implements Call, Serializable {
 
     private Double durationPercentage = 100D;
 
+    private Integer startSeq;
+
+    private Integer endSeq;
+
     private Long start;
 
     private Long end;
@@ -153,6 +157,8 @@ public class Invocation implements Call, Serializable {
     }
 
     public void add(Event<?> event) {
+        event.setSeq(Context.sequence());
+
         if (eventList == null) {
             eventList = new ArrayList<Event<?>>();
         }

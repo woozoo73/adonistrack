@@ -26,6 +26,8 @@ public abstract class Event<V> {
 
     protected V value;
 
+    protected Integer seq;
+
     public Event() {
     }
 
