@@ -25,6 +25,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -222,7 +224,7 @@ public abstract class ProfileAspect {
             return 0;
         }
 
-        String targetClassName =  targetClass.getName();
+        String targetClassName = targetClass.getName();
         if (targetClassName == null) {
             return 0;
         }
@@ -266,6 +268,7 @@ public abstract class ProfileAspect {
         if (t != null) {
             invocation.setT(t);
             invocation.setThrowableInfo(new ObjectInfo(t));
+            addExceptionEvent(invocation, t);
         }
 
         invocation.stop();
@@ -314,6 +317,23 @@ public abstract class ProfileAspect {
     @AfterReturning(pointcut = "executionPointcut()", returning = "r")
     public void profileAfterReturning(JoinPoint joinPoint, Object r) {
         after(joinPoint, r);
+    }
+
+    protected static void addExceptionEvent(Invocation invocation, Throwable t) {
+        try {
+            StringWriter stackTrace = new StringWriter();
+            t.printStackTrace(new PrintWriter(stackTrace));
+
+            ExceptionInfo exceptionInfo = new ExceptionInfo();
+            exceptionInfo.setClassName(t.getClass().getName());
+            exceptionInfo.setSimpleClassName(t.getClass().getSimpleName());
+            exceptionInfo.setExceptionMessage(t.getMessage());
+            exceptionInfo.setStackTrace(stackTrace.toString());
+
+            ExceptionEvent exceptionEvent = new ExceptionEvent(exceptionInfo);
+            invocation.add(exceptionEvent);
+        } catch (Throwable t1) {
+        }
     }
 
 }
