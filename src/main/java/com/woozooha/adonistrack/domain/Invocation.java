@@ -39,13 +39,13 @@ public class Invocation implements Call, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String DATE_PATTERN = "yyyyMMdd";
-    public static final String DATE_TIME_PATTERN = "yyyyMMdd-HHmmss";
+    public static final String DATE_TIME_PATTERN = "yyyyMMdd-HHmmss-SSS";
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-    public static final int PSEUDO_UUID_LENGTH = 8;
+    public static final int PSEUDO_UUID_LENGTH = 4;
 
-    // yyyyMMdd-HHmmss-pseudouu
-    // 20211206-184100-f26cbc90
+    // yyyyMMdd-HHmmss-SSS-pseudouu
+    // 20211206-184100-020-f26c
     public static final int ID_LENGTH = DATE_TIME_PATTERN.length() + 1 + PSEUDO_UUID_LENGTH;
 
     private String id = generateId();
@@ -95,7 +95,7 @@ public class Invocation implements Call, Serializable {
     private List<Event<?>> eventList;
 
     private String generateId() {
-        return String.format("%s-%s", DATE_TIME_FORMATTER.format(LocalDateTime.now()), UUID.randomUUID().toString().substring(0, 8));
+        return String.format("%s-%s", DATE_TIME_FORMATTER.format(LocalDateTime.now()), UUID.randomUUID().toString().substring(0, PSEUDO_UUID_LENGTH));
     }
 
     public boolean equalsJoinPoint(Invocation another) {
@@ -151,7 +151,7 @@ public class Invocation implements Call, Serializable {
         childInvocation.setDepth(depth + 1);
 
         if (childInvocationList == null) {
-            childInvocationList = new ArrayList<Invocation>();
+            childInvocationList = new ArrayList<>();
         }
         childInvocationList.add(childInvocation);
     }
@@ -166,7 +166,7 @@ public class Invocation implements Call, Serializable {
     }
 
     public void calculateChildDurationPercentage() {
-        Long totalSibling = 0L;
+        long totalSibling = 0L;
 
         if (childInvocationList != null) {
             for (Invocation invocation : childInvocationList) {
@@ -178,7 +178,7 @@ public class Invocation implements Call, Serializable {
 
         if (childInvocationList != null) {
             for (Invocation invocation : childInvocationList) {
-                Double percentage = 0D;
+                double percentage = 0D;
                 if (totalSibling > 0L) {
                     percentage = (100D * invocation.durationNanoTime) / totalSibling;
                 }

@@ -17,6 +17,8 @@ package com.woozooha.adonistrack.domain;
 
 import java.io.Serializable;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.aspectj.lang.Signature;
 
 import lombok.Data;
@@ -27,10 +29,11 @@ import lombok.Data;
  * @author woozoo73
  */
 @Data
-public class SignatureInfo implements Signature, Serializable {
+public class SignatureInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Getter(value = AccessLevel.NONE)
 	private Class<?> declaringType;
 
 	private String name;
@@ -59,12 +62,10 @@ public class SignatureInfo implements Signature, Serializable {
 		this.declaringTypeName = signature.getDeclaringTypeName();
 	}
 
-	@Override
 	public String toShortString() {
 		return shortString;
 	}
 
-	@Override
 	public String toLongString() {
 		return longString;
 	}

@@ -18,11 +18,7 @@ package com.woozooha.adonistrack.format;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import com.woozooha.adonistrack.domain.Event;
-import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.JoinPointInfo;
-import com.woozooha.adonistrack.domain.ObjectInfo;
-import com.woozooha.adonistrack.domain.SignatureInfo;
+import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.util.ToStringUtils;
 
 /**
@@ -58,7 +54,6 @@ public class TextFormat implements Format {
             try {
                 builder.append(formatInternal(invocation));
             } catch (Exception e) {
-                e.printStackTrace();
             }
 
             if (suffix != null) {
@@ -67,8 +62,6 @@ public class TextFormat implements Format {
 
             return builder.toString();
         } catch (Exception e) {
-            e.printStackTrace();
-
             return null;
         }
     }
@@ -125,7 +118,7 @@ public class TextFormat implements Format {
         JoinPointInfo joinPoint = invocation.getJoinPointInfo();
         SignatureInfo signature = joinPoint.getSignatureInfo();
         if (signature != null) {
-            String targetName = null;
+            String targetName;
             if (joinPoint.getTarget().getProxyTargetName() != null) {
                 targetName = joinPoint.getTarget().getProxyTargetName();
             } else {
@@ -137,6 +130,11 @@ public class TextFormat implements Format {
             builder.append("(");
             argsInfo(builder, invocation);
             builder.append(")");
+        }
+        SourceLocationInfo sourceLocation = joinPoint.getSourceLocation();
+        if (sourceLocation != null) {
+            builder.append(" : Line ");
+            builder.append(sourceLocation.getLine());
         }
 
         builder.append(" ");
@@ -182,7 +180,7 @@ public class TextFormat implements Format {
             return;
         }
 
-        if (invocation.getEventList() == null || invocation.getEventList().size() == 0) {
+        if (invocation.getEventList() == null || invocation.getEventList().isEmpty()) {
             return;
         }
 

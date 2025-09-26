@@ -15,6 +15,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="wrapper" />
       </profile>
+      <profile name="Annotation profile for AdonisTrack" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="adonistrack" />
+      </profile>
       <profile name="Annotation profile for AdonisTrack Spring web" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -23,7 +32,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.16.20/lombok-1.16.20.jar" />
         </processorPath>
         <module name="adonistrack-springweb" />
-        <module name="adonistrack" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

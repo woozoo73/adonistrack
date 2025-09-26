@@ -26,25 +26,26 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AdonisTrackInterceptor implements HandlerInterceptor {
 
-    private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<Invocation>();
+    private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<>();
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-        Invocation invocation = CONTEXT.get();
-        if (invocation == null) {
-            invocation = before(request);
-            CONTEXT.set(invocation);
-        }
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        Context.setTrace(true);
+        Invocation invocation = before(request);
+        CONTEXT.set(invocation);
 
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            @Nullable ModelAndView modelAndView) throws Exception {
-        Invocation invocation = CONTEXT.get();
-        after(invocation, request, response);
+            @Nullable ModelAndView modelAndView) {
+        try {
+            Invocation invocation = CONTEXT.get();
+            after(invocation, request, response);
+        } finally {
+            CONTEXT.remove();
+        }
     }
 
     private Invocation before(HttpServletRequest request) {

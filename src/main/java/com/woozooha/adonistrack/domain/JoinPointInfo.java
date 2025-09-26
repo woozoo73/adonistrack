@@ -63,7 +63,7 @@ public class JoinPointInfo implements Serializable {
             }
         }
 
-        sourceLocation = new SourceLocationInfo(joinPoint.getSourceLocation());
+        // sourceLocation = new SourceLocationInfo(joinPoint.getSourceLocation());
 
         Signature signature = joinPoint.getSignature();
         if (signature == null) {

@@ -17,6 +17,8 @@ package com.woozooha.adonistrack.domain;
 
 import java.io.Serializable;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.aspectj.lang.reflect.SourceLocation;
 
 import lombok.Data;
@@ -27,10 +29,11 @@ import lombok.Data;
  * @author woozoo73
  */
 @Data
-public class SourceLocationInfo implements SourceLocation, Serializable {
+public class SourceLocationInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter(value = AccessLevel.NONE)
     private Class<?> withinType;
 
     private String fileName;

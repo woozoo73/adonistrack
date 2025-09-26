@@ -15,33 +15,65 @@
  */
 package com.woozooha.adonistrack.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Stack;
 
 /**
  * Invocation context.
- * 
+ *
  * @author woozoo73
  */
 public class Context implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ThreadLocal<Invocation> ENDPOINT_INVOCATION_CONTEXT = new ThreadLocal<Invocation>();
+    public static final int DEFAULT_TRACE_COUNT = 2000;
 
-    private static ThreadLocal<Integer> ENDPOINT_INVOCATION_SEQ = new ThreadLocal<Integer>() {
-        @Override
-        protected Integer initialValue() {
-            return 0;
-        }
-    };
+    private static ThreadLocal<Boolean> TRACE_CONTEXT = ThreadLocal.withInitial(() -> false);
 
-    private static ThreadLocal<Stack<Invocation>> INVOCATION_STACK_CONTEXT = new ThreadLocal<Stack<Invocation>>() {
-        @Override
-        protected Stack<Invocation> initialValue() {
-            return new Stack<Invocation>();
-        }
-    };
+    private static ThreadLocal<Integer> TRACE_COUNT = ThreadLocal.withInitial(() -> 0);
+
+    private static ThreadLocal<Invocation> ENDPOINT_INVOCATION_CONTEXT = new ThreadLocal<>();
+
+    private static ThreadLocal<Integer> ENDPOINT_INVOCATION_SEQ = ThreadLocal.withInitial(() -> 0);
+
+    private static ThreadLocal<Stack<Invocation>> INVOCATION_STACK_CONTEXT = ThreadLocal.withInitial(() -> new Stack<>());
+
+    @Setter
+    @Getter
+    private static int maxTraceCount = DEFAULT_TRACE_COUNT;
+
+    @Getter
+    @Setter
+    private static boolean sourceLocation = false;
+
+    public static boolean getTrace() {
+        return TRACE_CONTEXT.get();
+    }
+
+    public static void setTrace(boolean traceContext) {
+        TRACE_CONTEXT.set(traceContext);
+    }
+
+    public static Integer getTraceCount() {
+        return TRACE_COUNT.get();
+    }
+
+    public static void setTraceCount(int count) {
+        TRACE_COUNT.set(count);
+    }
+
+    public static void increaseTraceCount() {
+        int count = TRACE_COUNT.get();
+        TRACE_COUNT.set(count + 1);
+    }
+
+    public static boolean exceedMaxTraceCount() {
+        return getTraceCount() >= maxTraceCount;
+    }
 
     public static Invocation getEndpointInvocation() {
         return ENDPOINT_INVOCATION_CONTEXT.get();
@@ -54,6 +86,10 @@ public class Context implements Serializable {
     public static void addToInvocationStack(Invocation invocation) {
         Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
         stack.add(invocation);
+    }
+
+    public static int getInvocationStackSize() {
+        return INVOCATION_STACK_CONTEXT.get().size();
     }
 
     public static Invocation popFromInvocationStack() {
@@ -78,14 +114,30 @@ public class Context implements Serializable {
     }
 
     public static Invocation dump() {
-        Invocation invocation = ENDPOINT_INVOCATION_CONTEXT.get();
-        invocation.calculateChildDurationPercentage();
+        return dump(true);
+    }
 
-        ENDPOINT_INVOCATION_CONTEXT.set(null);
-        ENDPOINT_INVOCATION_SEQ.set(0);
-        INVOCATION_STACK_CONTEXT.set(new Stack<Invocation>());
+    public static Invocation dump(boolean calculate) {
+        Invocation invocation;
+
+        try {
+            invocation = ENDPOINT_INVOCATION_CONTEXT.get();
+            if (invocation != null && calculate) {
+                invocation.calculateChildDurationPercentage();
+            }
+        } finally {
+            clear();
+        }
 
         return invocation;
+    }
+
+    public static void clear() {
+        TRACE_CONTEXT.remove();
+        TRACE_COUNT.remove();
+        ENDPOINT_INVOCATION_CONTEXT.remove();
+        ENDPOINT_INVOCATION_SEQ.remove();
+        INVOCATION_STACK_CONTEXT.remove();
     }
 
     public static boolean add(Event event) {

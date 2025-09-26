@@ -20,15 +20,17 @@ import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.format.Format;
 import com.woozooha.adonistrack.format.TextFormat;
-import com.woozooha.adonistrack.writer.*;
+import com.woozooha.adonistrack.writer.CompositeWriter;
+import com.woozooha.adonistrack.writer.FileWriter;
+import com.woozooha.adonistrack.writer.LogWriter;
+import com.woozooha.adonistrack.writer.MemoryWriter;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -149,30 +151,58 @@ public abstract class ProfileAspect {
     }
 
     public static <V> Invocation before(JoinPoint joinPoint) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         return before(Invocation.Type.Exec, joinPoint, null);
     }
 
     public static <V extends Call> Invocation before(Event<V> event) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         return before(Invocation.Type.Event, null, event);
     }
 
     public static Invocation after(JoinPoint joinPoint, Object r) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         return after(joinPoint, r, null);
     }
 
     public static Invocation after(JoinPoint joinPoint, Throwable t) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         return after(joinPoint, null, t);
     }
 
     public static Invocation after(Invocation invocation, Object r) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         return after(invocation, r, null);
     }
 
     public static Invocation after(Invocation invocation, Throwable t) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         return after(invocation, null, t);
     }
 
     private static <V> Invocation before(Invocation.Type type, JoinPoint joinPoint, Event<V> event) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         Invocation endpointInvocation = Context.getEndpointInvocation();
 
         Invocation invocation = new Invocation();
@@ -183,10 +213,12 @@ public abstract class ProfileAspect {
             invocation.setJoinPoint(joinPoint);
             JoinPointInfo joinPointInfo = new JoinPointInfo(joinPoint);
             invocation.setJoinPointInfo(joinPointInfo);
-            // FIXME:
-            // SourceLocationInfo sourceLocation = joinPointInfo.getSourceLocation();
-            // int line = findSourceLine(joinPoint);
-            // sourceLocation.setLine(line);
+
+            if (Context.isSourceLocation()) {
+                SourceLocationInfo sourceLocation = joinPointInfo.getSourceLocation();
+                int line = findSourceLine(joinPoint);
+                sourceLocation.setLine(line);
+            }
         }
         if (event != null) {
             invocation.add(event);
@@ -213,7 +245,7 @@ public abstract class ProfileAspect {
         return invocation;
     }
 
-    private static int findSourceLine(JoinPoint joinPoint) {
+    protected static int findSourceLine(JoinPoint joinPoint) {
         Object target = joinPoint.getTarget();
         if (target == null) {
             return 0;
@@ -229,15 +261,14 @@ public abstract class ProfileAspect {
             return 0;
         }
 
-        try {
-            throw new RuntimeException();
-        } catch (RuntimeException e) {
-            StackTraceElement[] traces = e.getStackTrace();
-            if (traces != null) {
-                for (StackTraceElement trace : traces) {
-                    if (targetClassName.equals(trace.getClassName())) {
-                        return trace.getLineNumber();
-                    }
+        StackTraceElement[] traces = new RuntimeException().getStackTrace();
+        if (traces != null) {
+            for (StackTraceElement trace : traces) {
+                if (targetClassName.equals(trace.getClassName())) {
+                    return trace.getLineNumber();
+                }
+                if (trace.getClassName().startsWith(targetClassName + "$$")) {
+                    return trace.getLineNumber();
                 }
             }
         }
@@ -246,12 +277,20 @@ public abstract class ProfileAspect {
     }
 
     private static Invocation after(JoinPoint joinPoint, Object r, Throwable t) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         Invocation invocation = getInvocation(joinPoint);
 
         return after(invocation, r, t);
     }
 
     private static Invocation after(Invocation invocation, Object r, Throwable t) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         if (invocation == null) {
             return null;
         }
@@ -288,6 +327,10 @@ public abstract class ProfileAspect {
     }
 
     public static Invocation getInvocation(JoinPoint joinPoint) {
+        if (!Context.getTrace()) {
+            return null;
+        }
+
         Invocation endpointInvocation = Context.getEndpointInvocation();
         if (endpointInvocation == null) {
             return null;
@@ -304,19 +347,31 @@ public abstract class ProfileAspect {
     @Pointcut
     public abstract void executionPointcut();
 
-    @Before("executionPointcut()")
-    public void executionBefore(JoinPoint joinPoint) {
-        before(joinPoint);
-    }
+    @Around("executionPointcut()")
+    public Object execution(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object r;
+        boolean trace = !Context.exceedMaxTraceCount();
 
-    @AfterThrowing(pointcut = "executionPointcut()", throwing = "t")
-    public void profileAfterThrowing(JoinPoint joinPoint, Throwable t) {
-        after(joinPoint, t);
-    }
+        try {
+            if (trace) {
+                before(joinPoint);
+                Context.increaseTraceCount();
+            }
 
-    @AfterReturning(pointcut = "executionPointcut()", returning = "r")
-    public void profileAfterReturning(JoinPoint joinPoint, Object r) {
-        after(joinPoint, r);
+            r = joinPoint.proceed();
+
+            if (trace) {
+                after(joinPoint, r);
+            }
+        } catch (Throwable t) {
+            if (trace) {
+                after(joinPoint, t);
+            }
+
+            throw t;
+        }
+
+        return r;
     }
 
     protected static void addExceptionEvent(Invocation invocation, Throwable t) {

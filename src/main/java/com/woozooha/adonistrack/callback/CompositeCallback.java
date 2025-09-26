@@ -20,7 +20,7 @@ import java.util.List;
 import com.woozooha.adonistrack.domain.Invocation;
 
 /**
- * Composite invocation callback can holds many callbacks.
+ * Composite invocation callback can hold many callbacks.
  * 
  * @author woozoo73
  */
@@ -35,7 +35,11 @@ public class CompositeCallback implements InvocationCallback {
         }
 
         for (InvocationCallback callback : callbacks) {
-            callback.before(invocation);
+            try {
+                callback.before(invocation);
+            } finally {
+                // do nothing
+            }
         }
     }
 
@@ -46,7 +50,11 @@ public class CompositeCallback implements InvocationCallback {
         }
 
         for (InvocationCallback callback : callbacks) {
-            callback.after(invocation);
+            try {
+                callback.after(invocation);
+            } finally {
+                // do nothing
+            }
         }
     }
 
