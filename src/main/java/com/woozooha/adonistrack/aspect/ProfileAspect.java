@@ -151,62 +151,35 @@ public abstract class ProfileAspect {
     }
 
     public static <V> Invocation before(JoinPoint joinPoint) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         return before(Invocation.Type.Exec, joinPoint, null);
     }
 
     public static <V extends Call> Invocation before(Event<V> event) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         return before(Invocation.Type.Event, null, event);
     }
 
     public static Invocation after(JoinPoint joinPoint, Object r) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         return after(joinPoint, r, null);
     }
 
     public static Invocation after(JoinPoint joinPoint, Throwable t) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         return after(joinPoint, null, t);
     }
 
     public static Invocation after(Invocation invocation, Object r) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         return after(invocation, r, null);
     }
 
     public static Invocation after(Invocation invocation, Throwable t) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         return after(invocation, null, t);
     }
 
     private static <V> Invocation before(Invocation.Type type, JoinPoint joinPoint, Event<V> event) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
-        Invocation endpointInvocation = Context.getEndpointInvocation();
+        Context current = Context.getCurrent().get();
+        Invocation endpointInvocation = current.getEndpoint();
 
         Invocation invocation = new Invocation();
-        invocation.setStartSeq(Context.sequence());
+        invocation.setStartSeq(current.sequence());
         invocation.setType(type);
 
         if (joinPoint != null) {
@@ -225,7 +198,7 @@ public abstract class ProfileAspect {
         }
 
         if (endpointInvocation == null) {
-            Context.setEndpointInvocation(invocation);
+            current.setEndpoint(invocation);
 
             try {
                 config.getInvocationCallback().before(invocation);
@@ -233,12 +206,12 @@ public abstract class ProfileAspect {
             }
         }
 
-        Invocation currentInvocation = Context.peekFromInvocationStack();
+        Invocation currentInvocation = current.peekFromInvocationStack();
         if (currentInvocation != null) {
             currentInvocation.add(invocation);
         }
 
-        Context.addToInvocationStack(invocation);
+        current.addToInvocationStack(invocation);
 
         invocation.start();
 
@@ -277,25 +250,19 @@ public abstract class ProfileAspect {
     }
 
     private static Invocation after(JoinPoint joinPoint, Object r, Throwable t) {
-        if (!Context.getTrace()) {
-            return null;
-        }
-
         Invocation invocation = getInvocation(joinPoint);
 
         return after(invocation, r, t);
     }
 
     private static Invocation after(Invocation invocation, Object r, Throwable t) {
-        if (!Context.getTrace()) {
-            return null;
-        }
+        Context current = Context.getCurrent().get();
 
         if (invocation == null) {
             return null;
         }
 
-        invocation.setEndSeq(Context.sequence());
+        invocation.setEndSeq(current.sequence());
 
         if (r != null) {
             invocation.setReturnValue(r);
@@ -312,10 +279,10 @@ public abstract class ProfileAspect {
 
         invocation.stop();
 
-        Context.popFromInvocationStack();
+        current.popFromInvocationStack();
 
-        if (invocation.equalsJoinPoint(Context.getEndpointInvocation())) {
-            Invocation i = Context.dump();
+        if (invocation.equalsJoinPoint(current.getEndpoint())) {
+            Invocation i = current.dump();
 
             try {
                 config.getInvocationCallback().after(i);
@@ -327,11 +294,9 @@ public abstract class ProfileAspect {
     }
 
     public static Invocation getInvocation(JoinPoint joinPoint) {
-        if (!Context.getTrace()) {
-            return null;
-        }
+        Context current = Context.getCurrent().get();
 
-        Invocation endpointInvocation = Context.getEndpointInvocation();
+        Invocation endpointInvocation = current.getEndpoint();
         if (endpointInvocation == null) {
             return null;
         }
@@ -349,13 +314,18 @@ public abstract class ProfileAspect {
 
     @Around("executionPointcut()")
     public Object execution(ProceedingJoinPoint joinPoint) throws Throwable {
+        boolean trace = false;
+        Context current = Context.getCurrent().get();
+        if (current != null) {
+            trace = current.checkTrace();
+        }
+
         Object r;
-        boolean trace = !Context.exceedMaxTraceCount();
 
         try {
             if (trace) {
                 before(joinPoint);
-                Context.increaseTraceCount();
+                current.increaseCount();
             }
 
             r = joinPoint.proceed();

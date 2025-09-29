@@ -26,79 +26,56 @@ import java.util.Stack;
  *
  * @author woozoo73
  */
+@Getter
+@Setter
 public class Context implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     public static final int DEFAULT_TRACE_COUNT = 2000;
 
-    private static ThreadLocal<Boolean> TRACE_CONTEXT = ThreadLocal.withInitial(() -> false);
-
-    private static ThreadLocal<Integer> TRACE_COUNT = ThreadLocal.withInitial(() -> 0);
-
-    private static ThreadLocal<Invocation> ENDPOINT_INVOCATION_CONTEXT = new ThreadLocal<>();
-
-    private static ThreadLocal<Integer> ENDPOINT_INVOCATION_SEQ = ThreadLocal.withInitial(() -> 0);
-
-    private static ThreadLocal<Stack<Invocation>> INVOCATION_STACK_CONTEXT = ThreadLocal.withInitial(() -> new Stack<>());
-
-    @Setter
     @Getter
+    protected static final ThreadLocal<Context> current = ThreadLocal.withInitial(() -> new Context());
+
+    @Getter
+    @Setter
     private static int maxTraceCount = DEFAULT_TRACE_COUNT;
 
     @Getter
     @Setter
     private static boolean sourceLocation = false;
 
-    public static boolean getTrace() {
-        return TRACE_CONTEXT.get();
+    private boolean trace = false;
+    private int count = 0;
+    private Invocation endpoint;
+    private int seq = 0;
+    private Stack<Invocation> stack = new Stack<>();
+
+    public static boolean checkCurrentTrace() {
+        Context context = current.get();
+        if (context == null) {
+            return false;
+        }
+        return context.checkTrace();
     }
 
-    public static void setTrace(boolean traceContext) {
-        TRACE_CONTEXT.set(traceContext);
+    public boolean checkTrace() {
+        return trace && getCount() < Context.getMaxTraceCount();
     }
 
-    public static Integer getTraceCount() {
-        return TRACE_COUNT.get();
+    public int increaseCount() {
+        return ++count;
     }
 
-    public static void setTraceCount(int count) {
-        TRACE_COUNT.set(count);
-    }
-
-    public static void increaseTraceCount() {
-        int count = TRACE_COUNT.get();
-        TRACE_COUNT.set(count + 1);
-    }
-
-    public static boolean exceedMaxTraceCount() {
-        return getTraceCount() >= maxTraceCount;
-    }
-
-    public static Invocation getEndpointInvocation() {
-        return ENDPOINT_INVOCATION_CONTEXT.get();
-    }
-
-    public static void setEndpointInvocation(Invocation invocation) {
-        ENDPOINT_INVOCATION_CONTEXT.set(invocation);
-    }
-
-    public static void addToInvocationStack(Invocation invocation) {
-        Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
+    public void addToInvocationStack(Invocation invocation) {
         stack.add(invocation);
     }
 
-    public static int getInvocationStackSize() {
-        return INVOCATION_STACK_CONTEXT.get().size();
-    }
-
-    public static Invocation popFromInvocationStack() {
-        Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
+    public Invocation popFromInvocationStack() {
         return stack.pop();
     }
 
-    public static Invocation peekFromInvocationStack() {
-        Stack<Invocation> stack = INVOCATION_STACK_CONTEXT.get();
+    public Invocation peekFromInvocationStack() {
         if (stack.isEmpty()) {
             return null;
         }
@@ -106,22 +83,22 @@ public class Context implements Serializable {
         return stack.peek();
     }
 
-    public static Integer sequence() {
-        Integer sequence = ENDPOINT_INVOCATION_SEQ.get();
-        ENDPOINT_INVOCATION_SEQ.set(++sequence);
+    public Integer sequence() {
+        int sequence = getSeq();
+        seq = ++sequence;
 
         return sequence;
     }
 
-    public static Invocation dump() {
+    public Invocation dump() {
         return dump(true);
     }
 
-    public static Invocation dump(boolean calculate) {
+    public Invocation dump(boolean calculate) {
         Invocation invocation;
 
         try {
-            invocation = ENDPOINT_INVOCATION_CONTEXT.get();
+            invocation = getEndpoint();
             if (invocation != null && calculate) {
                 invocation.calculateChildDurationPercentage();
             }
@@ -133,23 +110,7 @@ public class Context implements Serializable {
     }
 
     public static void clear() {
-        TRACE_CONTEXT.remove();
-        TRACE_COUNT.remove();
-        ENDPOINT_INVOCATION_CONTEXT.remove();
-        ENDPOINT_INVOCATION_SEQ.remove();
-        INVOCATION_STACK_CONTEXT.remove();
-    }
-
-    public static boolean add(Event event) {
-        Invocation invocation = Context.peekFromInvocationStack();
-
-        if (invocation == null) {
-            return false;
-        }
-
-        invocation.add(event);
-
-        return true;
+        current.remove();
     }
 
 }

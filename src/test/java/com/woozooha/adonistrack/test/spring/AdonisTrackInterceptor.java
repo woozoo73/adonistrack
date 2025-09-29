@@ -30,7 +30,10 @@ public class AdonisTrackInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        Context.setTrace(true);
+        Context current = new Context();
+        current.setTrace(true);
+        Context.getCurrent().set(current);
+
         Invocation invocation = before(request);
         CONTEXT.set(invocation);
 

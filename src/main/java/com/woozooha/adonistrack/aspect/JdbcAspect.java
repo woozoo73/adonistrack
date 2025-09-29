@@ -1,26 +1,15 @@
 package com.woozooha.adonistrack.aspect;
 
+import com.woozooha.adonistrack.domain.*;
+import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.*;
+
 import java.net.URL;
 import java.sql.Date;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
-
-import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-
-import com.woozooha.adonistrack.domain.Context;
-import com.woozooha.adonistrack.domain.Invocation;
-import com.woozooha.adonistrack.domain.JdbcContext;
-import com.woozooha.adonistrack.domain.JdbcEvent;
-import com.woozooha.adonistrack.domain.JdbcStatementInfo;
-import com.woozooha.adonistrack.domain.ObjectInfo;
 
 @Aspect
 public class JdbcAspect {
@@ -37,7 +26,7 @@ public class JdbcAspect {
             // String
             String.class,
             // Date & URL
-            Date.class, Time.class, Timestamp.class, URL.class };
+            Date.class, Time.class, Timestamp.class, URL.class};
 
     @Pointcut("within(java.sql.Connection+) && (execution(java.sql.PreparedStatement+ prepareStatement(String)) || execution(java.sql.Statement+ createStatement(String)))")
     public void createStatementPointcut() {
@@ -53,6 +42,10 @@ public class JdbcAspect {
 
     @AfterReturning(pointcut = "createStatementPointcut()", returning = "r")
     public void profileCreateStatement(JoinPoint joinPoint, Object r) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         if (r == null) {
             return;
         }
@@ -69,6 +62,10 @@ public class JdbcAspect {
 
     @Before("executePointcut()")
     public void profileBeforeExecute(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         Statement statement = (Statement) joinPoint.getTarget();
         JdbcStatementInfo statementInfo = JdbcContext.get(statement);
 
@@ -81,6 +78,10 @@ public class JdbcAspect {
 
     @After("executePointcut()")
     public void profileAfterExecute(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         Statement statement = (Statement) joinPoint.getTarget();
         JdbcStatementInfo statementInfo = JdbcContext.get(statement);
 
@@ -91,7 +92,9 @@ public class JdbcAspect {
         statementInfo.setEnd(System.nanoTime());
         statementInfo.calculateDuration();
 
-        Invocation invocation = Context.peekFromInvocationStack();
+        Context current = Context.getCurrent().get();
+
+        Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation != null) {
             JdbcEvent jdbcEvent = new JdbcEvent(statementInfo);
@@ -101,6 +104,10 @@ public class JdbcAspect {
 
     @AfterThrowing(pointcut = "executePointcut()", throwing = "t")
     public void profileAfterThrowingExecute(JoinPoint joinPoint, Throwable t) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         Statement statement = (Statement) joinPoint.getTarget();
         JdbcStatementInfo statementInfo = JdbcContext.get(statement);
 
@@ -113,6 +120,10 @@ public class JdbcAspect {
 
     @Before("setParameterPointcut()")
     public void profileSetParameter(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         Statement statement = (Statement) joinPoint.getTarget();
         JdbcStatementInfo statementInfo = JdbcContext.get(statement);
 

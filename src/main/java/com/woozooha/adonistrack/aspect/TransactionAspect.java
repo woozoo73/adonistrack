@@ -23,6 +23,10 @@ public class TransactionAspect extends PrintableAspect {
 
     @Around("setAutoCommitPointcut()")
     public Object profileSetAutoCommit(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (!Context.checkCurrentTrace()) {
+            return joinPoint.proceed();
+        }
+
         print("profileSetAutoCommit", joinPoint);
 
         if (joinPoint == null) {
@@ -46,6 +50,10 @@ public class TransactionAspect extends PrintableAspect {
 
     @Around("commitPointcut()")
     public Object profileCommit(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (!Context.checkCurrentTrace()) {
+            return joinPoint.proceed();
+        }
+
         print("profileCommit", joinPoint);
 
         if (joinPoint == null) {
@@ -68,6 +76,10 @@ public class TransactionAspect extends PrintableAspect {
 
     @Around("rollbackPointcut()")
     public Object profileRollback(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (!Context.checkCurrentTrace()) {
+            return joinPoint.proceed();
+        }
+
         print("profileRollback", joinPoint);
 
         if (joinPoint == null) {
@@ -89,7 +101,9 @@ public class TransactionAspect extends PrintableAspect {
     }
 
     private boolean addEvent(Object target, Boolean autoCommit, Boolean commit, Boolean rollback) {
-        Invocation invocation = Context.peekFromInvocationStack();
+        Context current = Context.getCurrent().get();
+
+        Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation == null) {
             return false;

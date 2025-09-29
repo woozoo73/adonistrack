@@ -157,7 +157,9 @@ public class Invocation implements Call, Serializable {
     }
 
     public void add(Event<?> event) {
-        event.setSeq(Context.sequence());
+        Context current = Context.getCurrent().get();
+
+        event.setSeq(current.sequence());
 
         if (eventList == null) {
             eventList = new ArrayList<Event<?>>();

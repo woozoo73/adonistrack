@@ -30,6 +30,10 @@ public class SqlSpyAspect extends PrintableAspect {
 
     @Before("reportSqlPointcut()")
     public void profileReportSql(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profileReportSql", joinPoint);
 
         SqlInfo sqlInfo = new SqlInfo();
@@ -43,7 +47,9 @@ public class SqlSpyAspect extends PrintableAspect {
     }
 
     private boolean addEvent(SqlInfo sqlInfo) {
-        Invocation invocation = Context.peekFromInvocationStack();
+        Context current = Context.getCurrent().get();
+
+        Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation == null) {
             return false;

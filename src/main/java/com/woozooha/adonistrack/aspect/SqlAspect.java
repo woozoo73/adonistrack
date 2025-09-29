@@ -25,7 +25,7 @@ public class SqlAspect extends PrintableAspect {
             // String
             String.class,
             // Date & URL
-            Date.class, Time.class, Timestamp.class, URL.class };
+            Date.class, Time.class, Timestamp.class, URL.class};
 
     private static SqlFormat sqlFormat = new SqlMessageFormat();
 
@@ -55,6 +55,10 @@ public class SqlAspect extends PrintableAspect {
 
     @AfterReturning(pointcut = "createStatementPointcut()", returning = "r")
     public void profileCreateStatement(JoinPoint joinPoint, Object r) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profileCreateStatement", joinPoint);
 
         if (r == null) {
@@ -73,6 +77,10 @@ public class SqlAspect extends PrintableAspect {
 
     @AfterReturning(pointcut = "prepareStatementPointcut()", returning = "r")
     public void profilePrepareStatementPointcut(JoinPoint joinPoint, Object r) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profilePrepareStatementPointcut", joinPoint);
 
         if (r == null) {
@@ -94,6 +102,10 @@ public class SqlAspect extends PrintableAspect {
 
     @Before("executePointcut()")
     public void profileBeforeExecute(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profileBeforeExecute", joinPoint);
 
         Statement statement = (Statement) joinPoint.getTarget();
@@ -109,6 +121,10 @@ public class SqlAspect extends PrintableAspect {
 
     @After("executePointcut()")
     public void profileAfterExecute(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profileAfterExecute", joinPoint);
 
         Statement statement = (Statement) joinPoint.getTarget();
@@ -131,6 +147,10 @@ public class SqlAspect extends PrintableAspect {
 
     @AfterThrowing(pointcut = "executePointcut()", throwing = "t")
     public void profileAfterThrowingExecute(JoinPoint joinPoint, Throwable t) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profileAfterThrowingExecute", joinPoint);
 
         Statement statement = (Statement) joinPoint.getTarget();
@@ -146,6 +166,10 @@ public class SqlAspect extends PrintableAspect {
 
     @Before("setParameterPointcut()")
     public void profileSetParameter(JoinPoint joinPoint) {
+        if (!Context.checkCurrentTrace()) {
+            return;
+        }
+
         print("profileSetParameter", joinPoint);
 
         PreparedStatement preparedStatement = (PreparedStatement) joinPoint.getTarget();
@@ -191,7 +215,9 @@ public class SqlAspect extends PrintableAspect {
     }
 
     private boolean addEvent(SqlInfo sqlInfo) {
-        Invocation invocation = Context.peekFromInvocationStack();
+        Context current = Context.getCurrent().get();
+
+        Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation == null) {
             return false;
