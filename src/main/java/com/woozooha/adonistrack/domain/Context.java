@@ -39,6 +39,10 @@ public class Context implements Serializable {
 
     @Getter
     @Setter
+    private static boolean globalTrace = true;
+
+    @Getter
+    @Setter
     private static int maxTraceCount = DEFAULT_TRACE_COUNT;
 
     @Getter
@@ -52,6 +56,9 @@ public class Context implements Serializable {
     private Stack<Invocation> stack = new Stack<>();
 
     public static boolean checkCurrentTrace() {
+        if (!globalTrace) {
+            return false;
+        }
         Context context = current.get();
         if (context == null) {
             return false;
@@ -60,6 +67,9 @@ public class Context implements Serializable {
     }
 
     public boolean checkTrace() {
+        if (!globalTrace) {
+            return false;
+        }
         return trace && getCount() < Context.getMaxTraceCount();
     }
 

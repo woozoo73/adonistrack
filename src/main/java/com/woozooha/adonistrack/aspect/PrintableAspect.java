@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 @Setter
 public abstract class PrintableAspect {
 
-    private static BiConsumer<String, JoinPoint> printer;
+    protected static BiConsumer<String, JoinPoint> printer;
 
     public static void setPrinter(BiConsumer<String, JoinPoint> printer) {
         PrintableAspect.printer = printer;

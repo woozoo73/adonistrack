@@ -1,7 +1,7 @@
 package com.woozooha.adonistrack.aspect;
 
 import com.woozooha.adonistrack.domain.*;
-import org.apache.commons.lang3.StringUtils;
+import com.woozooha.adonistrack.util.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 

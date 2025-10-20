@@ -1,7 +1,6 @@
 package com.woozooha.adonistrack.test;
 
 import com.woozooha.adonistrack.domain.Context;
-import com.woozooha.adonistrack.test.spring.Application;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -24,7 +23,7 @@ import static org.junit.Assert.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {Application.class})
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = Application.class)
 @Slf4j
 public class SpringTest {
 

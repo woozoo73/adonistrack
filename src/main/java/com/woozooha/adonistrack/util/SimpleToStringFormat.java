@@ -1,7 +1,5 @@
 package com.woozooha.adonistrack.util;
 
-import org.apache.commons.text.StringEscapeUtils;
-
 public class SimpleToStringFormat implements ToStringFormat {
 
     public String format(Object object) {
@@ -24,7 +22,7 @@ public class SimpleToStringFormat implements ToStringFormat {
             value = String.format("%s(FIXME: Can't use toString() because '%s')", clazz, throwable);
         }
 
-        return StringEscapeUtils.escapeJava(value);
+        return value;
     }
 
 }

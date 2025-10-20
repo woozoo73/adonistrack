@@ -41,7 +41,7 @@ import java.util.function.Predicate;
 @Aspect
 public abstract class ProfileAspect {
 
-    private static Config config;
+    protected static Config config;
 
     public ProfileAspect() {
         initConfig();
@@ -314,10 +314,14 @@ public abstract class ProfileAspect {
 
     @Around("executionPointcut()")
     public Object execution(ProceedingJoinPoint joinPoint) throws Throwable {
+        boolean globalTrace = Context.isGlobalTrace();
         boolean trace = false;
-        Context current = Context.getCurrent().get();
-        if (current != null) {
-            trace = current.checkTrace();
+        Context current = null;
+        if (globalTrace) {
+            current = Context.getCurrent().get();
+            if (current != null) {
+                trace = current.checkTrace();
+            }
         }
 
         Object r;

@@ -16,12 +16,12 @@ import java.util.function.UnaryOperator;
 @Aspect
 public class SqlSpyAspect extends PrintableAspect {
 
-    private static SqlFormat sqlFormat = new SqlMessageFormat(100);
+    protected static SqlFormat sqlFormat = new SqlMessageFormat(100);
 
-    private static UnaryOperator<String> sqlConveter = (sql) -> sql;
+    protected static UnaryOperator<String> sqlConverter = (sql) -> sql;
 
-    public static void setSqlConveter(UnaryOperator<String> sqlConveter) {
-        SqlSpyAspect.sqlConveter = sqlConveter;
+    public static void setSqlConverter(UnaryOperator<String> sqlConverter) {
+        SqlSpyAspect.sqlConverter = sqlConverter;
     }
 
     @Pointcut("within(net.sf.log4jdbc.sql.jdbcapi.StatementSpy+) && execution(* reportSql(String, String))")
@@ -38,7 +38,7 @@ public class SqlSpyAspect extends PrintableAspect {
 
         SqlInfo sqlInfo = new SqlInfo();
         String sql = (String) joinPoint.getArgs()[0];
-        String convertedSql = sqlConveter.apply(sql);
+        String convertedSql = sqlConverter.apply(sql);
         sqlInfo.setSql(convertedSql);
         sqlInfo.setStart(System.currentTimeMillis());
         sqlInfo.setEnd(System.currentTimeMillis());

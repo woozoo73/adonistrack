@@ -44,7 +44,7 @@ public class SimpleToStringFormatTest {
 
         log.debug("string: {}", value);
 
-        assertEquals("foo\\nbar", value);
+        assertEquals("foo\nbar", value);
     }
 
     @Test

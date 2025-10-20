@@ -42,13 +42,13 @@ public class Config implements Serializable {
         return proxyClass;
     };
 
-    private InvocationCallback invocationCallback;
+    protected InvocationCallback invocationCallback;
 
-    private History history;
+    protected History history;
 
     // Finder of Proxy class's real class(or interface).
     // $Proxy1 --> Foo
-    private static Function<Class<?>, Class<?>> proxyTargetFinder = DEFAULT_PROXY_TARGET_FINDER;
+    protected static Function<Class<?>, Class<?>> proxyTargetFinder = DEFAULT_PROXY_TARGET_FINDER;
 
     public static Function<Class<?>, Class<?>> getProxyTargetFinder() {
         return proxyTargetFinder;
