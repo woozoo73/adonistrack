@@ -1,4 +1,4 @@
-= AdonisTrack image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"] image:https://img.shields.io/maven-central/v/com.woozooha/adonistrack.svg["Maven Central", link="https://search.maven.org/search?q=g:com.woozooha%20a:adonistrack"]
+= AdonisTrack image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://opensource.org/licenses/Apache-2.0"] image:https://img.shields.io/maven-central/v/com.woozooha/adonistrack.svg["Maven Central", link="https://central.sonatype.com/search?q=g:com.woozooha%20a:adonistrack"]
 
 Simple Java profiling tool. (The light version of 'hazin-tracer')
 
@@ -14,7 +14,7 @@ Simple Java profiling tool. (The light version of 'hazin-tracer')
 
 === 1. Add this library to your project
 
-image:https://img.shields.io/maven-central/v/com.woozooha/adonistrack.svg["Maven Central", link="https://search.maven.org/search?q=g:com.woozooha%20a:adonistrack"]
+image:https://img.shields.io/maven-central/v/com.woozooha/adonistrack.svg["Maven Central", link="https://central.sonatype.com/search?q=g:com.woozooha%20a:adonistrack"]
 
 === 2. Add AdonistrackFilter to your application
 
