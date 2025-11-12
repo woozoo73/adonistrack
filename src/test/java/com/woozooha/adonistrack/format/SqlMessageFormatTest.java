@@ -3,7 +3,7 @@ package com.woozooha.adonistrack.format;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SqlMessageFormatTest {
 
@@ -104,104 +104,183 @@ public class SqlMessageFormatTest {
             "from from from from from0\r\n" +
             "from from from from from0\n\r";
 
+    SqlMessageFormat whereFormat;
     SqlMessageFormat format;
 
     @Before
     public void setUp() {
+        whereFormat = new SqlMessageFormat(100, true);
         format = new SqlMessageFormat(100);
     }
 
     @Test
     public void invalid0() {
-        String message = format.format(invalid);
+        String message = whereFormat.format(invalid);
         assertEquals(invalid, message);
     }
 
     @Test
     public void invalid1() {
-        format.setMaxLength(15);
-        String message = format.format(invalid);
+        whereFormat.setMaxLength(15);
+        String message = whereFormat.format(invalid);
         assertEquals(15 + 4, message.length());
         assertEquals("the quick brown ...", message);
     }
 
     @Test
     public void select0() {
-        String message = format.format(select0);
-        assertEquals("SELECT ~ FROM foo foo_ ~ WHERE foo_.id = ? ~", message);
+        {
+            String message = whereFormat.format(select0);
+            assertEquals("SELECT ~ FROM foo foo_ ~ WHERE foo_.id = ? ~", message);
+        }
+        {
+            String message = format.format(select0);
+            assertEquals("SELECT ~ FROM foo foo_ ~", message);
+        }
     }
 
     @Test
     public void select1() {
-        String message = format.format(select1);
-        assertEquals("SELECT ~ FROM foo foo_ ~ WHERE foo_.id = ? ~", message);
+        {
+            String message = whereFormat.format(select1);
+            assertEquals("SELECT ~ FROM foo foo_ ~ WHERE foo_.id = ? ~", message);
+        }
+        {
+            String message = format.format(select1);
+            assertEquals("SELECT ~ FROM foo foo_ ~", message);
+        }
     }
 
     @Test
     public void select2() {
-        String message = format.format(select2);
-        assertEquals("SELECT ~ FROM user user_ ~ WHERE user_.id = ? ~", message);
+        {
+            String message = whereFormat.format(select2);
+            assertEquals("SELECT ~ FROM user user_ ~ WHERE user_.id = ? ~", message);
+        }
+        {
+            String message = format.format(select2);
+            assertEquals("SELECT ~ FROM user user_ ~", message);
+        }
     }
 
     @Test
     public void select3() {
-        String message = format.format(select3);
-        assertEquals("SELECT ~ FROM user user_ ~ WHERE user_.id = ? ~ [20, 10]", message);
+        {
+            String message = whereFormat.format(select3);
+            assertEquals("SELECT ~ FROM user user_ ~ WHERE user_.id = ? ~ [20, 10]", message);
+        }
+        {
+            String message = format.format(select3);
+            assertEquals("SELECT ~ FROM user user_ ~ [20, 10]", message);
+        }
     }
 
     @Test
     public void select4() {
-        String message = format.format(select4);
-        assertEquals("SELECT ~ FROM user user_ ~ WHERE user_.id = ? ~ [10]", message);
+        {
+            String message = whereFormat.format(select4);
+            assertEquals("SELECT ~ FROM user user_ ~ WHERE user_.id = ? ~ [10]", message);
+        }
+        {
+            String message = format.format(select4);
+            assertEquals("SELECT ~ FROM user user_ ~ [10]", message);
+        }
     }
 
     @Test
     public void select5() {
-        String message = format.format(select5);
-        // assertEquals("SELECT ~ FROM user ~ [20, 10]", message);
-        assertEquals("SELECT ~", message);
+        {
+            String message = whereFormat.format(select5);
+            assertEquals("SELECT ~", message);
+        }
+        {
+            String message = format.format(select5);
+            assertEquals("SELECT ~", message);
+        }
     }
 
     @Test
     public void select6() {
-        String message = format.format(select6);
-        assertEquals("SELECT ~ FROM foo f ~ WHERE f.id = b.id ~", message);
+        {
+            String message = whereFormat.format(select6);
+            assertEquals("SELECT ~ FROM foo f ~ WHERE f.id = b.id ~", message);
+        }
+        {
+            String message = format.format(select6);
+            assertEquals("SELECT ~ FROM foo f ~", message);
+        }
     }
 
     @Test
     public void insert0() {
-        String message = format.format(insert0);
-        assertEquals("INSERT INTO contract ~", message);
+        {
+            String message = whereFormat.format(insert0);
+            assertEquals("INSERT INTO contract ~", message);
+        }
+        {
+            String message = format.format(insert0);
+            assertEquals("INSERT INTO contract ~", message);
+        }
     }
 
     @Test
     public void update0() {
-        String message = format.format(update0);
-        assertEquals("UPDATE user SET ~ WHERE id = ? ~", message);
+        {
+            String message = whereFormat.format(update0);
+            assertEquals("UPDATE user SET ~ WHERE id = ? ~", message);
+        }
+        {
+            String message = format.format(update0);
+            assertEquals("UPDATE user SET ~", message);
+        }
     }
 
     @Test
     public void delete0() {
-        String message = format.format(delete0);
-        assertEquals("DELETE FROM foo WHERE id = ? ~", message);
+        {
+            String message = whereFormat.format(delete0);
+            assertEquals("DELETE FROM foo WHERE id = ? ~", message);
+        }
+        {
+            String message = format.format(delete0);
+            assertEquals("DELETE FROM foo", message);
+        }
     }
 
     @Test
     public void multiLine0() {
-        String message = format.format(multiLine0);
-        assertEquals("foo from foo where id=?", message);
+        {
+            String message = whereFormat.format(multiLine0);
+            assertEquals("foo from foo where id=?", message);
+        }
+        {
+            String message = format.format(multiLine0);
+            assertEquals("foo from foo where id=?", message);
+        }
     }
 
     @Test
     public void multiLine1() {
-        String message = format.format(multiLine1);
-        assertEquals("foo from from from from from from from from from from from from from from from from from from from f ...", message);
+        {
+            String message = whereFormat.format(multiLine1);
+            assertEquals("foo from from from from from from from from from from from from from from from from from from from f ...", message);
+        }
+        {
+            String message = format.format(multiLine1);
+            assertEquals("foo from from from from from from from from from from from from from from from from from from from f ...", message);
+        }
     }
 
     @Test
     public void multiLine2() {
-        String message = format.format(multiLine2);
-        assertEquals("foo0  from from from from from0  from from from from from0  from from from from from0  ", message);
+        {
+            String message = whereFormat.format(multiLine2);
+            assertEquals("foo0  from from from from from0  from from from from from0  from from from from from0  ", message);
+        }
+        {
+            String message = format.format(multiLine2);
+            assertEquals("foo0  from from from from from0  from from from from from0  from from from from from0  ", message);
+        }
     }
 
 }

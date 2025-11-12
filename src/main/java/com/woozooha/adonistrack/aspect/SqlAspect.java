@@ -33,6 +33,10 @@ public class SqlAspect extends PrintableAspect {
         return sqlFormat;
     }
 
+    public static void setSqlFormat(SqlFormat sqlFormat) {
+        SqlAspect.sqlFormat = sqlFormat;
+    }
+
     @Pointcut("within(java.sql.Connection+) && execution(java.sql.Statement+ createStatement())")
     public void createStatementPointcut() {
     }

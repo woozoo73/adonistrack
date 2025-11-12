@@ -17,13 +17,20 @@ import net.sf.jsqlparser.statement.update.Update;
 public class SqlMessageFormat implements SqlFormat {
 
     public SqlMessageFormat() {
+        this(100);
     }
 
     public SqlMessageFormat(int maxLength) {
+        this(maxLength, false);
+    }
+
+    public SqlMessageFormat(int maxLength, boolean includeWhere) {
         this.maxLength = maxLength;
+        this.includeWhere = includeWhere;
     }
 
     private int maxLength = 100;
+    private boolean includeWhere = false;
 
     @Override
     public String format(String sql) {
@@ -72,9 +79,11 @@ public class SqlMessageFormat implements SqlFormat {
                     }
                 }
                 message += " SET ~";
-                Expression where = update.getWhere();
-                if (where != null) {
-                    message += " WHERE " + where + " ~";
+                if (includeWhere) {
+                    Expression where = update.getWhere();
+                    if (where != null) {
+                        message += " WHERE " + where + " ~";
+                    }
                 }
 
                 return message;
@@ -96,10 +105,11 @@ public class SqlMessageFormat implements SqlFormat {
                         }
                     }
                 }
-                // message += " SET ~";
-                Expression where = delete.getWhere();
-                if (where != null) {
-                    message += " WHERE " + where + " ~";
+                if (includeWhere) {
+                    Expression where = delete.getWhere();
+                    if (where != null) {
+                        message += " WHERE " + where + " ~";
+                    }
                 }
 
                 return message;
@@ -129,9 +139,11 @@ public class SqlMessageFormat implements SqlFormat {
                         if (table != null) {
                             message += " ~";
                         }
-                        Expression where = plainSelect.getWhere();
-                        if (where != null) {
-                            message += " WHERE " + where + " ~";
+                        if (includeWhere) {
+                            Expression where = plainSelect.getWhere();
+                            if (where != null) {
+                                message += " WHERE " + where + " ~";
+                            }
                         }
                     }
                     Limit limit = plainSelect.getLimit();
