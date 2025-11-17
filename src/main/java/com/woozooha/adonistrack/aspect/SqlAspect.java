@@ -231,6 +231,7 @@ public class SqlAspect extends PrintableAspect {
 
         SqlEvent event = new SqlEvent(sqlInfo);
         invocation.add(event);
+        current.increaseCount();
 
         return true;
     }

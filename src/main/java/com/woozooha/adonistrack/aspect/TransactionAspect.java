@@ -128,6 +128,7 @@ public class TransactionAspect extends PrintableAspect {
 
         TransactionEvent event = new TransactionEvent(transactionInfo);
         invocation.add(event);
+        current.increaseCount();
 
         return true;
     }

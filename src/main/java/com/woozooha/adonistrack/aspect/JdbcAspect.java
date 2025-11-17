@@ -99,6 +99,7 @@ public class JdbcAspect {
         if (invocation != null) {
             JdbcEvent jdbcEvent = new JdbcEvent(statementInfo);
             invocation.add(jdbcEvent);
+            current.increaseCount();
         }
     }
 
