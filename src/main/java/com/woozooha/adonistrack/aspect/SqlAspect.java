@@ -1,8 +1,8 @@
 package com.woozooha.adonistrack.aspect;
 
 import com.woozooha.adonistrack.domain.*;
+import com.woozooha.adonistrack.format.SimpleSqlMessageFormat;
 import com.woozooha.adonistrack.format.SqlFormat;
-import com.woozooha.adonistrack.format.SqlMessageFormat;
 import com.woozooha.adonistrack.util.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -27,7 +27,7 @@ public class SqlAspect extends PrintableAspect {
             // Date & URL
             Date.class, Time.class, Timestamp.class, URL.class};
 
-    protected static SqlFormat sqlFormat = new SqlMessageFormat();
+    protected static SqlFormat sqlFormat = new SimpleSqlMessageFormat();
 
     public static SqlFormat getSqlFormat() {
         return sqlFormat;

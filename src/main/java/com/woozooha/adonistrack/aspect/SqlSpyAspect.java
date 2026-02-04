@@ -4,8 +4,8 @@ import com.woozooha.adonistrack.domain.Context;
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.domain.SqlEvent;
 import com.woozooha.adonistrack.domain.SqlInfo;
+import com.woozooha.adonistrack.format.SimpleSqlMessageFormat;
 import com.woozooha.adonistrack.format.SqlFormat;
-import com.woozooha.adonistrack.format.SqlMessageFormat;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,9 +16,13 @@ import java.util.function.UnaryOperator;
 @Aspect
 public class SqlSpyAspect extends PrintableAspect {
 
-    protected static SqlFormat sqlFormat = new SqlMessageFormat(100);
+    protected static SqlFormat sqlFormat = new SimpleSqlMessageFormat();
 
     protected static UnaryOperator<String> sqlConverter = (sql) -> sql;
+
+    public static void setSqlFormat(SqlFormat sqlFormat) {
+        SqlSpyAspect.sqlFormat = sqlFormat;
+    }
 
     public static void setSqlConverter(UnaryOperator<String> sqlConverter) {
         SqlSpyAspect.sqlConverter = sqlConverter;
