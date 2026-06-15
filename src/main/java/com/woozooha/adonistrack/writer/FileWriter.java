@@ -3,19 +3,16 @@ package com.woozooha.adonistrack.writer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
+import com.woozooha.adonistrack.fuction.Predicate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class FileWriter implements Writer, History {
 
@@ -27,19 +24,20 @@ public class FileWriter implements Writer, History {
 
     @Getter
     @Setter
-    private Predicate<Invocation> filter = (t) -> true;
+    private Predicate<Invocation> filter = new Predicate<Invocation>() {
+        public boolean test(Invocation invocation) {
+            return true;
+        }
+    };
 
-    @Override
     public Format getFormat() {
         return null;
     }
 
-    @Override
     public void setFormat(Format format) {
         // do nothing.
     }
 
-    @Override
     @SneakyThrows
     public void write(Invocation invocation) {
         try {
@@ -64,18 +62,29 @@ public class FileWriter implements Writer, History {
             String json = objectMapper.writeValueAsString(invocation);
             File jsonFile = new File(dayDir, id + ".json");
 
-            try (java.io.Writer writer = new java.io.FileWriter(jsonFile)) {
+            java.io.Writer writer = null;
+            try {
+                writer = new java.io.FileWriter(jsonFile);
                 writer.write(json);
                 writer.flush();
+            } catch (java.io.IOException e) {
+                // ignore
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (java.io.IOException e) {
+                        // close 도중 발생하는 예외는 보통 무시하거나 로그를 남깁니다.
+                    }
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
     public List<Invocation> getInvocationList() {
-        String day = Invocation.DATE_FORMATTER.format(LocalDate.now());
+        String day = Invocation.DATE_FORMATTER.get().format(new Date());
         File dayDir = new File(root, day);
         if (!dayDir.exists()) {
             return Collections.emptyList();
@@ -85,24 +94,47 @@ public class FileWriter implements Writer, History {
         if (files == null) {
             return Collections.emptyList();
         }
-        Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
+        Arrays.sort(files, new Comparator<File>() {
+            public int compare(java.io.File f1, java.io.File f2) {
+                long m1 = f1.lastModified();
+                long m2 = f2.lastModified();
+                // 내림차순 정렬 (f2와 f1의 위치를 바꿈)
+                if (m1 < m2) return 1;
+                if (m1 > m2) return -1;
+                return 0;
+            }
+        });
 
-        return Arrays.stream(files).map(f -> {
-                            try {
-                                return readInvocation(f);
-                            } catch (Exception e) {
-                                return null;
-                            }
-                        }
-                )
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<Invocation> list = new ArrayList<Invocation>();
+        for (File file : files) {
+            try {
+                Invocation invocation = readInvocation(file);
+                if (invocation != null) {
+                    list.add(invocation);
+                }
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+
+        return list;
     }
 
     @SneakyThrows
     private Invocation readInvocation(File file) {
-        try (Reader reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
+        Reader reader = null;
+        try {
+            reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
+
             return objectMapper.readValue(reader, Invocation.class);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (java.io.IOException e) {
+                    // ignore
+                }
+            }
         }
     }
 

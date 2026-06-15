@@ -21,15 +21,15 @@ import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Invocation data.
- * 
+ *
  * @author woozoo73
  */
 @Getter
@@ -40,8 +40,20 @@ public class Invocation implements Call, Serializable {
 
     public static final String DATE_PATTERN = "yyyyMMdd";
     public static final String DATE_TIME_PATTERN = "yyyyMMdd-HHmmss-SSS";
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+    public static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(DATE_PATTERN);
+        }
+    };
+
+    // DATE_TIME_FORMATTER 변환
+    public static final ThreadLocal<SimpleDateFormat> DATE_TIME_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(DATE_TIME_PATTERN);
+        }
+    };
     public static final int PSEUDO_UUID_LENGTH = 4;
 
     // yyyyMMdd-HHmmss-SSS-pseudouu
@@ -95,7 +107,7 @@ public class Invocation implements Call, Serializable {
     private List<Event<?>> eventList;
 
     private String generateId() {
-        return String.format("%s-%s", DATE_TIME_FORMATTER.format(LocalDateTime.now()), UUID.randomUUID().toString().substring(0, PSEUDO_UUID_LENGTH));
+        return String.format("%s-%s", DATE_TIME_FORMATTER.get().format(new Date()), UUID.randomUUID().toString().substring(0, PSEUDO_UUID_LENGTH));
     }
 
     public boolean equalsJoinPoint(Invocation another) {
@@ -151,7 +163,7 @@ public class Invocation implements Call, Serializable {
         childInvocation.setDepth(depth + 1);
 
         if (childInvocationList == null) {
-            childInvocationList = new ArrayList<>();
+            childInvocationList = new ArrayList<Invocation>();
         }
         childInvocationList.add(childInvocation);
     }
@@ -162,7 +174,7 @@ public class Invocation implements Call, Serializable {
         event.setSeq(current.sequence());
 
         if (eventList == null) {
-            eventList = new ArrayList<>();
+            eventList = new ArrayList<Event<?>>();
         }
         eventList.add(event);
     }

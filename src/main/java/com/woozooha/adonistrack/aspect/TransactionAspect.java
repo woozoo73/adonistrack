@@ -35,7 +35,7 @@ public class TransactionAspect extends PrintableAspect {
 
         Object target = joinPoint.getTarget();
 
-        boolean autoCommit = (boolean) joinPoint.getArgs()[0];
+        boolean autoCommit = (Boolean) joinPoint.getArgs()[0];
         this.addEvent(target, autoCommit, null, null);
 
         return joinPoint.proceed();

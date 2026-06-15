@@ -32,7 +32,6 @@ public class CompositeCallback implements InvocationCallback {
 
     private List<InvocationCallback> callbacks;
 
-    @Override
     public void before(Invocation invocation) {
         if (callbacks == null) {
             return;
@@ -43,7 +42,6 @@ public class CompositeCallback implements InvocationCallback {
         }
     }
 
-    @Override
     public void after(Invocation invocation) {
         if (callbacks == null) {
             return;

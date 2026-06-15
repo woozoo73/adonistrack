@@ -1,7 +1,7 @@
 package com.woozooha.adonistrack.test.spring;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.woozooha.adonistrack.aspect.ProfileAspect;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,12 @@ public class AdonisTrackHistoryController {
 
         List<Invocation> invocations = history.getInvocationList();
 
-        return invocations.stream().map(i -> new Invocation.InvocationSummary(i)).collect(Collectors.toList());
+        List<Invocation.InvocationSummary> summaries = new ArrayList<Invocation.InvocationSummary>();
+        for (Invocation i : invocations) {
+            summaries.add(new Invocation.InvocationSummary(i));
+        }
+
+        return summaries;
     }
 
     @GetMapping("/adonis-track/invocations/{id}")
@@ -29,7 +34,12 @@ public class AdonisTrackHistoryController {
 
         List<Invocation> invocations = history.getInvocationList();
 
-        return invocations.stream().filter(i -> id.equals(i.getId())).findFirst().orElse(null);
+        for (Invocation i : invocations) {
+            if (id != null ? id.equals(i.getId()) : i.getId() == null) {
+                return i;
+            }
+        }
+        return null;
     }
 
 }

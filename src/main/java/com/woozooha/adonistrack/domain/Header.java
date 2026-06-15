@@ -3,7 +3,6 @@ package com.woozooha.adonistrack.domain;
 import lombok.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,7 +28,18 @@ public class Header {
             return null;
         }
 
-        return String.join(",", values);
+        if (values.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < values.size(); i++) {
+            sb.append(values.get(i));
+            if (i < values.size() - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
     }
 
 }

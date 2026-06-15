@@ -1,10 +1,9 @@
 package com.woozooha.adonistrack.aspect;
 
+import com.woozooha.adonistrack.fuction.BiConsumer;
 import lombok.Getter;
 import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
-
-import java.util.function.BiConsumer;
 
 @Getter
 @Setter

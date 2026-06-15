@@ -35,7 +35,12 @@ public class Context implements Serializable {
     public static final int DEFAULT_TRACE_COUNT = 2000;
 
     @Getter
-    protected static final ThreadLocal<Context> current = ThreadLocal.withInitial(Context::new);
+    protected static final ThreadLocal<Context> current = new ThreadLocal<Context>() {
+        @Override
+        protected Context initialValue() {
+            return new Context();
+        }
+    };
 
     @Getter
     @Setter
@@ -53,7 +58,7 @@ public class Context implements Serializable {
     private int count = 0;
     private Invocation endpoint;
     private int seq = 0;
-    private Stack<Invocation> stack = new Stack<>();
+    private Stack<Invocation> stack = new Stack<Invocation>();
 
     public static boolean checkCurrentTrace() {
         if (!globalTrace) {

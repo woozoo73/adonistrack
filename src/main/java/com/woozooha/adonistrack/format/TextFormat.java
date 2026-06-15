@@ -42,7 +42,6 @@ public class TextFormat implements Format {
         this.suffix = suffix;
     }
 
-    @Override
     public String format(Invocation invocation) {
         try {
             StringBuilder builder = new StringBuilder();

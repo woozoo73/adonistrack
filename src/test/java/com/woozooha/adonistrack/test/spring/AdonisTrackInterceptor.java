@@ -26,9 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AdonisTrackInterceptor implements HandlerInterceptor {
 
-    private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<>();
+    private static ThreadLocal<Invocation> CONTEXT = new ThreadLocal<Invocation>();
 
-    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Context current = new Context();
         current.setTrace(true);
@@ -40,7 +39,6 @@ public class AdonisTrackInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
             @Nullable ModelAndView modelAndView) {
         try {

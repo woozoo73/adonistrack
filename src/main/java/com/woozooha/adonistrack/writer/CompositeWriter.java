@@ -28,19 +28,16 @@ import com.woozooha.adonistrack.format.Format;
  */
 public class CompositeWriter implements Writer {
 
-    private final List<Writer> writers = new ArrayList<>();
+    private final List<Writer> writers = new ArrayList<Writer>();
 
-    @Override
     public Format getFormat() {
         return null;
     }
 
-    @Override
     public void setFormat(Format format) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public void write(Invocation invocation) {
         for (Writer writer : writers) {
             writer.write(invocation);

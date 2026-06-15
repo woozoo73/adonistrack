@@ -19,7 +19,6 @@ public class SimpleSqlMessageFormat implements SqlFormat {
     private static final String TABLE_UPDATE_REGEX = "(?i)UPDATE\\s+([^\\s(),;]+)";
     private static final Pattern TABLE_UPDATE_PATTERN = Pattern.compile(TABLE_UPDATE_REGEX);
 
-    @Override
     public String format(String sql) {
         String cleanSql = clean(sql);
 
@@ -37,7 +36,7 @@ public class SimpleSqlMessageFormat implements SqlFormat {
     }
 
     protected String clean(String sql) {
-        if (sql == null || sql.isEmpty()) {
+        if (sql == null || sql.length() == 0) {
             return sql;
         }
 
@@ -45,7 +44,7 @@ public class SimpleSqlMessageFormat implements SqlFormat {
     }
 
     protected String findCommand(String sql) {
-        if (sql == null || sql.isEmpty()) {
+        if (sql == null || sql.length() == 0) {
             return null;
         }
 
@@ -58,7 +57,7 @@ public class SimpleSqlMessageFormat implements SqlFormat {
     }
 
     protected String findTable(String sql, String command) {
-        if (sql == null || sql.isEmpty()) {
+        if (sql == null || sql.length() == 0) {
             return null;
         }
         if (command == null) {
@@ -66,21 +65,14 @@ public class SimpleSqlMessageFormat implements SqlFormat {
         }
 
         Pattern tablePattern;
-        switch (command) {
-            case "SELECT":
-            case "DELETE":
-                tablePattern = TABLE_FROM_PATTERN;
-                break;
-            case "INSERT":
-            case "MERGE":
-                tablePattern = TABLE_INTO_PATTERN;
-                break;
-            case "UPDATE":
-                tablePattern = TABLE_UPDATE_PATTERN;
-                break;
-            default:
-                tablePattern = null;
-                break;
+        if (command.equals("SELECT") || command.equals("DELETE")) {
+            tablePattern = TABLE_FROM_PATTERN;
+        } else if (command.equals("INSERT") || command.equals("MERGE")) {
+            tablePattern = TABLE_INTO_PATTERN;
+        } else if (command.equals("UPDATE")) {
+            tablePattern = TABLE_UPDATE_PATTERN;
+        } else {
+            tablePattern = null;
         }
         if (tablePattern == null) {
             return null;
@@ -102,7 +94,7 @@ public class SimpleSqlMessageFormat implements SqlFormat {
     }
 
     protected String cleanSchema(String table) {
-        if (table == null || table.isEmpty()) {
+        if (table == null || table.length() == 0) {
             return table;
         }
 
@@ -114,7 +106,6 @@ public class SimpleSqlMessageFormat implements SqlFormat {
         return table.substring(lastDotIndex + 1);
     }
 
-    @Override
     public int getMaxLength() {
         return 0;
     }

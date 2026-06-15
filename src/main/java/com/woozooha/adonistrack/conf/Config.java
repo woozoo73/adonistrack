@@ -16,9 +16,9 @@
 package com.woozooha.adonistrack.conf;
 
 import java.io.Serializable;
-import java.util.function.Function;
 
 import com.woozooha.adonistrack.callback.InvocationCallback;
+import com.woozooha.adonistrack.fuction.Function;
 import com.woozooha.adonistrack.writer.History;
 
 import lombok.AllArgsConstructor;
@@ -36,12 +36,14 @@ public class Config implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final Function<Class<?>, Class<?>> DEFAULT_PROXY_TARGET_FINDER = (proxyClass) -> {
-        Class<?>[] interfaces = proxyClass.getInterfaces();
-        for (Class<?> inf : interfaces) {
-            return inf;
+    public static final Function<Class<?>, Class<?>> DEFAULT_PROXY_TARGET_FINDER = new Function<Class<?>, Class<?>>() {
+        public Class<?> apply(Class<?> proxyClass) {
+            Class<?>[] interfaces = proxyClass.getInterfaces();
+            for (Class<?> inf : interfaces) {
+                return inf;
+            }
+            return proxyClass;
         }
-        return proxyClass;
     };
 
     protected InvocationCallback invocationCallback;
@@ -60,7 +62,6 @@ public class Config implements Serializable {
 
         private String[] baseNames;
 
-        @Override
         public Class<?> apply(Class<?> proxyClass) {
             Class<?>[] interfaces = proxyClass.getInterfaces();
             for (Class<?> inf : interfaces) {

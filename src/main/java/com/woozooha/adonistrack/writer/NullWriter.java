@@ -25,17 +25,14 @@ import com.woozooha.adonistrack.format.Format;
  */
 public class NullWriter implements Writer {
 
-    @Override
     public Format getFormat() {
         return null;
     }
 
-    @Override
     public void setFormat(Format format) {
         // do nothing.
     }
 
-    @Override
     public void write(Invocation invocation) {
         // do nothing.
     }

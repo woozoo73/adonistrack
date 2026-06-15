@@ -20,6 +20,7 @@ import com.woozooha.adonistrack.conf.Config;
 import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.format.Format;
 import com.woozooha.adonistrack.format.TextFormat;
+import com.woozooha.adonistrack.fuction.Predicate;
 import com.woozooha.adonistrack.writer.CompositeWriter;
 import com.woozooha.adonistrack.writer.FileWriter;
 import com.woozooha.adonistrack.writer.LogWriter;
@@ -32,7 +33,6 @@ import org.aspectj.lang.annotation.*;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.function.Predicate;
 
 /**
  * Profile invocations aspect.
@@ -119,12 +119,14 @@ public abstract class ProfileAspect {
     }
 
     protected Predicate<Invocation> getFilter() {
-        return (t) -> {
-            if (t.getEventList() == null || t.getEventList().isEmpty()) {
-                return false;
+        return new Predicate<Invocation>() {
+            public boolean test(Invocation t) {
+                if (t.getEventList() == null || t.getEventList().isEmpty()) {
+                    return false;
+                }
+                Event<?> event = t.getEventList().get(0);
+                return event instanceof RequestEvent;
             }
-            Event<?> event = t.getEventList().get(0);
-            return event instanceof RequestEvent;
         };
     }
 

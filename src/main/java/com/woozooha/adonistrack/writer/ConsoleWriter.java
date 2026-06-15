@@ -27,17 +27,14 @@ public class ConsoleWriter implements Writer {
 
     private Format format;
 
-    @Override
     public Format getFormat() {
         return format;
     }
 
-    @Override
     public void setFormat(Format format) {
         this.format = format;
     }
 
-    @Override
     public void write(Invocation invocation) {
         System.out.println(format.format(invocation));
     }

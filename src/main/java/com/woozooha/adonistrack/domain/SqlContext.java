@@ -11,7 +11,7 @@ public class SqlContext implements Serializable {
     private static final ThreadLocal<Map<Integer, SqlInfo>> SQL_MAP = new ThreadLocal<Map<Integer, SqlInfo>>() {
         @Override
         protected HashMap<Integer, SqlInfo> initialValue() {
-            return new HashMap<>();
+            return new HashMap<Integer, SqlInfo>();
         }
     };
 

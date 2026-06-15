@@ -2,15 +2,16 @@ package com.woozooha.adonistrack.format;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
+
+import java.io.StringReader;
 
 @Getter
 @Setter
@@ -32,14 +33,17 @@ public class SqlMessageFormat implements SqlFormat {
     private int maxLength = 100;
     private boolean includeWhere = false;
 
-    @Override
     public String format(String sql) {
-        if (sql == null || sql.isEmpty()) {
+        if (sql == null || sql.length() == 0) {
             return sql;
         }
 
         try {
-            Statement statement = CCJSqlParserUtil.parse(sql);
+            // 1. CCJSqlParserUtil.parse 대신 CCJSqlParserManager 인스턴스 사용
+            CCJSqlParserManager parserManager = new CCJSqlParserManager();
+            Statement statement = parserManager.parse(new StringReader(sql));
+
+            // [INSERT 처리]
             if (statement instanceof Insert) {
                 String message = "INSERT";
                 Insert insert = (Insert) statement;
@@ -49,18 +53,17 @@ public class SqlMessageFormat implements SqlFormat {
                     if (tableName != null) {
                         message += " INTO " + tableName;
                     }
-                    Alias alias = table.getAlias();
-                    if (alias != null) {
-                        String aliasName = alias.getName();
-                        if (aliasName!= null) {
-                            message += " " + aliasName;
-                        }
+                    // 0.7.0에서 Alias는 별도 객체가 아니라 String입니다.
+                    String aliasName = table.getAlias();
+                    if (aliasName != null && aliasName.trim().length() > 0) {
+                        message += " " + aliasName;
                     }
                 }
                 message += " ~";
-
                 return message;
             }
+
+            // [UPDATE 처리]
             if (statement instanceof Update) {
                 String message = "UPDATE";
                 Update update = (Update) statement;
@@ -70,12 +73,9 @@ public class SqlMessageFormat implements SqlFormat {
                     if (tableName != null) {
                         message += " " + tableName;
                     }
-                    Alias alias = table.getAlias();
-                    if (alias != null) {
-                        String aliasName = alias.getName();
-                        if (aliasName!= null) {
-                            message += " " + aliasName;
-                        }
+                    String aliasName = table.getAlias();
+                    if (aliasName != null && aliasName.trim().length() > 0) {
+                        message += " " + aliasName;
                     }
                 }
                 message += " SET ~";
@@ -85,9 +85,10 @@ public class SqlMessageFormat implements SqlFormat {
                         message += " WHERE " + where + " ~";
                     }
                 }
-
                 return message;
             }
+
+            // [DELETE 처리]
             if (statement instanceof Delete) {
                 String message = "DELETE";
                 Delete delete = (Delete) statement;
@@ -97,12 +98,9 @@ public class SqlMessageFormat implements SqlFormat {
                     if (tableName != null) {
                         message += " FROM " + tableName;
                     }
-                    Alias alias = table.getAlias();
-                    if (alias != null) {
-                        String aliasName = alias.getName();
-                        if (aliasName!= null) {
-                            message += " " + aliasName;
-                        }
+                    String aliasName = table.getAlias();
+                    if (aliasName != null && aliasName.trim().length() > 0) {
+                        message += " " + aliasName;
                     }
                 }
                 if (includeWhere) {
@@ -111,9 +109,10 @@ public class SqlMessageFormat implements SqlFormat {
                         message += " WHERE " + where + " ~";
                     }
                 }
-
                 return message;
             }
+
+            // [SELECT 처리]
             if (statement instanceof Select) {
                 String message = "SELECT ~";
                 Select select = (Select) statement;
@@ -127,12 +126,9 @@ public class SqlMessageFormat implements SqlFormat {
                         if (tableName != null) {
                             message += " FROM " + tableName;
                         }
-                        Alias alias = table.getAlias();
-                        if (alias != null) {
-                            String aliasName = alias.getName();
-                            if (aliasName!= null) {
-                                message += " " + aliasName;
-                            }
+                        String aliasName = table.getAlias();
+                        if (aliasName != null && aliasName.trim().length() > 0) {
+                            message += " " + aliasName;
                         }
                         message += " ~";
                         if (includeWhere) {
@@ -144,30 +140,29 @@ public class SqlMessageFormat implements SqlFormat {
                     }
                     Limit limit = plainSelect.getLimit();
                     if (limit != null) {
-                        Expression offset = limit.getOffset();
-                        Expression rowCount = limit.getRowCount();
+                        long offset = limit.getOffset();
+                        long rowCount = limit.getRowCount();
+                        boolean hasOffset = limit.isOffsetJdbcParameter();
+
                         message += " [";
-                        if (offset != null) {
-                            message += limit.getOffset() + ", ";
+                        if (hasOffset) {
+                            message += offset + ", ";
                         }
-                        if (rowCount != null) {
-                            message += limit.getRowCount();
-                        }
+                        message += rowCount;
                         message += "]";
                     }
                 }
-
                 return message;
             }
         } catch (Exception e) {
-            //
+            // 예외 무시 및 cut(sql) 반환 유지
         }
 
         return cut(sql);
     }
 
     private String cut(String sql) {
-        if (sql == null || sql.isEmpty()) {
+        if (sql == null || sql.length() == 0) {
             return sql;
         }
 

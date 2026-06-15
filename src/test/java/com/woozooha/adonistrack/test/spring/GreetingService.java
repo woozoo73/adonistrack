@@ -14,7 +14,8 @@ public class GreetingService {
     GreetingRepository greetingRepository;
 
     public Greeting greeting(Long id) {
-        return greetingRepository.findById(id).get();
+        // return greetingRepository.findById(id).get();
+        return null;
     }
 
     @PostConstruct

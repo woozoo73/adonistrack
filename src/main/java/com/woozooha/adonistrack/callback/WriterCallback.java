@@ -31,11 +31,9 @@ public class WriterCallback implements InvocationCallback {
 
     private Writer writer;
 
-    @Override
     public void before(Invocation invocation) {
     }
 
-    @Override
     public void after(Invocation invocation) {
         writer.write(invocation);
     }

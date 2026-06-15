@@ -30,7 +30,7 @@ public class SqlInfo implements Call, Serializable {
 
     private Long duration;
 
-    private Map<Integer, ObjectInfo> parameterMap = new LinkedHashMap<>();
+    private Map<Integer, ObjectInfo> parameterMap = new LinkedHashMap<Integer, ObjectInfo>();
 
     private ObjectInfo throwableInfo;
 

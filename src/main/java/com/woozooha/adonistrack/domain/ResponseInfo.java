@@ -29,7 +29,8 @@ public class ResponseInfo implements Call, Serializable {
 
     public ResponseInfo(HttpServletResponse response) {
         this.start = System.currentTimeMillis();
-        this.status = response.getStatus();
+        // FIXME:
+        // this.status = response.getStatus();
     }
 
 }

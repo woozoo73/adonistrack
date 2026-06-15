@@ -3,7 +3,6 @@ package com.woozooha.adonistrack.domain;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @Data
 public class TransactionInfo implements Call, Serializable {
@@ -45,13 +44,29 @@ public class TransactionInfo implements Call, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         TransactionInfo that = (TransactionInfo) o;
-        return Objects.equals(id, that.id) && Objects.equals(autoCommit, that.autoCommit) && Objects.equals(commit, that.commit) && Objects.equals(rollback, that.rollback);
+
+        // id 비교 (null 체크 포함)
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        // autoCommit 비교
+        if (autoCommit != null ? !autoCommit.equals(that.autoCommit) : that.autoCommit != null) return false;
+        // commit 비교
+        if (commit != null ? !commit.equals(that.commit) : that.commit != null) return false;
+        // rollback 비교
+        if (rollback != null ? !rollback.equals(that.rollback) : that.rollback != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, autoCommit, commit, rollback);
+        // Java 1.5 표준 방식 (이펙티브 자바 스타일)
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (autoCommit != null ? autoCommit.hashCode() : 0);
+        result = 31 * result + (commit != null ? commit.hashCode() : 0);
+        result = 31 * result + (rollback != null ? rollback.hashCode() : 0);
+        return result;
     }
 
     @Override
