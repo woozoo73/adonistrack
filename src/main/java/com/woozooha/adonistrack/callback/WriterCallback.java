@@ -17,12 +17,16 @@ package com.woozooha.adonistrack.callback;
 
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.writer.Writer;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Invocation callback write the invocation.
  * 
  * @author woozoo73
  */
+@Getter
+@Setter
 public class WriterCallback implements InvocationCallback {
 
     private Writer writer;
@@ -34,14 +38,6 @@ public class WriterCallback implements InvocationCallback {
     @Override
     public void after(Invocation invocation) {
         writer.write(invocation);
-    }
-
-    public Writer getWriter() {
-        return writer;
-    }
-
-    public void setWriter(Writer writer) {
-        this.writer = writer;
     }
 
 }

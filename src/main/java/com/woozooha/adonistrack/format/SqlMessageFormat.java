@@ -34,7 +34,7 @@ public class SqlMessageFormat implements SqlFormat {
 
     @Override
     public String format(String sql) {
-        if (sql == null || sql.length() == 0) {
+        if (sql == null || sql.isEmpty()) {
             return sql;
         }
 
@@ -123,11 +123,9 @@ public class SqlMessageFormat implements SqlFormat {
                     FromItem fromItem = plainSelect.getFromItem();
                     if (fromItem instanceof Table) {
                         Table table = (Table) fromItem;
-                        if (table != null) {
-                            String tableName = table.getName();
-                            if (tableName != null) {
-                                message += " FROM " + tableName;
-                            }
+                        String tableName = table.getName();
+                        if (tableName != null) {
+                            message += " FROM " + tableName;
                         }
                         Alias alias = table.getAlias();
                         if (alias != null) {
@@ -136,9 +134,7 @@ public class SqlMessageFormat implements SqlFormat {
                                 message += " " + aliasName;
                             }
                         }
-                        if (table != null) {
-                            message += " ~";
-                        }
+                        message += " ~";
                         if (includeWhere) {
                             Expression where = plainSelect.getWhere();
                             if (where != null) {
@@ -171,7 +167,7 @@ public class SqlMessageFormat implements SqlFormat {
     }
 
     private String cut(String sql) {
-        if (sql == null || sql.length() == 0) {
+        if (sql == null || sql.isEmpty()) {
             return sql;
         }
 

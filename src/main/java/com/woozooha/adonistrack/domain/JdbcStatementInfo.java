@@ -31,7 +31,7 @@ public class JdbcStatementInfo implements Serializable {
         parameterMap.put(index, new ObjectInfo(value));
     }
 
-    public Double getDurationMiliTime() {
+    public Double getDurationMilliTime() {
         if (durationNanoTime == null) {
             return null;
         }

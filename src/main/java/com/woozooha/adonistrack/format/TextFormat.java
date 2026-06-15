@@ -28,7 +28,7 @@ import com.woozooha.adonistrack.util.ToStringUtils;
  */
 public class TextFormat implements Format {
 
-    private static NumberFormat timeFormat = new DecimalFormat("###,##0.00");
+    private static final NumberFormat timeFormat = new DecimalFormat("###,##0.00");
 
     private String prefix;
 
@@ -54,6 +54,7 @@ public class TextFormat implements Format {
             try {
                 builder.append(formatInternal(invocation));
             } catch (Exception e) {
+                // ignore
             }
 
             if (suffix != null) {

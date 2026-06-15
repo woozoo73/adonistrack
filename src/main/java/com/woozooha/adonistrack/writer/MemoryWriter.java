@@ -3,6 +3,7 @@ package com.woozooha.adonistrack.writer;
 import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,8 +14,11 @@ public class MemoryWriter implements Writer, History {
     @Getter
     private LinkedList<Invocation> invocations = new LinkedList<>();
 
+    @Setter
     private int maxSize = -1;
 
+    @Setter
+    @Getter
     private Predicate<Invocation> filter = (t) -> true;
 
     @Override
@@ -25,18 +29,6 @@ public class MemoryWriter implements Writer, History {
     @Override
     public void setFormat(Format format) {
         // do nothing.
-    }
-
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
-    }
-
-    public Predicate<Invocation> getFilter() {
-        return filter;
-    }
-
-    public void setFilter(Predicate<Invocation> filter) {
-        this.filter = filter;
     }
 
     @Override

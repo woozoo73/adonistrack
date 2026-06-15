@@ -24,7 +24,7 @@ public class ExceptionInfo {
         builder.append("[Exception]").append(" ").append(simpleClassName).append(" ");
         if (exceptionMessage != null) {
             if (exceptionMessage.length() > 20) {
-                builder.append(exceptionMessage.substring(0, 20)).append("...");
+                builder.append(exceptionMessage, 0, 20).append("...");
             } else {
                 builder.append(exceptionMessage);
             }

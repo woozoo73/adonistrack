@@ -38,14 +38,7 @@ public class TransactionAspect extends PrintableAspect {
         boolean autoCommit = (boolean) joinPoint.getArgs()[0];
         this.addEvent(target, autoCommit, null, null);
 
-        Object r = null;
-        try {
-            r = joinPoint.proceed();
-        } catch (Throwable t) {
-            throw t;
-        } finally {
-            return r;
-        }
+        return joinPoint.proceed();
     }
 
     @Around("commitPointcut()")
@@ -64,14 +57,7 @@ public class TransactionAspect extends PrintableAspect {
 
         this.addEvent(target, null, Boolean.TRUE, null);
 
-        Object r = null;
-        try {
-            r = joinPoint.proceed();
-        } catch (Throwable t) {
-            throw t;
-        } finally {
-            return r;
-        }
+        return joinPoint.proceed();
     }
 
     @Around("rollbackPointcut()")
@@ -90,23 +76,16 @@ public class TransactionAspect extends PrintableAspect {
 
         this.addEvent(target, null, null, Boolean.TRUE);
 
-        Object r = null;
-        try {
-            r = joinPoint.proceed();
-        } catch (Throwable t) {
-            throw t;
-        } finally {
-            return r;
-        }
+        return joinPoint.proceed();
     }
 
-    private boolean addEvent(Object target, Boolean autoCommit, Boolean commit, Boolean rollback) {
+    private void addEvent(Object target, Boolean autoCommit, Boolean commit, Boolean rollback) {
         Context current = Context.getCurrent().get();
 
         Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation == null) {
-            return false;
+            return;
         }
 
         TransactionInfo transactionInfo = new TransactionInfo();
@@ -129,8 +108,6 @@ public class TransactionAspect extends PrintableAspect {
         TransactionEvent event = new TransactionEvent(transactionInfo);
         invocation.add(event);
         current.increaseCount();
-
-        return true;
     }
 
 }

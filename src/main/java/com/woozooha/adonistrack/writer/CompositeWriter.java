@@ -22,13 +22,13 @@ import com.woozooha.adonistrack.domain.Invocation;
 import com.woozooha.adonistrack.format.Format;
 
 /**
- * Composite writer can holds many writers.
+ * Composite writer can hold many writers.
  * 
  * @author woozoo73
  */
 public class CompositeWriter implements Writer {
 
-    private List<Writer> writers = new ArrayList<>();
+    private final List<Writer> writers = new ArrayList<>();
 
     @Override
     public Format getFormat() {
@@ -42,10 +42,6 @@ public class CompositeWriter implements Writer {
 
     @Override
     public void write(Invocation invocation) {
-        if (writers == null) {
-            return;
-        }
-
         for (Writer writer : writers) {
             writer.write(invocation);
         }

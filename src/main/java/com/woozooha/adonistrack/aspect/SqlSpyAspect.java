@@ -50,13 +50,13 @@ public class SqlSpyAspect extends PrintableAspect {
         addEvent(sqlInfo);
     }
 
-    private boolean addEvent(SqlInfo sqlInfo) {
+    private void addEvent(SqlInfo sqlInfo) {
         Context current = Context.getCurrent().get();
 
         Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation == null) {
-            return false;
+            return;
         }
 
         sqlInfo.setMessage(sqlFormat.format(sqlInfo.getSql()));
@@ -64,8 +64,6 @@ public class SqlSpyAspect extends PrintableAspect {
         SqlEvent event = new SqlEvent(sqlInfo);
         invocation.add(event);
         current.increaseCount();
-
-        return true;
     }
 
 }

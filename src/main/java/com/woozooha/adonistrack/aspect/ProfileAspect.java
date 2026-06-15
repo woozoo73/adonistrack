@@ -24,6 +24,7 @@ import com.woozooha.adonistrack.writer.CompositeWriter;
 import com.woozooha.adonistrack.writer.FileWriter;
 import com.woozooha.adonistrack.writer.LogWriter;
 import com.woozooha.adonistrack.writer.MemoryWriter;
+import lombok.Getter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -41,6 +42,7 @@ import java.util.function.Predicate;
 @Aspect
 public abstract class ProfileAspect {
 
+    @Getter
     protected static Config config;
 
     public ProfileAspect() {
@@ -118,11 +120,11 @@ public abstract class ProfileAspect {
 
     protected Predicate<Invocation> getFilter() {
         return (t) -> {
-            if (t.getEventList() == null || t.getEventList().size() == 0) {
+            if (t.getEventList() == null || t.getEventList().isEmpty()) {
                 return false;
             }
-            Event event = t.getEventList().get(0);
-            return event != null && event instanceof RequestEvent;
+            Event<?> event = t.getEventList().get(0);
+            return event instanceof RequestEvent;
         };
     }
 
@@ -144,10 +146,6 @@ public abstract class ProfileAspect {
 
     protected boolean useFileWriter() {
         return false;
-    }
-
-    public static Config getConfig() {
-        return config;
     }
 
     public static <V> Invocation before(JoinPoint joinPoint) {
@@ -203,6 +201,7 @@ public abstract class ProfileAspect {
             try {
                 config.getInvocationCallback().before(invocation);
             } catch (Throwable throwable) {
+                // ignore
             }
         }
 
@@ -225,14 +224,8 @@ public abstract class ProfileAspect {
         }
 
         Class<?> targetClass = target.getClass();
-        if (targetClass == null) {
-            return 0;
-        }
 
         String targetClassName = targetClass.getName();
-        if (targetClassName == null) {
-            return 0;
-        }
 
         StackTraceElement[] traces = new RuntimeException().getStackTrace();
         if (traces != null) {
@@ -268,7 +261,7 @@ public abstract class ProfileAspect {
             invocation.setReturnValue(r);
             invocation.setReturnValueInfo(new ObjectInfo(r));
             if (r instanceof Event) {
-                invocation.add((Event) r);
+                invocation.add((Event<?>) r);
             }
         }
         if (t != null) {
@@ -287,6 +280,7 @@ public abstract class ProfileAspect {
             try {
                 config.getInvocationCallback().after(i);
             } catch (Throwable throwable) {
+                // ignore
             }
         }
 
@@ -301,12 +295,7 @@ public abstract class ProfileAspect {
             return null;
         }
 
-        Invocation invocation = endpointInvocation.getInvocationByJoinPoint(joinPoint);
-        if (invocation == null) {
-            return null;
-        }
-
-        return invocation;
+        return endpointInvocation.getInvocationByJoinPoint(joinPoint);
     }
 
     @Pointcut
@@ -362,6 +351,7 @@ public abstract class ProfileAspect {
             ExceptionEvent exceptionEvent = new ExceptionEvent(exceptionInfo);
             invocation.add(exceptionEvent);
         } catch (Throwable t1) {
+            // ignore
         }
     }
 

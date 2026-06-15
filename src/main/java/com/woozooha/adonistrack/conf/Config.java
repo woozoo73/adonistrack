@@ -23,6 +23,8 @@ import com.woozooha.adonistrack.writer.History;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Configuration.
@@ -48,15 +50,9 @@ public class Config implements Serializable {
 
     // Finder of Proxy class's real class(or interface).
     // $Proxy1 --> Foo
+    @Getter
+    @Setter
     protected static Function<Class<?>, Class<?>> proxyTargetFinder = DEFAULT_PROXY_TARGET_FINDER;
-
-    public static Function<Class<?>, Class<?>> getProxyTargetFinder() {
-        return proxyTargetFinder;
-    }
-
-    public static void setProxyTargetFinder(Function<Class<?>, Class<?>> proxyTargetFinder) {
-        Config.proxyTargetFinder = proxyTargetFinder;
-    }
 
     @Data
     @AllArgsConstructor

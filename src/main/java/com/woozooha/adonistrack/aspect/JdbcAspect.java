@@ -19,7 +19,7 @@ public class JdbcAspect {
     public static final int MAX_VALUE_LENGTH = 20;
 
     public static final Class<?>[] SHOULD_LOG_PARAMETER_TYPES = {
-            // Primative types
+            // Primitive types
             Byte.TYPE, Short.TYPE, Integer.TYPE, Long.TYPE, Float.TYPE, Double.TYPE,
             // Wrapper types
             Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,

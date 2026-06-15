@@ -29,7 +29,7 @@ public class Header {
             return null;
         }
 
-        return values.stream().collect(Collectors.joining(","));
+        return String.join(",", values);
     }
 
 }

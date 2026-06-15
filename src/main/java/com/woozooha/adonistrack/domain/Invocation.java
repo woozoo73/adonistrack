@@ -162,7 +162,7 @@ public class Invocation implements Call, Serializable {
         event.setSeq(current.sequence());
 
         if (eventList == null) {
-            eventList = new ArrayList<Event<?>>();
+            eventList = new ArrayList<>();
         }
         eventList.add(event);
     }
@@ -221,7 +221,7 @@ public class Invocation implements Call, Serializable {
             RequestInfo req = null;
             ResponseInfo res = null;
             if (invocation.getEventList() != null) {
-                for (Event event : invocation.getEventList()) {
+                for (Event<?> event : invocation.getEventList()) {
                     if (req == null && event instanceof RequestEvent) {
                         req = ((RequestEvent) event).getValue();
                     }

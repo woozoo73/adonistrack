@@ -15,57 +15,41 @@ public class SimpleToStringFormatTest {
     SimpleToStringFormat format = new SimpleToStringFormat();
 
     @Test
-    public void testFormtNull() {
-        Object object = null;
-
-        String value = format.format(object);
-
-        log.debug("object: {}", value);
+    public void testFormatNull() {
+        String value = format.format(null);
 
         assertNull(value);
     }
 
     @Test
-    public void testFormtString() {
+    public void testFormatString() {
         String string = "foo";
-
         String value = format.format(string);
-
-        log.debug("string: {}", value);
 
         assertEquals("foo", value);
     }
 
     @Test
-    public void testFormtStringNewline() {
+    public void testFormatStringNewline() {
         String string = "foo\nbar";
-
         String value = format.format(string);
-
-        log.debug("string: {}", value);
 
         assertEquals("foo\nbar", value);
     }
 
     @Test
-    public void testFormtBytes() throws UnsupportedEncodingException {
-        byte[] bytes = new String("foo").getBytes();
-
+    public void testFormatBytes() throws UnsupportedEncodingException {
+        byte[] bytes = "foo".getBytes();
         String value = format.format(bytes);
-
-        log.debug("bytes: {}", value);
 
         assertNotNull(value);
     }
 
     @Test
-    public void testFormtPlain() {
+    public void testFormatPlain() {
         PlainObject plain = new PlainObject();
         plain.setName("plain");
-
         String value = format.format(plain);
-
-        log.debug("plain: {}", value);
 
         assertNotNull(value);
     }
@@ -74,7 +58,7 @@ public class SimpleToStringFormatTest {
      * Safety check for StackOverflowError.
      */
     @Test
-    public void testFormtRecursive() {
+    public void testFormatRecursive() {
         RecursiveObject parent = new RecursiveObject();
         parent.setName("parent");
 
@@ -95,14 +79,14 @@ public class SimpleToStringFormatTest {
     }
 
     @Data
-    private class PlainObject {
+    private static class PlainObject {
 
         private String name;
 
     }
 
     @Data
-    private class RecursiveObject {
+    private static class RecursiveObject {
 
         private String name;
 

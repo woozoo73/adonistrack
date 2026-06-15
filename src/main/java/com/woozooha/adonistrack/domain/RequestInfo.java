@@ -34,7 +34,7 @@ public class RequestInfo implements Call, Serializable {
     public RequestInfo(HttpServletRequest request) {
         this.start = System.currentTimeMillis();
         this.method = request.getMethod();
-        this.requestURI = request.getRequestURI().toString();
+        this.requestURI = request.getRequestURI();
         this.queryString = request.getQueryString();
     }
 

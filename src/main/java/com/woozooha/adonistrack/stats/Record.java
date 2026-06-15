@@ -19,10 +19,14 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import com.woozooha.adonistrack.domain.Invocation;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Record {
 
-    private static NumberFormat timeFormat = new DecimalFormat("###,##0.00");
+    private static final NumberFormat timeFormat = new DecimalFormat("###,##0.00");
 
     private int requestCount;
 
@@ -57,9 +61,6 @@ public class Record {
             }
             if (slowestDuration == null || duration > slowestDuration) {
                 slowestDuration = duration;
-            }
-            if (slowestInvocation == null
-                    || (slowestDuration == null || duration > slowestDuration)) {
                 slowestInvocation = invocation;
             }
         } else {
@@ -75,57 +76,23 @@ public class Record {
         return totalDuration / successCount;
     }
 
-    public int getRequestCount() {
-        return requestCount;
-    }
-
-    public int getSuccessCount() {
-        return successCount;
-    }
-
-    public int getErrorCount() {
-        return errorCount;
-    }
-
-    public void setErrorCount(int errorCount) {
-        this.errorCount = errorCount;
-    }
-
-    public double getQuickestDuration() {
-        return quickestDuration;
-    }
-
-    public double getSlowestDuration() {
-        return slowestDuration;
-    }
-
-    public double getTotalDuration() {
-        return totalDuration;
-    }
-
-    public Invocation getSlowestInvocation() {
-        return slowestInvocation;
-    }
-
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Record [requestCount=");
-        builder.append(requestCount);
-        builder.append(", successCount=");
-        builder.append(successCount);
-        builder.append(", errorCount=");
-        builder.append(errorCount);
-        builder.append(", quickestDuration=");
-        builder.append(quickestDuration);
-        builder.append(", slowestDuration=");
-        builder.append(slowestDuration);
-        builder.append(", totalDuration=");
-        builder.append(totalDuration);
-        builder.append(", slowestInvocation=");
-        builder.append(slowestInvocation);
-        builder.append("]");
-        return builder.toString();
+        return "Record [requestCount=" +
+                requestCount +
+                ", successCount=" +
+                successCount +
+                ", errorCount=" +
+                errorCount +
+                ", quickestDuration=" +
+                quickestDuration +
+                ", slowestDuration=" +
+                slowestDuration +
+                ", totalDuration=" +
+                totalDuration +
+                ", slowestInvocation=" +
+                slowestInvocation +
+                "]";
     }
 
     public Object prettyPrint() {
@@ -135,11 +102,11 @@ public class Record {
         builder.append("error=").append(errorCount).append(", ");
         double min = 0D;
         if (quickestDuration != null) {
-            min = quickestDuration.doubleValue() / (1000 * 1000);
+            min = quickestDuration / (1000 * 1000);
         }
         double max = 0D;
         if (slowestDuration != null) {
-            max = slowestDuration.doubleValue() / (1000 * 1000);
+            max = slowestDuration / (1000 * 1000);
         }
         builder.append("min=").append(timeFormat.format(min)).append("(ms)").append(", ");
         builder.append("max=").append(timeFormat.format(max)).append("(ms)");

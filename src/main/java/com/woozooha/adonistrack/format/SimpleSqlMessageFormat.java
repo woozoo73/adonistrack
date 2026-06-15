@@ -65,7 +65,7 @@ public class SimpleSqlMessageFormat implements SqlFormat {
             return null;
         }
 
-        Pattern tablePattern = null;
+        Pattern tablePattern;
         switch (command) {
             case "SELECT":
             case "DELETE":

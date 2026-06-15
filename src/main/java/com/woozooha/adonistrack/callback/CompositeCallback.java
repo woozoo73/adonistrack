@@ -18,12 +18,16 @@ package com.woozooha.adonistrack.callback;
 import java.util.List;
 
 import com.woozooha.adonistrack.domain.Invocation;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Composite invocation callback can hold many callbacks.
  * 
  * @author woozoo73
  */
+@Getter
+@Setter
 public class CompositeCallback implements InvocationCallback {
 
     private List<InvocationCallback> callbacks;
@@ -35,11 +39,7 @@ public class CompositeCallback implements InvocationCallback {
         }
 
         for (InvocationCallback callback : callbacks) {
-            try {
-                callback.before(invocation);
-            } finally {
-                // do nothing
-            }
+            callback.before(invocation);
         }
     }
 
@@ -50,20 +50,8 @@ public class CompositeCallback implements InvocationCallback {
         }
 
         for (InvocationCallback callback : callbacks) {
-            try {
-                callback.after(invocation);
-            } finally {
-                // do nothing
-            }
+            callback.after(invocation);
         }
-    }
-
-    public List<InvocationCallback> getCallbacks() {
-        return callbacks;
-    }
-
-    public void setCallbacks(List<InvocationCallback> callbacks) {
-        this.callbacks = callbacks;
     }
 
 }

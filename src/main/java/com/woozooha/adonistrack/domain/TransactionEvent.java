@@ -23,7 +23,9 @@ public class TransactionEvent extends Event<TransactionInfo> {
         builder.append(type);
         builder.append("]");
         builder.append(" ");
-        builder.append(value);
+        if (value != null) {
+            builder.append(value);
+        }
         return builder.toString();
     }
 

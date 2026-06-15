@@ -38,11 +38,10 @@ public class ResponseEvent extends Event<ResponseInfo> {
         builder.append(type);
         builder.append("]");
         builder.append(" ");
-
-        int status = value.getStatus();
-
-        builder.append(status);
-
+        if (value != null) {
+            int status = value.getStatus();
+            builder.append(status);
+        }
         return builder.toString();
     }
 

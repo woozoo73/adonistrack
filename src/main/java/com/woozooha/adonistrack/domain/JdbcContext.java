@@ -9,7 +9,7 @@ public class JdbcContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ThreadLocal<Map<Statement, JdbcStatementInfo>> STATEMENT_MAP = new ThreadLocal<Map<Statement, JdbcStatementInfo>>() {
+    private static final ThreadLocal<Map<Statement, JdbcStatementInfo>> STATEMENT_MAP = new ThreadLocal<Map<Statement, JdbcStatementInfo>>() {
         @Override
         protected Map<Statement, JdbcStatementInfo> initialValue() {
             return new HashMap<Statement, JdbcStatementInfo>();

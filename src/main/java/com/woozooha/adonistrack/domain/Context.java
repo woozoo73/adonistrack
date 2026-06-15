@@ -35,7 +35,7 @@ public class Context implements Serializable {
     public static final int DEFAULT_TRACE_COUNT = 2000;
 
     @Getter
-    protected static final ThreadLocal<Context> current = ThreadLocal.withInitial(() -> new Context());
+    protected static final ThreadLocal<Context> current = ThreadLocal.withInitial(Context::new);
 
     @Getter
     @Setter

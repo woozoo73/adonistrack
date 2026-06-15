@@ -37,14 +37,15 @@ public class RequestEvent extends Event<RequestInfo> {
         builder.append(type);
         builder.append("]");
         builder.append(" ");
-        builder.append(value.getMethod());
-        builder.append(" ");
-        builder.append(value.getRequestURI());
-        if (value.getQueryString() != null) {
-            builder.append("?");
-            builder.append(value.getQueryString());
+        if (value != null) {
+            builder.append(value.getMethod());
+            builder.append(" ");
+            builder.append(value.getRequestURI());
+            if (value.getQueryString() != null) {
+                builder.append("?");
+                builder.append(value.getQueryString());
+            }
         }
-
         return builder.toString();
     }
 

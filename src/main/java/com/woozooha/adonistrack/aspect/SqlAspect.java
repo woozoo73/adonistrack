@@ -4,6 +4,8 @@ import com.woozooha.adonistrack.domain.*;
 import com.woozooha.adonistrack.format.SimpleSqlMessageFormat;
 import com.woozooha.adonistrack.format.SqlFormat;
 import com.woozooha.adonistrack.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
@@ -18,7 +20,7 @@ public class SqlAspect extends PrintableAspect {
     public static final int MAX_VALUE_LENGTH = 100;
 
     public static final Class<?>[] SHOULD_LOG_PARAMETER_TYPES = {
-            // Primative types
+            // Primitive types
             Byte.TYPE, Short.TYPE, Integer.TYPE, Long.TYPE, Float.TYPE, Double.TYPE,
             // Wrapper types
             Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
@@ -27,15 +29,9 @@ public class SqlAspect extends PrintableAspect {
             // Date & URL
             Date.class, Time.class, Timestamp.class, URL.class};
 
+    @Getter
+    @Setter
     protected static SqlFormat sqlFormat = new SimpleSqlMessageFormat();
-
-    public static SqlFormat getSqlFormat() {
-        return sqlFormat;
-    }
-
-    public static void setSqlFormat(SqlFormat sqlFormat) {
-        SqlAspect.sqlFormat = sqlFormat;
-    }
 
     @Pointcut("within(java.sql.Connection+) && execution(java.sql.Statement+ createStatement())")
     public void createStatementPointcut() {
@@ -196,7 +192,7 @@ public class SqlAspect extends PrintableAspect {
             sqlInfo.setParameter(index, "null");
         } else if (shouldProfileParameter(joinPoint, value)) {
             Object v = value;
-            if (value.getClass() == String.class && value != null) {
+            if (value.getClass() == String.class) {
                 v = StringUtils.abbreviate((String) value, MAX_VALUE_LENGTH);
             }
             sqlInfo.setParameter(index, v);
@@ -218,13 +214,13 @@ public class SqlAspect extends PrintableAspect {
         return false;
     }
 
-    private boolean addEvent(SqlInfo sqlInfo) {
+    private void addEvent(SqlInfo sqlInfo) {
         Context current = Context.getCurrent().get();
 
         Invocation invocation = current.peekFromInvocationStack();
 
         if (invocation == null) {
-            return false;
+            return;
         }
 
         sqlInfo.setMessage(sqlInfo.getMessage());
@@ -232,8 +228,6 @@ public class SqlAspect extends PrintableAspect {
         SqlEvent event = new SqlEvent(sqlInfo);
         invocation.add(event);
         current.increaseCount();
-
-        return true;
     }
 
 }

@@ -8,14 +8,12 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -27,8 +25,8 @@ public class FileWriter implements Writer, History {
     @Setter
     private File root;
 
-    private int maxSize = -1;
-
+    @Getter
+    @Setter
     private Predicate<Invocation> filter = (t) -> true;
 
     @Override
@@ -39,18 +37,6 @@ public class FileWriter implements Writer, History {
     @Override
     public void setFormat(Format format) {
         // do nothing.
-    }
-
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
-    }
-
-    public Predicate<Invocation> getFilter() {
-        return filter;
-    }
-
-    public void setFilter(Predicate<Invocation> filter) {
-        this.filter = filter;
     }
 
     @Override
@@ -69,7 +55,10 @@ public class FileWriter implements Writer, History {
             String day = id.substring(0, Invocation.DATE_PATTERN.length());
             File dayDir = new File(root, day);
             if (!dayDir.exists()) {
-                dayDir.mkdirs();
+                boolean result = dayDir.mkdirs();
+                if (!result) {
+                    throw new RuntimeException("Can't make the directory: " + dayDir);
+                }
             }
 
             String json = objectMapper.writeValueAsString(invocation);
@@ -80,7 +69,7 @@ public class FileWriter implements Writer, History {
                 writer.flush();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -93,6 +82,9 @@ public class FileWriter implements Writer, History {
         }
 
         File[] files = dayDir.listFiles();
+        if (files == null) {
+            return Collections.emptyList();
+        }
         Arrays.sort(files, Comparator.comparingLong(File::lastModified).reversed());
 
         return Arrays.stream(files).map(f -> {
@@ -103,13 +95,13 @@ public class FileWriter implements Writer, History {
                             }
                         }
                 )
-                .filter(e -> e != null)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     @SneakyThrows
     private Invocation readInvocation(File file) {
-        try (Reader reader = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
+        try (Reader reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
             return objectMapper.readValue(reader, Invocation.class);
         }
     }

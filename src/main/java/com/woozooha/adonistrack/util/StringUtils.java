@@ -3,7 +3,7 @@ package com.woozooha.adonistrack.util;
 public abstract class StringUtils {
 
     public static String abbreviate(String source, int maxLength) {
-        if (source == null || source.length() == 0 || source.length() <= maxLength) {
+        if (source == null || source.isEmpty() || source.length() <= maxLength) {
             return source;
         }
 
@@ -11,7 +11,7 @@ public abstract class StringUtils {
     }
 
     public static String capitalize(String source) {
-        if (source == null || source.length() == 0) {
+        if (source == null || source.isEmpty()) {
             return source;
         }
 
